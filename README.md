@@ -32,13 +32,54 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 
 ---
 
-## ⚙️ How the Pipeline Works (The 3-Step Process)
+## ⚙️ Architecture & Workflow
 
 Most AI tools use a "generate and pray" approach. EigenCV uses **Agentic Determinism**. Here is how we guarantee a flawless, hallucination-free application:
 
 1. **The Immutable Master Database:** You don't paste your resume into a chat window. Your career history lives offline as a structured JSON/Markdown database on your hard drive. Every achievement, project, and skill has a mathematically verifiable ID (e.g., `proj_aws_migration`).
 2. **AI Orchestration (The Brain):** When applying for a job, the AI reads the Job Description and acts as a strategic orchestrator. Instead of writing text, it executes a precise query against your database, returning only the IDs that maximize your ATS match score. It crafts a hyper-authentic Cover Letter based *exclusively* on your verified profile data.
 3. **Deterministic Compilation (The Muscle):** The AI is entirely locked out of the rendering process. The EigenCV Python compiler takes the approved list of IDs, fetches the exact text from your offline database, and deterministically injects it into a stunning, ATS-optimized LaTeX template. **Zero broken layouts, zero hallucinations.**
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as 👤 User
+    participant LLM as 🧠 Agent
+    participant DB as 🗄️ Database
+    participant Py as 🐍 Python Tools
+
+    rect rgb(40, 40, 60)
+    Note over U,DB: Phase 0: Setup & Privacy
+    U->>Py: Run scrub_data.py
+    Py->>DB: Wipe private data
+    U->>LLM: Upload old CV
+    LLM->>DB: Build JSON Database
+    end
+
+    rect rgb(20, 40, 20)
+    Note over U,Py: Phase 1: Routing
+    U->>LLM: Provide Job Description
+    LLM->>DB: Query database
+    DB-->>LLM: Return valid IDs
+    LLM->>LLM: Generate build_config.json
+    end
+    
+    rect rgb(60, 40, 20)
+    Note over LLM,Py: Phase 2: Compile
+    LLM->>Py: Execute cv_compiler.py
+    Note over Py,DB: 🏥 Healer auto-corrects IDs<br>🛡️ Lie Detector prevents hallucinations
+    Py->>DB: Fetch verified text
+    Py-->>LLM: Render PDF via Jinja2
+    end
+    
+    rect rgb(40, 60, 40)
+    Note over LLM,Py: Phase 3: Verification
+    LLM->>Py: Execute check_ats_score.py
+    Py->>Py: Parse compiled PDF
+    Py-->>LLM: Return ATS Score
+    LLM-->>U: Present Final PDF & Score!
+    end
+```
 
 ---
 
@@ -92,9 +133,9 @@ Successfully compiled CV-Applicant-Google.pdf
 
 ---
 
-## 🔬 Under the Hood: How it actually works
+## 🔬 Design Decisions (Under the Hood)
 
-To appeal to the technical crowd, here is exactly how EigenCV pulls this off without over-engineering:
+EigenCV prioritizes deterministic reliability over trendy AI complexity. For the engineers reading this, here is a transparent look at the core architectural decisions behind the pipeline:
 
 ### 1. "Pseudo-RAG" (Context Window Routing)
 We do **not** use Vector Databases (Chroma, Pinecone) or traditional RAG embeddings. Why? Because an individual's entire career history (even a 20-year veteran's) is only a few kilobytes of text. It easily fits into a modern LLM's context window. 
@@ -133,50 +174,6 @@ If you want absolute control and 100% data privacy:
 
 ---
 
-## 🛠️ System Architecture
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor U as 👤 User
-    participant LLM as 🧠 Agent
-    participant DB as 🗄️ Database
-    participant Py as 🐍 Python Tools
-
-    rect rgb(40, 40, 60)
-    Note over U,DB: Phase 0: Setup & Privacy
-    U->>Py: Run scrub_data.py
-    Py->>DB: Wipe private data
-    U->>LLM: Upload old CV
-    LLM->>DB: Build JSON Database
-    end
-
-    rect rgb(20, 40, 20)
-    Note over U,Py: Phase 1: Routing
-    U->>LLM: Provide Job Description
-    LLM->>DB: Query database
-    DB-->>LLM: Return valid IDs
-    LLM->>LLM: Generate build_config.json
-    end
-    
-    rect rgb(60, 40, 20)
-    Note over LLM,Py: Phase 2: Compile
-    LLM->>Py: Execute cv_compiler.py
-    Note over Py,DB: 🏥 Healer auto-corrects IDs<br>🛡️ Lie Detector prevents hallucinations
-    Py->>DB: Fetch verified text
-    Py-->>LLM: Render PDF via Jinja2
-    end
-    
-    rect rgb(40, 60, 40)
-    Note over LLM,Py: Phase 3: Verification
-    LLM->>Py: Execute check_ats_score.py
-    Py->>Py: Parse compiled PDF
-    Py-->>LLM: Return ATS Score
-    LLM-->>U: Present Final PDF & Score!
-    end
-```
-
----
 
 ## 📖 Advanced Documentation
 Looking to customize the LaTeX templates, add your own personal dossier for cultural-fit Cover Letters, or understand the Pydantic schema? 
