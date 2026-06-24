@@ -151,6 +151,7 @@ Successfully compiled CV-Applicant-Google.pdf
 ## ✨ Core USPs
 
 * 🛡️ **Zero-Trust & The EigenTruth Engine:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your profile to artificially boost your ATS score, the compiler's **EigenTruth Engine** (our Lie Detector) catches it and hard-crashes the build.
+* 📊 **Data-First Approach:** We strictly decouple your career data from the presentation layer. Your resume is not a text document, it is a structured dataset. The AI acts exclusively as a search filter on this data, never as an author.
 * 🔒 **Immutable Database:** Your bullet points and skills are strictly **IMMUTABLE**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
 * ✍️ **Authentic Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
 * 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
