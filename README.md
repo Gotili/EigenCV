@@ -97,41 +97,43 @@ If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolatio
 sequenceDiagram
     autonumber
     actor U as 👤 User
-    participant LLM as 🧠 Agent
+    participant LLM as 🧠 Agent (Cursor)
     participant DB as 🗄️ Database
-    participant Py as 🐍 Compiler
-    participant ATS as 🔍 ATS
+    participant Py as 🐍 Python Tools
 
     rect rgb(40, 40, 60)
     Note over U,DB: Phase 0: Setup & Privacy
     U->>Py: Run scrub_data.py
-    Py->>DB: Wipe personal data
-    U->>LLM: Provide old CV
+    Py->>DB: Wipe private data
+    U->>LLM: Upload old CV
     LLM->>DB: Build JSON Database
     end
 
     rect rgb(20, 40, 20)
-    Note over U,Py: Phase 1: Agentic Routing
+    Note over U,Py: Phase 1: Routing
     U->>LLM: Provide Job Description
-    LLM->>DB: Query bullet points
+    LLM->>DB: Query database
     DB-->>LLM: Return valid IDs
-    LLM-->>Py: Output build_config.json
+    LLM->>LLM: Generate build_config.json
     end
     
     rect rgb(60, 40, 20)
-    Note over Py,ATS: Phase 2: Compilation & Zero-Trust
+    Note over LLM,Py: Phase 2: Compile
+    LLM->>Py: Execute cv_compiler.py
     rect rgb(120, 20, 20)
-    Note over Py,DB: 🛡️ The Lie Detector<br>Crash if AI hallucinated skills
+    Note over Py,DB: 🛡️ The Lie Detector<br>Crash if AI hallucinated!
     end
     
     Py->>DB: Fetch verified text
-    Py->>Py: Render PDF via Jinja2
+    Py-->>LLM: Render PDF via Jinja2
     end
     
     rect rgb(40, 60, 40)
-    Note over Py,ATS: Phase 3: Verification
-    Py->>ATS: Trigger ATS scanner
-    ATS->>U: Output Honest Match Score
+    Note over LLM,Py: Phase 3: Verification
+    LLM->>Py: Execute check_ats_score.py
+    Py->>Py: Parse compiled PDF
+    Py-->>LLM: Return ATS Score
+    LLM-->>U: Present Final PDF & Score!
     end
 ```
 
@@ -159,6 +161,7 @@ Once your database is built, applying to jobs takes seconds.
 3. The Agent will semantically match your database to the job and output a strict `build_config.json`.
 
 ### Step 3: Compilation & Verification
+*(💡 Note: If you are using an Agentic IDE like Cursor or Windsurf, the Agent will execute these commands for you automatically! If you are using a Web LLM, run them manually:)*
 1. Run `python ../../cv/scripts/cv_compiler.py build_config.json` inside your new application folder.
 2. The Python compiler verifies the JSON, runs the Lie Detector, and deterministically injects your data into the LaTeX templates.
 3. Check the terminal for your honest ATS Score and review your beautiful PDF!
