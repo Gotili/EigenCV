@@ -10,3 +10,6 @@ Before you reply to the user or generate any files, you MUST read the system ins
 
 If the user asks you to migrate their old CV into this repository, read:
 👉 `docs/AI_ONBOARDING_PROMPT.md`
+
+If the user asks you to add a new job, update a skill, or fix a typo in their history, read:
+👉 `docs/AI_MAINTENANCE_PROMPT.md`

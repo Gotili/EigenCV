@@ -67,7 +67,7 @@ Successfully compiled CV-Applicant-Google.pdf
 
 ## ✨ Core USPs
 
-* 🛡️ **Zero-Trust & The Lie Detector:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your profile to artificially boost your ATS score, the compiler's **Lie Detector** catches it and hard-crashes the build.
+* 🛡️ **Zero-Trust & The EigenTruth Engine:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your profile to artificially boost your ATS score, the compiler's **EigenTruth Engine** (our Lie Detector) catches it and hard-crashes the build.
 * 🔒 **Immutable Database:** Your bullet points and skills are strictly **IMMUTABLE**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
 * ✍️ **Zero-Hallucination Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
 * 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
@@ -88,23 +88,27 @@ To appeal to the technical crowd, here is exactly how EigenCV pulls this off wit
 We do **not** use Vector Databases (Chroma, Pinecone) or traditional RAG embeddings. Why? Because an individual's entire career history (even a 20-year veteran's) is only a few kilobytes of text. It easily fits into a modern LLM's context window. 
 Instead of vector search, we use **In-Context Semantic Routing**. We feed your entire JSON database to the LLM and prompt it to output an array of `bullet_ids` that semantically match the Job Description. The LLM acts as the retriever, but the actual text insertion is handled deterministically by Python.
 
-### 2. How the "Lie Detector" Catches Hallucinations
+### 2. The EigenTruth Engine (How We Catch Hallucinations)
 When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess. *(Why do we track this? So you explicitly know your weak points, can strategically address them in your Cover Letter, or know exactly what to study before the technical interview!)*
 
 The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a strict Regex negative lookahead/lookbehind intersection (`(?<!\w)`) between your `missing_skills` list and the AI-generated free-text. 
-If a match is found, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner. *(And because of the regex bounds, missing skills like "C" won't crash on the word "script", and special characters like "C++" are safely parsed).*
+If a match is found, the compiler immediately throws an `EigenTruthViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner. *(And because of the regex bounds, missing skills like "C" won't crash on the word "script", and special characters like "C++" are safely parsed).*
+
+**Why a Regex engine and not a State-of-the-Art "LLM-as-a-Judge"?** 
+Because *Pragmatism > Over-engineering*. Your CV compiler should run completely offline, deterministically, in <1 second, without requiring an active API key or costing $0.05 per build. Our EigenTruth Engine is O(1), free, and bulletproof for this specific use case.
 
 ---
 
 ## 🚀 How to Use EigenCV: Choose Your Path
 
 ### Path 1: The Zero-Setup "Lifehack" (For Non-Coders / ChatGPT Plus)
-You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the AI in the cloud and render the PDF for free in your browser.
+You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the entire pipeline in the cloud.
 
 1. **Download** this entire repository as a ZIP file.
-2. **Upload** the ZIP to ChatGPT (using Advanced Data Analysis) or Claude, along with ALL your old resumes, Word documents, and project descriptions. 
-3. **The Bullet-Point Pool:** Dump years of history into the AI. The AI acts as a filter, extracting the facts into your immutable JSON database. Then, give it a Job Description. It will selectively pick ONLY the relevant bullet points and run the Python compiler in its sandbox to generate the raw `.tex` files.
-4. **Zero Local Install (The Overleaf Hack):** Because Cloud AIs struggle with compiling massive LaTeX environments, simply download the generated `.tex` files from the AI and drop them into **Overleaf** (or use GitHub Codespaces). Instant, gorgeous PDFs without local setup.
+2. **Upload** the ZIP to ChatGPT (requires Advanced Data Analysis) or Claude, along with ALL your old resumes.
+3. **The Zero-Click Prompt:** Copy and paste the prompt found in `docs/AI_CLOUD_PROMPT.md`.
+4. **Instant PDF:** ChatGPT will automatically migrate your history into the JSON database, match it against your Job Description, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
+*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering).*
 
 ### Path 2: The Hardcore Privacy Route (For Developers)
 If you want absolute control and 100% data privacy:

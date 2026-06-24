@@ -4,6 +4,15 @@ Welcome to the User Guide! This document provides an in-depth look at how the da
 
 ---
 
+## 🤖 Cheat-Sheet: How to talk to the AI Agent
+If you are using Cursor, Windsurf, or Copilot, use these exact prompts to trigger the correct internal routing logic without confusing the AI:
+
+*   **To initialize the project:** *"Migrate my old CV to the database. Follow `AI_START_HERE.md`."*
+*   **To generate an application:** *"Apply to this job [Paste JD]. Follow `AI_START_HERE.md`."*
+*   **To update your history:** *"I learned a new skill / got a new job. Please update my history. Follow `AI_START_HERE.md`."*
+
+---
+
 ## 🗄️ The Database Structure (`cv/database/active/`)
 
 To use this for yourself, you just need to replace the contents of the files in `cv/database/active/` with your own career info. The architecture uses a simple Key-Value store:

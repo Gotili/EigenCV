@@ -1,0 +1,99 @@
+\documentclass[11pt, letterpaper]{article}
+\input{../../cv/template/preamble.tex}
+\usepackage[{{ geometry_options }}]{geometry}
+\begin{document}
+{% if company_accent_color %}
+\definecolor{LinkBlue}{HTML}{ {{- company_accent_color -}} }
+{% endif %}
+\hypersetup{pdfkeywords={ {{- keywords -}} }}
+\newcommand{\cvtitle}{ {{- job_title | sanitize_latex_text -}} }
+\input{../../cv/template/header.tex}
+
+{% for section in section_order %}
+{% if section == 'Profile' and profile %}
+\section*{ {{ i18n.profile | default('Professional Summary') | sanitize_latex_text }} }
+{{ profile | sanitize_latex_text }}
+{% endif %}
+
+{% if section == 'Skills' and skill_categories %}
+\section*{ {{ i18n.skills | default('Skills \\& Tools') | sanitize_latex_text }} }
+\noindent
+\begin{minipage}[t]{0.49\textwidth}
+    \begin{itemize}[leftmargin=0in, label=, itemsep=2pt]
+        \item \textbf{ {{- skill_categories[0].name | sanitize_latex_text -}}: } {{- skill_categories[0].skills | sanitize_latex_text -}}
+        \item \textbf{ {{- skill_categories[1].name | sanitize_latex_text -}}: } {{- skill_categories[1].skills | sanitize_latex_text -}}
+{% if skill_categories|length > 4 %}
+        \item \textbf{ {{- skill_categories[4].name | sanitize_latex_text -}}: } {{- skill_categories[4].skills | sanitize_latex_text -}}
+{% endif %}
+    \end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.49\textwidth}
+    \begin{itemize}[leftmargin=0in, label=, itemsep=2pt]
+        \item \textbf{ {{- skill_categories[2].name | sanitize_latex_text -}}: } {{- skill_categories[2].skills | sanitize_latex_text -}}
+        \item \textbf{ {{- skill_categories[3].name | sanitize_latex_text -}}: } {{- skill_categories[3].skills | sanitize_latex_text -}}
+{% if skill_categories|length > 5 %}
+        \item \textbf{ {{- skill_categories[5].name | sanitize_latex_text -}}: } {{- skill_categories[5].skills | sanitize_latex_text -}}
+{% endif %}
+    \end{itemize}
+\end{minipage}
+{% endif %}
+
+{% if section == 'Experience' and experience %}
+\section*{ {{ i18n.experience | default('Experience') | sanitize_latex_text }} }
+{% for job in experience %}
+\noindent
+\textbf{ {{- job.company -}} } \hfill \textcolor{LinkBlue}{\textbf{ {{- job.location -}} }} \\
+\textit{ {{- job.title | sanitize_latex_text -}} } \hfill \textit{ {{- job.dates -}} }
+\begin{itemize}
+{% for bullet in job.bullets %}
+    \item {{ bullet }}
+{% endfor %}
+\end{itemize}
+{% if not loop.last %}
+\vspace{5pt}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if section == 'Projects' and projects %}
+\section*{ {{ i18n.projects | default('Projects') | sanitize_latex_text }} }
+\begin{itemize}[leftmargin=*, labelsep=0.5em, itemsep=0.2em]
+{% for project in projects %}
+    \item {{ project }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+{% if section == 'Education' and education %}
+\section*{ {{ i18n.education | default('Education') | sanitize_latex_text }} }
+{% for edu in education %}
+\noindent
+{{ edu }}
+{% if not loop.last %}
+
+\vspace{4pt}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if section == 'Extracurriculars' and extracurriculars %}
+\section*{ {{- extracurriculars_title | sanitize_latex_text -}} }
+\begin{itemize}[leftmargin=*, labelsep=0.5em, itemsep=0.2em]
+{% for extra in extracurriculars %}
+    \item {{ extra }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+
+{% if section == 'Languages' and languages %}
+\section*{ {{ i18n.languages | default('Languages') | sanitize_latex_text }} }
+\begin{itemize}[leftmargin=*, labelsep=0.5em, itemsep=0.2em]
+{% for lang in languages %}
+    \item {{ lang }}
+{% endfor %}
+\end{itemize}
+{% endif %}
+{% endfor %}
+
+\end{document}
