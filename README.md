@@ -34,15 +34,14 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 The sample above is just one configuration. EigenCV puts you in complete control:
 - **Dynamic Sections:** Not all sections are mandatory. Choose exactly what to include and reorder them instantly (e.g., move 'Education' to the top) by simply editing the comma-separated `cvorder` variable.
 - **Change Layouts:** Seamlessly swap between professional LaTeX templates (e.g., `Awesome-CV`, `EigenCV-Modern`).
-- **Brand Yourself:** Inject custom corporate accent colors to match the company you're applying to.
-- **Multilingual:** Generate applications in English, German, or any other language using the built-in translation matrix.
+- **Brand Yourself:** Inject custom corporate accent colors to match the company you're applying to.- **Multilingual:** Generate applications in English, German, or any other language using the built-in translation matrix.
 
 ---
 
 ## 🚀 How to Use EigenCV: Choose Your Path
 
 ### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
-You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the entire pipeline in the cloud.
+You don't need to know Python, LaTeX, or Git to use EigenCV. You can run the entire pipeline directly in ChatGPT.
 
 1. **Download** this entire repository as a ZIP file.
 2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Claude, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
@@ -51,7 +50,7 @@ You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate
 *(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
 
 ### Path 2: The Agentic Developer Route (CLI & IDE)
-If you want to leverage professional tools for maximum speed or require absolute data privacy, run it locally.
+If you prefer terminal workflows, need maximum build speed, or require strict data privacy, run the pipeline locally.
 
 1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
 2. **Install Dependencies:** Run `pip install -r requirements.txt`.
@@ -207,7 +206,7 @@ Looking to customize the LaTeX templates, add your own personal dossier for cult
 
 ## ⚖️ The Philosophy: Resumes as Code
 
-Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By maintaining your resume as a database and treating the LLM solely as an orchestration layer, you maintain **100 % control over your narrative** while automating the tedious process of LaTeX formatting and ATS tailoring.
+Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By keeping your resume in a database and restricting the AI to basic data retrieval, you keep **100 % control over your facts**. You only automate the tedious parts: LaTeX formatting and ATS keyword matching.
 
 **Your career is a database. Version control it.**
 Stop maintaining 15 different Word documents. By keeping your career facts in JSON files, you can treat your resume like software. Fork this repo, make it private, and use Git to track your career progression (`git commit -m "Promoted to Senior"`). When you find a job you like, let the Agent query your database, compile your LaTeX, and land the job.
