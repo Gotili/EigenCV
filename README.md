@@ -174,7 +174,7 @@ You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate
 2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Claude, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
 3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_CLOUD_PROMPT.md`."*
 4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
-*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering).*
+*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
 
 ### Path 2: The Hardcore Privacy Route (For Developers)
 If you want absolute control and 100% data privacy, run it locally.
