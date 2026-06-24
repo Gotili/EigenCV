@@ -55,7 +55,7 @@ def get_user_name(base_dir):
     return "Applicant"
 
 def create_new_app(company, role, dry_run=False):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     # Hard stop if the user hasn't onboarded yet
     check_onboarding(base_dir)

@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 echo Building all Application Packages...
 
-cd "%~dp0application-packages"
+cd "%~dp0..\application-packages"
 
 for /D %%d in (*) do (
     echo.
@@ -39,14 +39,14 @@ for /D %%d in (*) do (
 
 echo.
 echo Gathering PDFs into build directory...
-mkdir "%~dp0build" 2>nul
+mkdir "%~dp0..\build" 2>nul
 for /D %%d in (*) do (
     if exist "%%d\*.pdf" (
-        copy /Y "%%d\*.pdf" "%~dp0build\" >nul
+        copy /Y "%%d\*.pdf" "%~dp0..\build\" >nul
     )
 )
 
 echo.
 echo All builds completed. PDFs are available in the build\ folder.
-cd "%~dp0"
+cd "%~dp0..\"
 endlocal

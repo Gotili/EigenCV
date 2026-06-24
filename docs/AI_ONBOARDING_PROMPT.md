@@ -23,7 +23,7 @@ You are strictly FORBIDDEN from editing or overwriting any of the following file
 - `cv/scripts/cv_compiler.py`
 - `cv/scripts/cv_schema.py`
 - `check_ats_score.py`
-- `new_app.py`
+- `tools/new_app.py`
 
 ## Phase 1: Update Personal Metadata
 Edit `cv/database/active/metadata.tex`.
@@ -88,4 +88,4 @@ The user manually maintains their soft skills, work philosophy, and hobbies in t
 2. Ensure all JSON files contain valid JSON (no trailing commas).
 3. Ensure all LaTeX special characters (`&`, `%`, `$`, `#`, `_`) inside the JSON string values are properly escaped (e.g., `\&`, `\%`).
 3. Confirm with the user that the Onboarding is complete. 
-4. **CRITICAL:** Do NOT tell the user to run terminal commands (like `python new_app.py`). This is an Agentic workflow! Tell the user: "Onboarding is complete. You can now simply paste a Job Description into this chat, and I will automatically initialize the workspace, generate the tailored CV, and compile the PDF for you."
+4. **CRITICAL:** Do NOT tell the user to run terminal commands (like `python tools/new_app.py`). This is an Agentic workflow! Tell the user: "Onboarding is complete. You can now simply paste a Job Description into this chat, and I will automatically initialize the workspace, generate the tailored CV, and compile the PDF for you."

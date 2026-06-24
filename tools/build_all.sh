@@ -5,7 +5,7 @@ set -e
 echo "Building all Application Packages..."
 
 # Move to application packages directory
-BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 APP_DIR="$BASE_DIR/application-packages"
 
 if [ ! -d "$APP_DIR" ]; then

@@ -164,7 +164,7 @@ def compile_cv(config_path):
     metadata_path = os.path.join(data_dir, 'metadata.tex')
     template_name = 'eigencv_resume.tex.j2' # default
     cvcolor = 'awesome-emerald'
-    section_order = ['Profile', 'Skills', 'Experience', 'Projects', 'Education', 'Extracurriculars']
+    section_order = ['Profile', 'Skills', 'Experience', 'Projects', 'Education', 'Languages', 'Extracurriculars']
     user_first_name = "Applicant"
     user_last_name = ""
     parsed_metadata = {}
@@ -371,7 +371,8 @@ def compile_cv(config_path):
         ai_controlled_text = (config.profile + " " + config.keywords + " " + 
                               " ".join([cat.skills for cat in config.skill_categories]))
         if config.cover_letter:
-            ai_controlled_text += " " + config.cover_letter.body
+            cl = config.cover_letter
+            ai_controlled_text += f" {cl.intro_paragraph} {' '.join(cl.body_paragraphs)} {cl.outro_paragraph}"
         for missing in config.missing_skills:
             # Use negative lookbehinds/lookaheads instead of \b to correctly handle special chars like C++ and C#
             if re.search(rf"(?<!\w){re.escape(missing)}(?!\w)", ai_controlled_text, re.IGNORECASE):

@@ -11,7 +11,7 @@ Before you begin generating ANY application package, you MUST verify that the us
    > "⚠️ **Welcome to the EigenCV!** I see you are still using the default 'Jane Doe' placeholder data. Before we can generate tailored applications, we need to onboard your actual career history. Please provide me with a text dump of your old CV or LinkedIn profile, and say *'Start Onboarding'*. I will then use the rules in `docs/AI_ONBOARDING_PROMPT.md` to set up your database safely."
 
 ## Phase 1: Initialization & Pre-Flight Analysis
-1. **MANDATORY:** Run `python new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually. The script will automatically calculate the next correct ID and create the folder.
+1. **MANDATORY:** Run `python tools/new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually. The script will automatically calculate the next correct ID and create the folder.
 2. Save the ENTIRE, unedited, verbatim Job Description text into the newly created folder as `JD_[YYYY-MM-DD].md` for archiving.
 3. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
    - What are the core requirements of this role?
@@ -161,7 +161,7 @@ If the user requests changes to personal contact information (e.g., email, phone
 
 ## Phase 6: Automate the Build & ATS Check
 1. The compiler will automatically update `application_tracking.md` and `application-packages.mk`. You do not need to do this manually.
-2. Inform the user to run `build_all.bat` or `build.bat` in the folder.
+2. Inform the user to run `tools/build_all.bat` or `tools/build_all.sh` in the root folder.
 3. Run the ATS Check Script (`python check_ats_score.py "[Path to Package Folder]"`) which will analyze the compiled PDF against the `JD_*.md` and append the keyword match score to the folder's `README.md`.
 
 ## Phase 7: Unbiased Probability Matrix & Salary Estimate

@@ -47,7 +47,7 @@ This will safely restore EigenCV to its default factory state.
 ### 📂 Advanced Repository Structure
 Beyond the database, the repository is modularized into several functional directories:
 * **`cv/scripts/`**: Contains the core pipeline logic (`cv_compiler.py` and `cv_schema.py`).
-* **Root Directory**: Contains the entry-point scripts (`new_app.py` and `check_ats_score.py`) for easy command-line execution.
+* **Root Directory**: Contains the entry-point scripts (`tools/new_app.py` and `check_ats_score.py`) for easy command-line execution.
 * **`cv/template/`**: Houses all visual presentation logic. This includes the Jinja2 LaTeX templates (`eigencv_resume.tex.j2`, `eigencv_cover_letter.tex.j2`), the `preamble.tex`, and your static `header.tex` (contact info & links).
 * **`application-packages/`**: The generated output folder where all your finished applications live.
 
