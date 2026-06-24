@@ -1,0 +1,37 @@
+\documentclass[11pt, letterpaper]{article}
+\input{../../cv/template/preamble.tex}
+\usepackage[left=0.8in, right=0.8in, top=0.6in, bottom=0.6in]{geometry}
+\begin{document}
+{% if company_accent_color %}
+\definecolor{LinkBlue}{HTML}{ {{- company_accent_color -}} }
+{% endif %}
+\newcommand{\cvtitle}{ {{- cl.subject_role | sanitize_latex_text -}} }
+\input{../../cv/template/header.tex}
+\vspace{3em}
+\noindent\textbf{ {{- cl.company_name | sanitize_latex_text -}} }\\[0pt]
+{{ cl.recruiting_team | sanitize_latex_text }}\\[0pt]
+{{ cl.location | sanitize_latex_text }}
+\vspace{1em}
+\begin{flushright}\today\end{flushright}
+\vspace{2em}
+\noindent\textbf{Subject: Application for {{ cl.subject_role | sanitize_latex_text }}}
+\vspace{2em}
+
+\noindent {{ cl.salutation | sanitize_latex_text }}
+
+\vspace{1em}
+\noindent {{ cl.intro_paragraph | sanitize_latex_text }}
+{% for paragraph in cl.body_paragraphs %}
+
+\vspace{1em}
+\noindent {{ paragraph | sanitize_latex_text }}
+{% endfor %}
+
+\vspace{1em}
+\noindent {{ cl.outro_paragraph | sanitize_latex_text }}
+
+\vspace{3em}
+\noindent Sincerely,\\
+\vspace{2em}\\
+\noindent \cvname
+\end{document}

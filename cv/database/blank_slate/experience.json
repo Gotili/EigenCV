@@ -1,0 +1,21 @@
+{
+  "tech_corp": {
+    "company": "Tech Corp Innovators",
+    "location": "Berlin, Germany",
+    "dates": "Jan 2021 - Present",
+    "bullets": {
+      "arch_microservices": "Architected a scalable microservices platform using Go and Kubernetes, improving system throughput by 40\\%.",
+      "cloud_migration": "Led the migration of a legacy monolithic application to AWS, reducing operational costs by 30\\%.",
+      "team_lead": "Mentored a team of 5 junior developers, establishing strict CI/CD pipelines and code review standards."
+    }
+  },
+  "data_systems_gmbh": {
+    "company": "Data Systems GmbH",
+    "location": "Munich, Germany",
+    "dates": "Mar 2018 - Dec 2020",
+    "bullets": {
+      "data_pipeline": "Built distributed ETL pipelines using Apache Spark, processing over 5TB of log data daily.",
+      "ml_model": "Developed and deployed a machine learning model for churn prediction, increasing customer retention by 15\\%."
+    }
+  }
+}

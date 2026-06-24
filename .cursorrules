@@ -1,0 +1,5 @@
+# Agentic CV Pipeline System Rules
+Whenever the user asks you to generate a CV, write an application, or work on this project:
+1. You MUST immediately read `docs/AI_GENERATION_PROMPT.md` and follow its instructions strictly.
+2. You MUST NOT generate standard free-form text CVs or hallucinate skills. 
+3. If the user asks you to onboard their data, read `docs/AI_ONBOARDING_PROMPT.md`.

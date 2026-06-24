@@ -1,0 +1,37 @@
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\input{../../cv/database/active/metadata.tex}
+
+
+\usepackage{needspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{ifthen}
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\definecolor{SlateGrey}{HTML}{2B2B2B}
+\definecolor{SubtleGrey}{HTML}{4A4A4A}
+\definecolor{LinkBlue}{HTML}{0056b3}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=LinkBlue,
+	urlcolor=LinkBlue,
+}
+
+\titleformat{\section}
+{\needspace{3\baselineskip}\Large\bfseries\color{SlateGrey}}
+{}{0em}{}[\color{SlateGrey}\titlerule\vspace{0.25ex}]
+\titlespacing*{\section}{0pt}{1.0ex}{1ex}
+
+\setlist[itemize]{leftmargin=0.15in, itemsep=2pt, parsep=0pt, topsep=2pt}
+
+\pagestyle{empty}
+
+\clubpenalty=150
+\widowpenalty=150
+\displaywidowpenalty=150

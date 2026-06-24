@@ -1,0 +1,4 @@
+{
+  "proj_ai_router": "\\textbf{Agentic CV Pipeline:} Developed a Zero-Trust LLM-based compiler using Python and Pydantic to deterministically route JSON data into LaTeX templates without hallucinations.",
+  "proj_data_platform": "\\textbf{Real-time Analytics Platform:} Built an open-source real-time analytics dashboard using React, Node.js, and WebSockets."
+}

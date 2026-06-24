@@ -1,0 +1,26 @@
+{
+  "en": {
+    "experience": "Experience",
+    "education": "Education",
+    "projects": "Projects",
+    "skills": "Skills",
+    "languages": "Languages",
+    "profile": "Profile"
+  },
+  "de": {
+    "experience": "Berufserfahrung",
+    "education": "Ausbildung",
+    "projects": "Projekte",
+    "skills": "Fähigkeiten",
+    "languages": "Sprachen",
+    "profile": "Profil"
+  },
+  "es": {
+    "experience": "Experiencia Profesional",
+    "education": "Formación Académica",
+    "projects": "Proyectos Destacados",
+    "skills": "Habilidades Técnicas",
+    "languages": "Idiomas",
+    "profile": "Perfil Profesional"
+  }
+}

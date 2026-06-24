@@ -1,0 +1,141 @@
+%-------------------------------------------------------------------------------
+% CV: Awesome-CV Port for Agentic CV Pipeline
+%-------------------------------------------------------------------------------
+\documentclass[11pt, a4paper]{../../cv/template/awesome-cv}
+\geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
+{% if company_accent_color %}
+\definecolor{awesome}{HTML}{ {{- company_accent_color -}} }
+{% else %}
+\colorlet{awesome}{ {{- cvcolor -}} }
+{% endif %}
+
+% ATS extraction hardening
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\pretolerance=10000
+\tolerance=2000
+\emergencystretch=2.5em
+\renewcommand{\acvHeaderAfterSocialSkip}{8mm}
+\usepackage{needspace}
+
+\input{../../cv/database/active/metadata.tex}
+
+% Map the metadata to awesome-cv commands
+% Awesome-CV bolds the last name. We use the split variables from cv_compiler.
+\name{ {{- user_first_name -}} }{ {{- user_last_name -}} }
+\position{ \cvposition }
+\address{ \cvlocation }
+\mobile{ \cvphone }
+\email{ \cvemail }
+\extrainfo{\BeginAccSupp{ActualText={}}\faSquareGithub\EndAccSupp{}\acvHeaderIconSep\href{https://github.com/\cvgithub}{GitHub: \cvgithub}\acvHeaderSocialSep\BeginAccSupp{ActualText={}}\faLinkedin\EndAccSupp{}\acvHeaderIconSep\href{https://www.linkedin.com/in/\cvlinkedin}{LinkedIn: \cvlinkedin}}
+
+\begin{document}
+\makecvheader
+
+{% for section in section_order %}
+{% if section == 'Profile' and profile %}
+\needspace{4\baselineskip}
+\cvsection{ {{ i18n.profile | default('Professional Summary') | sanitize_latex_text }} }
+
+\begin{cvparagraph}
+{{ profile | sanitize_latex_text }}
+\end{cvparagraph}
+{% endif %}
+
+{% if section == 'Skills' and skill_categories %}
+\needspace{4\baselineskip}
+\cvsection{ {{ i18n.skills | default('Technical Skills') | sanitize_latex_text }} }
+
+\begin{cvskills}
+{% for cat in skill_categories %}
+\cvskill
+  { {{- cat.name | sanitize_latex_text -}} }
+  { {{- cat.skills | sanitize_latex_text -}} }
+{% endfor %}
+\end{cvskills}
+{% endif %}
+
+{% if section == 'Experience' and experience %}
+\needspace{4\baselineskip}
+\cvsection{{{ i18n.experience | default('Experience') }}}
+
+\begin{cventries}
+{% for job in experience %}
+\cventry
+  { {{- job.title | sanitize_latex_text -}} }
+  { {{- job.company -}} }
+  { {{- job.location -}} }
+  { {{- job.dates -}} }
+  {
+    \begin{cvitems}
+    {% for bullet in job.bullets %}
+      \item { {{- bullet -}} }
+    {% endfor %}
+    \end{cvitems}
+  }
+{% endfor %}
+\end{cventries}
+{% endif %}
+
+{% if section == 'Projects' and projects %}
+\needspace{4\baselineskip}
+\cvsection{Selected Engineering Work}
+
+\vspace{\acvSectionContentTopSkip}
+\begin{itemize}[leftmargin=2ex, nosep, noitemsep]
+  \setlength{\parskip}{0pt}
+  \renewcommand{\labelitemi}{\bullet}
+{% for proj in projects %}
+  \item \descriptionstyle{ {{- proj -}} }
+{% endfor %}
+\end{itemize}
+\vspace{2mm}
+{% endif %}
+
+{% if section == 'Education' and education %}
+\needspace{4\baselineskip}
+\cvsection{{{ i18n.education | default('Education') }}}
+
+\vspace{\acvSectionContentTopSkip}
+\begin{itemize}[leftmargin=2ex, nosep, noitemsep]
+  \setlength{\parskip}{0pt}
+  \renewcommand{\labelitemi}{\bullet}
+{% for edu in education %}
+  \item \descriptionstyle{ {{- edu -}} }
+{% endfor %}
+\end{itemize}
+\vspace{2mm}
+{% endif %}
+
+{% if section == 'Extracurriculars' and extracurriculars %}
+\needspace{4\baselineskip}
+\cvsection{ {{- extracurriculars_title | sanitize_latex_text -}} }
+
+\vspace{\acvSectionContentTopSkip}
+\begin{itemize}[leftmargin=2ex, nosep, noitemsep]
+  \setlength{\parskip}{0pt}
+  \renewcommand{\labelitemi}{\bullet}
+{% for extra in extracurriculars %}
+  \item \descriptionstyle{ {{- extra -}} }
+{% endfor %}
+\end{itemize}
+\vspace{2mm}
+{% endif %}
+
+{% if section == 'Languages' and languages %}
+\needspace{4\baselineskip}
+\cvsection{{{ i18n.languages | default('Languages') }}}
+
+\vspace{\acvSectionContentTopSkip}
+\begin{itemize}[leftmargin=2ex, nosep, noitemsep]
+  \setlength{\parskip}{0pt}
+  \renewcommand{\labelitemi}{\bullet}
+{% for lang in languages %}
+  \item \descriptionstyle{ {{- lang -}} }
+{% endfor %}
+\end{itemize}
+\vspace{2mm}
+{% endif %}
+{% endfor %}
+
+\end{document}

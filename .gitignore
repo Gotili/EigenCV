@@ -1,0 +1,41 @@
+# LaTeX helper files
+build/*.aux
+build/*.log
+build/*.out
+build/*.synctex.gz
+build/*.fdb_latexmk
+build/*.fls
+build/*.toc
+build/*.xdv
+
+# Personal data (if you keep photo separate)
+# assets/photo.jpg
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python Caches
+__pycache__/
+*.pyc
+
+# Generated application packages (Crucial for privacy!)
+application-packages/
+
+# Private tracking table
+application_tracking.md
+
+# Marketing and temp
+MARKETING_PITCH.md
+scratch/
+
+# Personal Database (Protects your real CV data from being pushed to public forks!)
+cv/database/active/*
+!cv/database/active/.gitkeep
