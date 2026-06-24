@@ -94,36 +94,42 @@ If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolatio
 ## 🛠️ System Architecture
 
 ```mermaid
-flowchart LR
-    %% Inputs
-    JD(Job Description)
-    DB[(Zero-Trust\nDatabase)]
-    
-    %% Engine
-    subgraph "EigenCV Pipeline"
-        Router{Agentic\nLLM Router}
-        Config(build_config.json)
-        Compiler[[Python Compiler\n& Lie Detector]]
-        ATS[[ATS Scoring\nEngine]]
-    end
+flowchart TD
+    %% Professional Theme (Dark & Light Mode Compatible)
+    classDef input fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
+    classDef database fill:#276749,stroke:#1e4e38,stroke-width:2px,color:#ffffff,rx:15px,ry:15px
+    classDef ai fill:#553c9a,stroke:#44337a,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
+    classDef script fill:#2b6cb0,stroke:#215285,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
+    classDef artifact fill:#1a202c,stroke:#4a5568,stroke-width:2px,stroke-dasharray: 4 4,color:#ffffff,rx:4px,ry:4px
+    classDef final fill:#9b2c2c,stroke:#742a2a,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
 
-    %% Outputs
-    PDF(Tailored PDF CV)
-    Score>Honest ATS Score]
+    %% Architecture Nodes
+    JD["📄 Job Description (.md)"]:::input
+    DB[("🗄️ Zero-Trust Database")]:::database
 
-    %% Connections
-    JD -->|"1. Input Target"| Router
-    DB -.->|"2. Career Facts"| Router
+    Agent{"🧠 Agentic LLM Router"}:::ai
+    Config["⚙️ build_config.json"]:::artifact
+
+    Compiler[["🐍 cv_compiler.py\n[Lie Detector & LaTeX Engine]"]]:::script
+    PDF["📑 Tailored Resume (.pdf)"]:::final
+
+    ATS[["🔍 check_ats_score.py\n[Verification Engine]"]]:::script
+    Score["📈 Honest ATS Match Score"]:::final
+
+    %% Flow Connections
+    JD -->|1. Feed Requirements| Agent
+    DB -.->|2. Supply Valid Bullet IDs| Agent
     
-    Router -->|"3. Semantic Routing"| Config
-    Config -->|"4. Load Specs"| Compiler
-    DB ===>|"5. Inject Ground Truth"| Compiler
+    Agent -->|3. Output Pydantic Schema| Config
     
-    Compiler -->|"6. Render LaTeX"| PDF
+    Config -->|4. Load Application Specs| Compiler
+    DB ===>|5. Inject Ground Truth Text| Compiler
     
-    PDF -.->|"7. Parse PDF Text"| ATS
-    JD -.->|"8. Baseline Keywords"| ATS
-    ATS ===>|"9. Compute Penalty Matrix"| Score
+    Compiler -->|6. Deterministic Render| PDF
+    
+    PDF -.->|7. Extract Final Text| ATS
+    JD -.->|8. Extract Target Keywords| ATS
+    ATS ===>|9. Calculate Integrity Penalty| Score
 ```
 
 ---
