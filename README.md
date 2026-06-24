@@ -74,6 +74,8 @@ Successfully compiled CV-Applicant-Google.pdf
 * 🧮 **Advanced ATS & Salary Estimations:** The post-compilation parser calculates a mathematically honest ATS score, and uses it to estimate potential salary ranges and interview/offer probabilities.
 * 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, deterministically compiled into beautiful Jinja2 LaTeX templates.
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
+* 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
+* 🐳 **Zero-Install Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot the environment in seconds to get a full TeX Live distribution inside Docker—no need to install 4GB of LaTeX dependencies on your host machine.
 * 🕵️ **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
@@ -121,7 +123,7 @@ If you want absolute control and 100% data privacy:
 sequenceDiagram
     autonumber
     actor U as 👤 User
-    participant LLM as 🧠 Agent (Cursor)
+    participant LLM as 🧠 Agent
     participant DB as 🗄️ Database
     participant Py as 🐍 Python Tools
 
@@ -144,10 +146,7 @@ sequenceDiagram
     rect rgb(60, 40, 20)
     Note over LLM,Py: Phase 2: Compile
     LLM->>Py: Execute cv_compiler.py
-    rect rgb(120, 20, 20)
     Note over Py,DB: 🛡️ The Lie Detector<br>Crash if AI hallucinated!
-    end
-    
     Py->>DB: Fetch verified text
     Py-->>LLM: Render PDF via Jinja2
     end
