@@ -13,16 +13,17 @@
 
 ---
 
-## 🤯 The Problem with AI Resume Builders
-If you tell ChatGPT to "tailor my resume for this job", it will quietly invent skills, inflate your job titles, and paraphrase your hard engineering achievements into generic HR buzzwords (like *"Spearheaded cross-functional synergies"*). 
+## 🤯 Commercial AI Builders vs. EigenCV
 
-**EigenCV solves this.** We treat your career history as an immutable database and the LLM solely as an orchestration layer. 
+**The Industry Standard (Commercial AI Builders):**  
+You tell an AI to "optimize my resume for this job." The AI treats your resume as a creative writing exercise. It quietly hallucinates skills, inflates job titles, and paraphrases your engineering achievements into generic HR buzzwords. The result is a PDF that beats the ATS but fails the technical interview because it's full of lies.
 
----
+**The EigenCV Approach (Zero-Trust):**  
+We treat your career history as an immutable database. The AI is strictly an **orchestration layer**. It does not write your resume; it *queries* your database to pull the most relevant, pre-verified bullet points. 
+
+If the AI attempts to go rogue and hallucinate a missing skill into your profile to artificially boost your ATS score, the Python compiler's **Lie Detector** intercepts it and hard-crashes the build. **Lies never make it into the PDF.**
 
 ## 🚀 The "Lie Detector" in Action
-
-> All modern LLMs (like ChatGPT or Claude) are mathematically prone to hallucinating skills when asked to "optimize for ATS". EigenCV acts as an impenetrable shield against this. If the AI goes rogue and attempts to sneak a fake skill into your resume config, the Python compiler catches it and hard-crashes:
 
 ```text
 +----------------------------- EigenCV Compiler ------------------------------+
