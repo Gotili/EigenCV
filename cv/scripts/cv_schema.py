@@ -48,9 +48,9 @@ class CoverLetterConfig(BaseModel):
         return self
 
 class ProbabilityMatrix(BaseModel):
-    invitation_probability: str = Field(..., description="E.g., '85% - Justification...'")
-    technical_pass_probability: str = Field(..., description="E.g., '90% - Justification...'")
-    job_offer_probability: str = Field(..., description="E.g., '75% - Justification...'")
+    invitation_probability: str = Field(..., description="E.g., '85 % - Justification...'")
+    technical_pass_probability: str = Field(..., description="E.g., '90 % - Justification...'")
+    job_offer_probability: str = Field(..., description="E.g., '75 % - Justification...'")
     salary_estimate: str = Field(..., description="E.g., '€95,000 - €120,000 - Justification...'")
     biggest_vulnerability: str = Field(..., description="The single weakest point in the profile")
 
@@ -140,7 +140,7 @@ class BuildConfig(BaseModel):
                 if total_available > 0:
                     min_required = math.ceil(total_available * 0.6)
                     if len(exp_data.bullets) < min_required:
-                        errors.append(f"You only provided {len(exp_data.bullets)} bullets for '{healed_comp_id}'. You MUST provide AT LEAST {min_required} bullets (60% of available {total_available}).")
+                        errors.append(f"You only provided {len(exp_data.bullets)} bullets for '{healed_comp_id}'. You MUST provide AT LEAST {min_required} bullets (60 % of available {total_available}).")
         
         self.experience = healed_experience
 

@@ -17,6 +17,6 @@ Agile / Scrum, Test-Driven Development (TDD), Microservices Architecture, DevOps
 
 | Skill Name | Category | Rating | Synonyms/Variants |
 | :--- | :--- | :--- | :--- |
-| Python | Programming | 90% | |
-| React | Frameworks | 80% | (React \| React.js) |
-| Docker | Tools & Cloud | 85% | [Docker, Containerization] |
+| Python | Programming | 90 % | |
+| React | Frameworks | 80 % | (React \| React.js) |
+| Docker | Tools & Cloud | 85 % | [Docker, Containerization] |

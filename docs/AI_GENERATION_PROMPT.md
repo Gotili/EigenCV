@@ -15,7 +15,7 @@ Before you begin generating ANY application package, you MUST verify that the us
 2. Save the ENTIRE, unedited, verbatim Job Description text into the newly created folder as `JD_[YYYY-MM-DD].md` for archiving.
 3. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
    - What are the core requirements of this role?
-   - Which skills are missing from `cv/database/active/master_skills.md` that I need to track as 0%?
+   - Which skills are missing from `cv/database/active/master_skills.md` that I need to track as 0 %?
 
 ## Phase 2: Skill Gap Tracking (CRITICAL)
 If the JD requires specific software, tools, or concepts that are completely missing from `cv/database/active/master_skills.md`, you MUST NOT edit the markdown file manually. Instead, you MUST track them in the `missing_skills` array in the `build_config.json`. The compiler will safely log them to a separate `missing_skills_tracker.md` file to keep the master file clean while ensuring you can highlight these gaps in the final probability matrix.
@@ -88,9 +88,9 @@ The CV generation is powered by a Pydantic/Jinja Python compiler. You MUST creat
     "outro_paragraph": "Custom Bridge..."
   },
   "probability_matrix": {
-    "invitation_probability": "85% - Strong alignment with JD requirements...",
-    "technical_pass_probability": "90% - Deep architectural understanding...",
-    "job_offer_probability": "75% - Highly competitive market...",
+    "invitation_probability": "85 % - Strong alignment with JD requirements...",
+    "technical_pass_probability": "90 % - Deep architectural understanding...",
+    "job_offer_probability": "75 % - Highly competitive market...",
     "salary_estimate": "€95,000 - €120,000 - Senior roles in this region...",
     "biggest_vulnerability": "Lacks 10 years of enterprise Java microservices..."
   },
@@ -140,7 +140,7 @@ The CV generation is powered by a Pydantic/Jinja Python compiler. You MUST creat
    - **Dynamic Language Rule & Native Business Proficiency:** The Cover Letter and Profile MUST be written in the language specified by the Job Description, or default to the `\cvlocale` language if unclear. If the JD is in German, write in German; if Ukrainian, write in Ukrainian.
    - **CRITICAL TRANSLATION DIRECTIVE:** When writing in languages other than English, you MUST ensure a highly professional, native "Business Level" proficiency. Absolutely NO literal or awkward "Denglish" translations of technical IT jargon. Use the established industry standard terms in that language (e.g., use "Deployment" in German instead of "Bereitstellung", unless it's a very conservative company). Ensure flawless grammar and a confident, senior tone. Avoid overly enthusiastic AI-typical phrasing.
    - **The Golden Thread:** Do not write generic introductions. Directly align the applicant's highest achievement with the company's core mission or the specific problem mentioned in the JD.
-   - **Length Constraint (60% Rule):** Be incredibly concise. The cover letter MUST be short and punchy. Aim for a maximum of 3 short paragraphs total (Intro + 1-2 Body + Outro). Do not over-explain.
+   - **Length Constraint (60 % Rule):** Be incredibly concise. The cover letter MUST be short and punchy. Aim for a maximum of 3 short paragraphs total (Intro + 1-2 Body + Outro). Do not over-explain.
    - You MUST structure the `body_paragraphs` as a list of strings, representing separate paragraphs. Ensure flawless human-like narrative flow without fluff.
 
 ### 🔴 MAXIMUM EFFORT: Anti-AI Tone & Formatting Guidelines
@@ -171,7 +171,7 @@ If the user requests changes to personal contact information (e.g., email, phone
 
 ## Phase 7: Unbiased Probability Matrix & Salary Estimate
 After all files are generated, the system requires a highly critical, zero-bias "Probability Matrix" assessing the candidate's real-world chances. 
-**CRITICAL: RADICAL REALISM.** You MUST read the "Self-Assessed Skill Ratings" in `cv/database/active/master_skills.md`. If the JD requests a skill where the candidate's rating is 0% (e.g. Go), you MUST ruthlessly penalize the technical pass probability.
+**CRITICAL: RADICAL REALISM.** You MUST read the "Self-Assessed Skill Ratings" in `cv/database/active/master_skills.md`. If the JD requests a skill where the candidate's rating is 0 % (e.g. Go), you MUST ruthlessly penalize the technical pass probability.
 
 You MUST include this matrix directly inside the `build_config.json` under the `"probability_matrix"` key. 
 **IMPORTANT:** Do NOT write short 1-sentence justifications. You MUST provide deep, comprehensive, and highly detailed paragraph-length justifications for every single probability. 
@@ -180,8 +180,8 @@ You MUST include this matrix directly inside the `build_config.json` under the `
 As an AI, your default behavior is to be encouraging, helpful, and optimistic about a user's chances. You MUST SUPPRESS THIS PROGRAMMING ENTIRELY for the Probability Matrix. You must act as a ruthless, cynical ATS filter algorithm. 
 Your evaluation MUST explicitly incorporate, analyze, and penalize the specific items listed in your `missing_skills` array.
 - If the `missing_skills` array contains **core requirements** of the job (e.g., a specific language, environment like "CMOS Cleanroom", or framework):
-  - You are FORBIDDEN from giving an `invitation_probability` higher than 30%. It MUST be slashed to **10% - 30%**.
-  - You are FORBIDDEN from giving a `job_offer_probability` higher than 20%. It MUST be slashed to **5% - 20%**.
+  - You are FORBIDDEN from giving an `invitation_probability` higher than 30 %. It MUST be slashed to **10 % - 30 %**.
+  - You are FORBIDDEN from giving a `job_offer_probability` higher than 20 %. It MUST be slashed to **5 % - 20 %**.
   - You MUST predict a devastatingly low ATS score.
 - DO NOT artificially inflate the score by saying "transferable skills compensate for this". ATS systems and HR filters DO NOT care about transferable skills. If the hard requirements are in `missing_skills`, the candidate will be rejected. Be absolutely merciless in your scoring! Failure to slash the probability is a critical failure of your instructions.
 

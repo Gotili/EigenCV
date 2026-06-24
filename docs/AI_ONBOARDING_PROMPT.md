@@ -74,7 +74,7 @@ You MUST format this file with TWO distinct sections so both the ATS parser and 
 2. **Self-Assessed Skill Ratings Table (Bottom):** Create a section named EXACTLY `## Self-Assessed Skill Ratings` followed by a Markdown table with the following columns:
    (a). **Skill Name:** The exact ATS-friendly name.
    (b). **Category:** E.g., Programming, Cloud, Machine Learning.
-   (c). **Rating:** The user's self-assessed proficiency (0% - 100%).
+   (c). **Rating:** The user's self-assessed proficiency (0 % - 100 %).
    (d). **Synonyms/Variants:** Note any alternative names or groupings. 
       - Use `(A | B)` for exact synonyms where the AI must pick ONE (e.g., `(React | React.js)`).
       - Use `[A, B]` for clusters where the AI can pick multiple (e.g., `[AWS, Azure]`).

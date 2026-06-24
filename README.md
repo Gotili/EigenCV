@@ -57,7 +57,7 @@ If you want to leverage professional tools for maximum speed or require absolute
 2. **Install Dependencies:** Run `pip install -r requirements.txt`.
 3. **Agent Setup:** 
    - **For Maximum Speed:** Open the repository using an Agentic CLI (like **Antigravity** / **Claude Code**) or an Agentic IDE (**Cursor** / **Windsurf**) connected to their standard cloud APIs.
-   - **For 100% Hardcore Privacy:** Point your Agentic IDE to a local model (like **Ollama** or **LM Studio**) so your data NEVER leaves your machine.
+   - **For 100 % Hardcore Privacy:** Point your Agentic IDE to a local model (like **Ollama** or **LM Studio**) so your data NEVER leaves your machine.
 4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
 5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
 6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
@@ -138,7 +138,7 @@ Successfully compiled CV to CV-Applicant-Google.tex
 Auto-compiling PDFs with pdflatex...
 Successfully compiled CV-Applicant-Google.pdf
 
-                       ATS Match Score: 85.0%                        
+                       ATS Match Score: 85.0 %                        
 +-------------------------------------------------------------------+
 | Category        | Skills                                          |
 |-----------------+-------------------------------------------------|
@@ -161,7 +161,7 @@ Successfully compiled CV-Applicant-Google.pdf
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
 * 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
 * 🐳 **Containerized Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot a fully sandboxed environment to get a full TeX Live distribution inside Docker. *(Note: The initial Docker build downloads the 4GB distribution, grab a coffee. After that, compile CVs locally without polluting your host machine.)*
-* 🕵️ **100% Local & Privacy-First (Optional):** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
+* 🕵️ **100 % Local & Privacy-First (Optional):** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
 
@@ -175,7 +175,7 @@ Instead of vector search, we use **In-Context Semantic Routing**. We feed your e
 
 ### 2. The EigenTruth Engine (How We Catch Hallucinations)
 **Is it really "Zero-Trust" if the AI generates the Cover Letter and Profile?** 
-Yes, but it's a *Constrained Generation Boundary*. While your hard facts (experience bullets, projects) are 100% immutable and fetched via IDs, your Profile and Cover Letter *must* be dynamically written to address the specific company's mission. 
+Yes, but it's a *Constrained Generation Boundary*. While your hard facts (experience bullets, projects) are 100 % immutable and fetched via IDs, your Profile and Cover Letter *must* be dynamically written to address the specific company's mission. 
 
 To maintain Zero-Trust here, the Python compiler (`cv_compiler.py`) intercepts these generated text fields *before* rendering the LaTeX. When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array for any required skills you *do not* possess. 
 
@@ -207,7 +207,7 @@ Looking to customize the LaTeX templates, add your own personal dossier for cult
 
 ## ⚖️ The Philosophy: Resumes as Code
 
-Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By maintaining your resume as a database and treating the LLM solely as an orchestration layer, you maintain **100% control over your narrative** while automating the tedious process of LaTeX formatting and ATS tailoring.
+Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By maintaining your resume as a database and treating the LLM solely as an orchestration layer, you maintain **100 % control over your narrative** while automating the tedious process of LaTeX formatting and ATS tailoring.
 
 **Your career is a database. Version control it.**
 Stop maintaining 15 different Word documents. By keeping your career facts in JSON files, you can treat your resume like software. Fork this repo, make it private, and use Git to track your career progression (`git commit -m "Promoted to Senior"`). When you find a job you like, let the Agent query your database, compile your LaTeX, and land the job.
