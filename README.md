@@ -38,7 +38,7 @@ Most AI tools use a "generate and pray" approach. EigenCV uses **Agentic Determi
 
 1. **The Immutable Master Database:** You don't paste your resume into a chat window. Your career history lives offline as a structured JSON/Markdown database on your hard drive. Every achievement, project, and skill has a mathematically verifiable ID (e.g., `proj_aws_migration`).
 2. **AI Orchestration (The Brain):** When applying for a job, the AI reads the Job Description and acts as a strategic orchestrator. Instead of writing text, it executes a precise query against your database, returning only the IDs that maximize your ATS match score. It crafts a hyper-authentic Cover Letter based *exclusively* on your verified profile data.
-3. **Deterministic Compilation (The Muscle):** The AI is entirely locked out of the rendering process. The EigenCV Python compiler takes the approved list of IDs, fetches the exact text from your offline database, and deterministically injects it into a stunning, ATS-optimized LaTeX template. **Zero broken layouts, zero hallucinations.**
+3. **Deterministic Compilation (The Muscle):** The AI is entirely locked out of the rendering process. The EigenCV Python compiler takes the approved list of IDs, fetches the exact text from your offline database, and deterministically injects it into a stunning, ATS-optimized LaTeX template. **Flawless layouts, no hallucinations.**
 
 ```mermaid
 sequenceDiagram
@@ -121,14 +121,14 @@ Successfully compiled CV-Applicant-Google.pdf
 
 * 🛡️ **Zero-Trust & The EigenTruth Engine:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your profile to artificially boost your ATS score, the compiler's **EigenTruth Engine** (our Lie Detector) catches it and hard-crashes the build.
 * 🔒 **Immutable Database:** Your bullet points and skills are strictly **IMMUTABLE**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
-* ✍️ **Zero-Hallucination Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
+* ✍️ **Authentic Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
 * 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
 * 🧮 **Advanced ATS Engine & Reality Checks:** The post-compilation Python parser calculates a mathematically honest ATS keyword match score. Meanwhile, the AI Agent acts as a ruthless filter, estimating interview/offer probabilities and salary ranges based *strictly* on your verified skills, creating a realistic Probability Matrix.
 * 🏥 **Self-Healing IDs:** If the LLM makes a minor typo when selecting an ID from your database (e.g., `aws_mig` instead of `aws_migration`), the compiler's built-in `rapidfuzz` heuristics will auto-heal the ID, preventing brittle build crashes.
 * 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, deterministically compiled into beautiful Jinja2 LaTeX templates.
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
 * 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
-* 🐳 **Zero-Install Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot a fully sandboxed environment to get a full TeX Live distribution inside Docker. *(Note: The initial Docker build downloads the 4GB distribution, grab a coffee. After that, compile CVs locally without polluting your host machine.)*
+* 🐳 **Containerized Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot a fully sandboxed environment to get a full TeX Live distribution inside Docker. *(Note: The initial Docker build downloads the 4GB distribution, grab a coffee. After that, compile CVs locally without polluting your host machine.)*
 * 🕵️ **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
@@ -167,7 +167,7 @@ EigenCV uses `pdflatex`. LaTeX was built from the ground up for print typography
 
 ## 🚀 How to Use EigenCV: Choose Your Path
 
-### Path 1: The Zero-Setup "Lifehack" (For Non-Coders / ChatGPT Plus)
+### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
 You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the entire pipeline in the cloud.
 
 1. **Download** this entire repository as a ZIP file.
