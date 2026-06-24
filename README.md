@@ -31,6 +31,17 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 > *EigenCV automatically renders your JSON data into gorgeous, pixel-perfect LaTeX. Switch between layouts (like `Awesome-CV` or `EigenCV-Modern`), change corporate accent colors, and reorder sections using simple metadata toggles.*
 
 ---
+
+## ⚙️ How the Pipeline Works (The 3-Step Process)
+
+Before we look at the Lie Detector, here is exactly how EigenCV generates your application:
+
+1. **The Master Database:** You maintain your entire career history (every project, every job, every skill) as structured Markdown/JSON files on your hard drive. Every bullet point has a unique ID (e.g., `proj_aws_migration`).
+2. **AI Orchestration & Matching:** When you apply for a job, the AI reads the Job Description and your database. Instead of writing text, it simply outputs a list of IDs (e.g., `["proj_aws_migration", "exp_google_lead"]`) that perfectly match the job requirements. It also drafts a hyper-authentic Cover Letter based *only* on your verified profile.
+3. **Deterministic Compilation:** The EigenCV Python compiler takes this list of IDs, fetches the verified text from your database, and deterministically injects it into a stunning LaTeX template.
+
+---
+
 ## 🚀 The "Lie Detector" in Action
 
 ```text
