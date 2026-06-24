@@ -27,8 +27,15 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 
 ## 🖼️ Example Output & Gallery
 
-> **[PLACEHOLDER: Insert image of the final compiled PDF here]**
-> *EigenCV automatically renders your JSON data into gorgeous, pixel-perfect LaTeX. Switch between layouts (like `Awesome-CV` or `EigenCV-Modern`), change corporate accent colors, and reorder sections using simple metadata toggles.*
+> ![Jane Doe Sample CV](docs/images/sample_cv.png)
+> ![Jane Doe Sample Cover Letter](docs/images/sample_cover_letter.png)
+
+### 🎨 Total Customization & Control
+The sample above is just one configuration. EigenCV puts you in complete control:
+- **Dynamic Sections:** Not all sections are mandatory. Choose exactly what to include and reorder them instantly (e.g., move 'Education' to the top) by simply editing the comma-separated `cvorder` variable.
+- **Change Layouts:** Seamlessly swap between professional LaTeX templates (e.g., `Awesome-CV`, `EigenCV-Modern`).
+- **Brand Yourself:** Inject custom corporate accent colors to match the company you're applying to.
+- **Multilingual:** Generate applications in English, German, or any other language using the built-in translation matrix.
 
 ---
 
@@ -43,12 +50,14 @@ You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate
 4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
 *(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
 
-### Path 2: The Hardcore Privacy Route (For Developers)
-If you want absolute control and 100% data privacy, run it locally.
+### Path 2: The Agentic Developer Route (CLI & IDE)
+If you want to leverage professional tools for maximum speed or require absolute data privacy, run it locally.
 
 1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
 2. **Install Dependencies:** Run `pip install -r requirements.txt`.
-3. **IDE Setup:** Open the repository in an Agentic IDE like **Cursor** or **Windsurf**. Point it to a local model (like Ollama or LM Studio) so your data NEVER leaves your machine.
+3. **Agent Setup:** 
+   - **For Maximum Speed:** Open the repository using an Agentic CLI (like **Antigravity** / **Claude Code**) or an Agentic IDE (**Cursor** / **Windsurf**) connected to their standard cloud APIs.
+   - **For 100% Hardcore Privacy:** Point your Agentic IDE to a local model (like **Ollama** or **LM Studio**) so your data NEVER leaves your machine.
 4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
 5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
 6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
@@ -152,7 +161,7 @@ Successfully compiled CV-Applicant-Google.pdf
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
 * 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
 * 🐳 **Containerized Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot a fully sandboxed environment to get a full TeX Live distribution inside Docker. *(Note: The initial Docker build downloads the 4GB distribution, grab a coffee. After that, compile CVs locally without polluting your host machine.)*
-* 🕵️ **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
+* 🕵️ **100% Local & Privacy-First (Optional):** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
 
