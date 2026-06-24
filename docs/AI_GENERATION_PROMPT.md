@@ -157,6 +157,8 @@ You are strictly forbidden from generating text that sounds like standard ChatGP
 6. **Forbidden Transitions & Clichés:** Never start sentences with *Furthermore, Moreover, Additionally, In conclusion*. Never start a cover letter with *"I am thrilled to apply for..."* or *"As a [Role] with X years of experience..."*.
 7. **Forbidden Punctuation Tics:** Do NOT overuse em-dashes (`—`) or semicolons (`;`). AI models use these obsessively to connect clauses. Use short, punchy, single-thought sentences instead.
 8. **Authentic Voice:** Write fact-first. Use active verbs. Be direct. If you solved a problem, say exactly what you did and what the result was, without dressing it up in dramatic narrative.
+9. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 \\%" instead of "40\\%", and "2 TB" instead of "2TB"). In LaTeX, preferably use a non-breaking space (tilde `~`) or small space (`\\,`) for this, e.g., `40~\\%` or `2~TB`.
+
 2. You do NOT need to manually create `build.bat` or `Makefile`. The `cv_compiler.py` script will automatically generate them for you in the new application folder.
 
 ## Phase 5: Metadata Updates
