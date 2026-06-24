@@ -150,6 +150,17 @@ If a match is found, the compiler immediately throws an `EigenTruthViolationErro
 **Why a Regex engine and not a State-of-the-Art "LLM-as-a-Judge"?** 
 Because *Pragmatism > Over-engineering*. Your CV compiler should run completely offline, deterministically, in <1 second, without requiring an active API key or costing $0.05 per build. Our EigenTruth Engine is O(1), free, and bulletproof for this specific use case.
 
+### 3. RapidFuzz Healing (Fault Tolerance)
+LLMs are notoriously bad at outputting exact string matches. If your database ID is `aws_migration_2023`, the LLM might output `aws_mig_23`. Traditional build systems would throw a `KeyError` and crash. 
+EigenCV uses the `rapidfuzz` library (C++ optimized Levenshtein distance) to mathematically calculate the closest matching ID in your database. This provides graceful degradation: we tolerate minor AI typos while strictly maintaining data integrity.
+
+### 4. Pydantic over Prompt Engineering
+We do not rely on complex "Prompt Engineering" to format the CV. We force the LLM to output data strictly matching a `cv_schema.py` Pydantic model. If the LLM violates the schema (e.g., nesting arrays where strings should be), the pipeline rejects it before it ever reaches the LaTeX compiler. Strong typing beats prompt engineering.
+
+### 5. LaTeX vs HTML-to-PDF (The ATS Text Layer)
+Many modern CV builders use web technologies (React/HTML) and use Headless Chrome (Puppeteer) to print to PDF. **This is fatal for ATS.** Browser engines often render PDFs with fragmented, non-sequential text layers, causing ATS parsers to misread the document.
+EigenCV uses `pdflatex`. LaTeX was built from the ground up for print typography. It guarantees a sequential, machine-readable text layer, ensuring the ATS parses your resume exactly from top to bottom.
+
 ---
 
 ## 🚀 How to Use EigenCV: Choose Your Path
@@ -164,13 +175,14 @@ You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate
 *(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering).*
 
 ### Path 2: The Hardcore Privacy Route (For Developers)
-If you want absolute control and 100% data privacy:
+If you want absolute control and 100% data privacy, run it locally.
 
-1. **Clone** this repository and open it in an Agentic IDE like **Cursor** or **Windsurf**.
-2. **Local LLMs:** Point your IDE to a local model (like Ollama, LM Studio, or GPT4All). Your career data will NEVER leave your machine.
-3. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
-4. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
-5. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
+1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
+2. **Install Dependencies:** Run `pip install -r requirements.txt`.
+3. **IDE Setup:** Open the repository in an Agentic IDE like **Cursor** or **Windsurf**. Point it to a local model (like Ollama or LM Studio) so your data NEVER leaves your machine.
+4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
+5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
+6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
 
 ---
 
