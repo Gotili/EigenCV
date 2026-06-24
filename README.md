@@ -68,23 +68,57 @@ Successfully compiled CV-Applicant-Google.pdf
 ## 🛠️ System Architecture
 
 ```mermaid
-graph TD
-    JD[Job Description .md] -->|AI Prompt| AI[Agentic LLM Router]
-    DB[(Active Database\nJSON & Markdown)] -->|Context| AI
+flowchart LR
+    %% Subgraphs for Architectural Separation
+    subgraph Input ["📥 1. Input Layer"]
+        JD(📄 Job Description)
+    end
+
+    subgraph Data ["🗄️ 2. Zero-Trust Database"]
+        DB[(JSON / Markdown\nCareer Facts)]
+    end
+
+    subgraph AI_Layer ["🧠 3. Agentic Orchestration"]
+        Router{LLM Router}
+        Config[⚙️ build_config.json]
+    end
+
+    subgraph Build ["🔨 4. Compilation Pipeline"]
+        Compiler[[🐍 cv_compiler.py]]
+        TEX(📝 LaTeX Templates)
+        PDF(📑 Tailored PDF CV)
+    end
+
+    subgraph Verif ["🛡️ 5. Verification"]
+        ATS[[🔍 check_ats_score.py]]
+        Log(📈 Honest ATS Score)
+    end
+
+    %% Workflow
+    JD -.->|Semantic Match| Router
+    DB ==>|Ground Truth| Router
+    Router ==>|Pydantic Validated| Config
     
-    AI -->|Validates Schema| Config[build_config.json]
-    Config -->|Python| Compiler[cv_compiler.py]
+    Config ==>|Injects Data| Compiler
+    Compiler -.->|Renders| TEX
+    TEX ==>|pdflatex| PDF
     
-    Compiler -->|Jinja2 Templates| TEX[LaTeX Source .tex]
-    TEX -->|pdflatex| PDF[Tailored CV .pdf]
+    PDF -.->|Parses Text| ATS
+    JD -.->|Extracts Keywords| ATS
+    ATS ==>|Calculates Match| Log
+
+    %% Styling to make it look premium
+    classDef primary fill:#4285F4,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef secondary fill:#34A853,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef database fill:#FBBC05,stroke:#000,stroke-width:2px,color:#000,rx:5px,ry:5px;
+    classDef warning fill:#EA4335,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
+    classDef file fill:#E8EAED,stroke:#9AA0A6,stroke-width:1px,color:#202124,rx:5px,ry:5px;
     
-    PDF -->|Text Extraction| ATS[check_ats_score.py]
-    JD --> ATS
-    ATS -->|Match Score| Log[Application Log]
-    
-    style JD fill:#f9f,stroke:#333,stroke-width:2px
-    style AI fill:#bbf,stroke:#333,stroke-width:2px
-    style PDF fill:#ff9,stroke:#333,stroke-width:2px
+    class Router primary;
+    class Compiler,ATS secondary;
+    class DB database;
+    class Log warning;
+    class JD,Config,TEX,PDF file;
 ```
 
 ---
