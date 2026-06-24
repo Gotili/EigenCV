@@ -44,6 +44,17 @@ Beyond the database, the repository is modularized into several functional direc
 
 ---
 
+## 🧠 The Agentic Output (Pydantic Schema)
+
+When the LLM reads your Job Description, it generates a `build_config.json`. This file is strictly validated by Pydantic (`cv/scripts/cv_schema.py`). You don't need to know Python to understand it, but you should understand its structure:
+
+* **No Raw Text for History:** The schema forces the AI to output *arrays of string IDs*, not raw text. For example, under `experience`, the AI outputs `["data_pipelines", "aws_migration"]`. The compiler uses these IDs to fetch the real text from your database.
+* **The `skills` Array:** The AI extracts a curated list of skills from your `master_skills.md` that match the job.
+* **The `missing_skills` Array:** If the job requires a skill you do not have, the AI MUST put it here. The Lie Detector uses this array to ensure the AI didn't hallucinate that skill into your `profile` or `keywords`.
+* **Dynamic Generation:** Only the `profile` (your summary paragraph) and `keywords` (ATS SEO terms) are generated dynamically as free-text by the AI, because these must be heavily tailored to the specific company's mission statement.
+
+---
+
 ## 🎨 Customizing the Design
 
 Because the pipeline strictly separates Data (JSON) from Presentation (LaTeX), overhauling the visual design is incredibly easy. You don't have to touch your career history at all.
