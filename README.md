@@ -67,8 +67,8 @@ Successfully compiled CV-Applicant-Google.pdf
 
 ## ✨ Core USPs
 
-* 🛡️ **Zero-Trust & The Lie Detector:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have to artificially boost your ATS score, the compiler's **Lie Detector** catches it and hard-crashes the build.
-* 🔒 **Immutable Database:** Your bullet points and skills are strictly **FIX**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
+* 🛡️ **Zero-Trust & The Lie Detector:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your profile to artificially boost your ATS score, the compiler's **Lie Detector** catches it and hard-crashes the build.
+* 🔒 **Immutable Database:** Your bullet points and skills are strictly **IMMUTABLE**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
 * ✍️ **Zero-Hallucination Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
 * 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
 * 🧮 **Advanced ATS & Salary Estimations:** The post-compilation parser calculates a mathematically honest ATS score, and uses it to estimate potential salary ranges and interview/offer probabilities.
