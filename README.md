@@ -75,7 +75,8 @@ We do **not** use Vector Databases (Chroma, Pinecone) or traditional RAG embeddi
 Instead of vector search, we use **In-Context Semantic Routing**. We feed your entire JSON database to the LLM and prompt it to output an array of `bullet_ids` that semantically match the Job Description. The LLM acts as the retriever, but the actual text insertion is handled deterministically by Python.
 
 ### 2. How the "Lie Detector" Catches Hallucinations
-When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess.
+When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess. *(Why do we track this? So you explicitly know your weak points, can strategically address them in your Cover Letter, or know exactly what to study before the technical interview!)*
+
 The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a case-insensitive substring intersection between your `missing_skills` list and the AI-generated free-text. 
 If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner.
 
@@ -84,30 +85,36 @@ If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolatio
 ## 🛠️ System Architecture
 
 ```mermaid
-flowchart TD
-    %% Nodes
-    JD(📄 Job Description)
-    DB[(🗄️ Zero-Trust Database)]
-    LLM{🧠 Agentic LLM Router}
-    Config(⚙️ build_config.json)
-    Compiler[[🐍 cv_compiler.py]]
-    PDF(📑 Tailored PDF CV)
-    ATS[[🔍 check_ats_score.py]]
-    Score(📈 Honest ATS Score)
+flowchart LR
+    %% Inputs
+    JD(Job Description)
+    DB[(Zero-Trust\nDatabase)]
+    
+    %% Engine
+    subgraph "EigenCV Pipeline"
+        Router{Agentic\nLLM Router}
+        Config(build_config.json)
+        Compiler[[Python Compiler\n& Lie Detector]]
+        ATS[[ATS Scoring\nEngine]]
+    end
 
-    %% Logical Flow
-    JD -->|1. Feed into Prompt| LLM
-    DB -.->|2. Context & Rules| LLM
-    LLM -->|3. Output Validated Schema| Config
+    %% Outputs
+    PDF(Tailored PDF CV)
+    Score>Honest ATS Score]
+
+    %% Connections
+    JD -->|"1. Input Target"| Router
+    DB -.->|"2. Career Facts"| Router
     
-    Config -->|4. Load Configuration| Compiler
-    DB ===>|5. Inject Verified Text| Compiler
+    Router -->|"3. Semantic Routing"| Config
+    Config -->|"4. Load Specs"| Compiler
+    DB ===>|"5. Inject Ground Truth"| Compiler
     
-    Compiler -->|6. Render via Jinja2 & pdflatex| PDF
+    Compiler -->|"6. Render LaTeX"| PDF
     
-    PDF -.->|7. Extract Text| ATS
-    JD -.->|8. Compare Keywords| ATS
-    ATS ===>|9. Calculate Penalty| Score
+    PDF -.->|"7. Parse PDF Text"| ATS
+    JD -.->|"8. Baseline Keywords"| ATS
+    ATS ===>|"9. Compute Penalty Matrix"| Score
 ```
 
 ---
