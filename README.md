@@ -94,68 +94,61 @@ If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolatio
 ## 🛠️ System Architecture
 
 ```mermaid
-flowchart TD
-    %% Professional Theme (Dark & Light Mode Compatible)
-    classDef input fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
-    classDef database fill:#276749,stroke:#1e4e38,stroke-width:2px,color:#ffffff,rx:15px,ry:15px
-    classDef ai fill:#553c9a,stroke:#44337a,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
-    classDef script fill:#2b6cb0,stroke:#215285,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
-    classDef artifact fill:#1a202c,stroke:#4a5568,stroke-width:2px,stroke-dasharray: 4 4,color:#ffffff,rx:4px,ry:4px
-    classDef final fill:#9b2c2c,stroke:#742a2a,stroke-width:2px,color:#ffffff,rx:6px,ry:6px
+sequenceDiagram
+    autonumber
+    actor User
+    participant LLM as 🧠 Agentic LLM
+    participant DB as 🗄️ Zero-Trust DB
+    participant Core as 🐍 Python Compiler
+    participant PDF as 📑 LaTeX PDF
+    participant ATS as 🔍 ATS Engine
 
-    %% Architecture Nodes
-    JD["📄 Job Description (.md)"]:::input
-    DB[("🗄️ Zero-Trust Database")]:::database
-
-    Agent{"🧠 Agentic LLM Router"}:::ai
-    Config["⚙️ build_config.json"]:::artifact
-
-    Compiler[["🐍 cv_compiler.py\n[Lie Detector & LaTeX Engine]"]]:::script
-    PDF["📑 Tailored Resume (.pdf)"]:::final
-
-    ATS[["🔍 check_ats_score.py\n[Verification Engine]"]]:::script
-    Score["📈 Honest ATS Match Score"]:::final
-
-    %% Flow Connections
-    JD -->|1. Feed Requirements| Agent
-    DB -.->|2. Supply Valid Bullet IDs| Agent
+    User->>LLM: Provide Target Job Description (.md)
+    LLM->>DB: Query for matching skills & bullet points
+    DB-->>LLM: Return valid IDs & Ground Truth Rules
+    LLM-->>Core: Output strictly typed build_config.json
     
-    Agent -->|3. Output Pydantic Schema| Config
+    rect rgb(120, 20, 20)
+    Note over Core,DB: 🛡️ The Lie Detector
+    Core->>Core: Cross-reference config with Master Database
+    Core->>Core: Hard-crash if AI hallucinated missing skills!
+    end
     
-    Config -->|4. Load Application Specs| Compiler
-    DB ===>|5. Inject Ground Truth Text| Compiler
+    Core->>DB: Fetch verified raw text for validated IDs
+    Core->>PDF: Render deterministically via Jinja2 Templates
     
-    Compiler -->|6. Deterministic Render| PDF
-    
-    PDF -.->|7. Extract Final Text| ATS
-    JD -.->|8. Extract Target Keywords| ATS
-    ATS ===>|9. Calculate Integrity Penalty| Score
+    Core->>ATS: Trigger post-build verification
+    PDF-->>ATS: Extract raw text from compiled document
+    ATS->>User: Output mathematically honest ATS Match Score
 ```
 
 ---
 
-## ⚡ Quickstart
+## 🚦 The 3-Step Workflow
 
 ### Prerequisites
 * Python 3.10+
 * LaTeX distribution (e.g., TeX Live, MiKTeX) installed and added to PATH
 * `pip install -r requirements.txt`
-
 *(💡 Don't want to install LaTeX? Use the included **DevContainer** in VS Code to run everything instantly in Docker!)*
 
-### The Agentic Workflow (Recommended)
-This pipeline is designed to be operated by an Agentic Coding Assistant (like Cursor) or a Web LLM (Claude 3.5 Sonnet).
+### Step 1: Onboarding (Build your Zero-Trust Database)
+Before you apply to jobs, you must establish your Source of Truth.
+1. Open your Agentic IDE (Cursor, Windsurf) or a web LLM (Claude/ChatGPT).
+2. Feed it the `docs/AI_ONBOARDING_PROMPT.md`.
+3. Paste the raw text dump of your old CV or LinkedIn profile.
+4. The AI will systematically extract your data and generate your immutable JSON/Markdown files in `cv/database/active/`.
 
-1. **Upload your old CV:** Use the `docs/AI_ONBOARDING_PROMPT.md` to have the AI extract your old CV into the immutable JSON database (`cv/database/active/`).
-2. **Apply to a Job:** Open the repo in Cursor (or upload the ZIP to Claude). Paste the Job Description and say:
-   > *"I want to apply to this job. Read `AI_START_HERE.md` and generate my application package."*
-3. **Sit back:** The Agent will semantically match your database bullets to the job, structure the JSON, compile the LaTeX, and run the ATS check.
+### Step 2: Agentic Routing (Apply to a Job)
+Once your database is built, applying to jobs takes seconds.
+1. Paste the target Job Description into your AI chat.
+2. Tell the Agent: *"I want to apply to this job. Read `AI_START_HERE.md` and generate my application package."*
+3. The Agent will semantically match your database to the job and output a strict `build_config.json`.
 
-### Manual CLI Workflow
-1. `python new_app.py "Google" "SoftwareEngineer"`
-2. Paste the Job Description into the new folder.
-3. Use ChatGPT to generate the `build_config.json`.
-4. Run `python ../../cv/scripts/cv_compiler.py build_config.json` inside the folder.
+### Step 3: Compilation & Verification
+1. Run `python ../../cv/scripts/cv_compiler.py build_config.json` inside your new application folder.
+2. The Python compiler verifies the JSON, runs the Lie Detector, and deterministically injects your data into the LaTeX templates.
+3. Check the terminal for your honest ATS Score and review your beautiful PDF!
 
 ---
 
@@ -171,7 +164,7 @@ Looking to customize the LaTeX templates, add your own personal dossier for cult
 Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By maintaining your resume as a database and treating the LLM solely as an orchestration layer, you maintain **100% control over your narrative** while automating the tedious process of LaTeX formatting and ATS tailoring.
 
 **Your career is a database. Version control it.**
-Stop maintaining 15 different Word documents. Store your career facts in Git. When you achieve something new, just `git commit -m "Promoted to Senior Engineer"`. Query your database, compile your LaTeX, and land the job.
+Stop maintaining 15 different Word documents. By keeping your career facts in JSON files, you can treat your resume like software. Fork this repo, make it private, and use Git to track your career progression (`git commit -m "Promoted to Senior"`). When you find a job you like, let the Agent query your database, compile your LaTeX, and land the job.
 
 ---
 
