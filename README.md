@@ -103,11 +103,24 @@ sequenceDiagram
     participant PDF as 📑 LaTeX PDF
     participant ATS as 🔍 ATS Engine
 
+    rect rgb(40, 40, 60)
+    Note over User,DB: Phase 0: Setup & Privacy
+    User->>Core: Run scrub_data.py (Before public push)
+    Core->>DB: Wipe personal data & restore blank slate
+    User->>LLM: Provide old CV + AI_ONBOARDING_PROMPT.md
+    LLM->>DB: Build immutable JSON career database
+    end
+
+    rect rgb(20, 40, 20)
+    Note over User,Core: Phase 1: Agentic Routing
     User->>LLM: Provide Target Job Description (.md)
     LLM->>DB: Query for matching skills & bullet points
     DB-->>LLM: Return valid IDs & Ground Truth Rules
     LLM-->>Core: Output strictly typed build_config.json
+    end
     
+    rect rgb(60, 40, 20)
+    Note over Core,PDF: Phase 2: Compilation & Zero-Trust
     rect rgb(120, 20, 20)
     Note over Core,DB: 🛡️ The Lie Detector
     Core->>Core: Cross-reference config with Master Database
@@ -116,10 +129,14 @@ sequenceDiagram
     
     Core->>DB: Fetch verified raw text for validated IDs
     Core->>PDF: Render deterministically via Jinja2 Templates
+    end
     
+    rect rgb(40, 60, 40)
+    Note over Core,ATS: Phase 3: Verification
     Core->>ATS: Trigger post-build verification
     PDF-->>ATS: Extract raw text from compiled document
     ATS->>User: Output mathematically honest ATS Match Score
+    end
 ```
 
 ---
