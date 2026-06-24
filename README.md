@@ -21,7 +21,7 @@ You tell an AI to "optimize my resume for this job." The AI treats your resume a
 **The EigenCV Approach (Zero-Trust):**  
 We treat your career history as an immutable database. The AI is strictly an **orchestration layer**. It does not write your resume; it *queries* your database to pull the most relevant, pre-verified bullet points. 
 
-If the AI attempts to go rogue and hallucinate a missing skill into your profile to artificially boost your ATS score, the Python compiler's **Lie Detector** intercepts it and hard-crashes the build. **Lies never make it into the PDF.**
+If the AI attempts to go rogue and hallucinate a missing skill into your profile to artificially boost your ATS score, the Python compiler's **Lie Detector** intercepts it and hard-crashes the build. **Obvious lies never make it into the PDF.**
 
 ---
 
@@ -29,6 +29,29 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 
 > **[PLACEHOLDER: Insert image of the final compiled PDF here]**
 > *EigenCV automatically renders your JSON data into gorgeous, pixel-perfect LaTeX. Switch between layouts (like `Awesome-CV` or `EigenCV-Modern`), change corporate accent colors, and reorder sections using simple metadata toggles.*
+
+---
+
+## 🚀 How to Use EigenCV: Choose Your Path
+
+### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
+You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the entire pipeline in the cloud.
+
+1. **Download** this entire repository as a ZIP file.
+2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Claude, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
+3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_CLOUD_PROMPT.md`."*
+4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
+*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
+
+### Path 2: The Hardcore Privacy Route (For Developers)
+If you want absolute control and 100% data privacy, run it locally.
+
+1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
+2. **Install Dependencies:** Run `pip install -r requirements.txt`.
+3. **IDE Setup:** Open the repository in an Agentic IDE like **Cursor** or **Windsurf**. Point it to a local model (like Ollama or LM Studio) so your data NEVER leaves your machine.
+4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
+5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
+6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
 
 ---
 
@@ -163,30 +186,7 @@ We do not rely on complex "Prompt Engineering" to format the CV. We force the LL
 Many modern CV builders use web technologies (React/HTML) and use Headless Chrome (Puppeteer) to print to PDF. **This is fatal for ATS.** Browser engines often render PDFs with fragmented, non-sequential text layers, causing ATS parsers to misread the document.
 EigenCV uses `pdflatex`. LaTeX was built from the ground up for print typography. It guarantees a sequential, machine-readable text layer, ensuring the ATS parses your resume exactly from top to bottom.
 
----
 
-## 🚀 How to Use EigenCV: Choose Your Path
-
-### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
-You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the entire pipeline in the cloud.
-
-1. **Download** this entire repository as a ZIP file.
-2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Claude, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
-3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_CLOUD_PROMPT.md`."*
-4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
-*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
-
-### Path 2: The Hardcore Privacy Route (For Developers)
-If you want absolute control and 100% data privacy, run it locally.
-
-1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
-2. **Install Dependencies:** Run `pip install -r requirements.txt`.
-3. **IDE Setup:** Open the repository in an Agentic IDE like **Cursor** or **Windsurf**. Point it to a local model (like Ollama or LM Studio) so your data NEVER leaves your machine.
-4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
-5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
-6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
-
----
 
 
 ## 📖 Advanced Documentation
