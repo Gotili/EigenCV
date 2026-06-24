@@ -22,7 +22,7 @@ If you tell ChatGPT to "tailor my resume for this job", it will quietly invent s
 
 ## 🚀 The "Lie Detector" in Action
 
-> Instead of silently ignoring bad AI behavior, the internal compiler actively audits the LLM's output against your master database.
+> All modern LLMs (like ChatGPT or Claude) are mathematically prone to hallucinating skills when asked to "optimize for ATS". EigenCV acts as an impenetrable shield against this. If the AI goes rogue and attempts to sneak a fake skill into your resume config, the Python compiler catches it and hard-crashes:
 
 ```text
 +----------------------------- EigenCV Compiler ------------------------------+
