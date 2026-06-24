@@ -23,6 +23,14 @@ We treat your career history as an immutable database. The AI is strictly an **o
 
 If the AI attempts to go rogue and hallucinate a missing skill into your profile to artificially boost your ATS score, the Python compiler's **Lie Detector** intercepts it and hard-crashes the build. **Lies never make it into the PDF.**
 
+---
+
+## 🖼️ Example Output & Gallery
+
+> **[PLACEHOLDER: Insert image of the final compiled PDF here]**
+> *EigenCV automatically renders your JSON data into gorgeous, pixel-perfect LaTeX. Switch between layouts (like `Awesome-CV` or `EigenCV-Modern`), change corporate accent colors, and reorder sections using simple metadata toggles.*
+
+---
 ## 🚀 The "Lie Detector" in Action
 
 ```text
@@ -63,6 +71,7 @@ Successfully compiled CV-Applicant-Google.pdf
 * 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, which is then deterministically compiled into beautiful Jinja2 LaTeX templates.
 * 🌍 **Multi-Language Support (Locale Fallback):** Applying abroad? The system supports native multi-language CVs. If you try to mix a Spanish Job Description with an English database, the compiler throws a `Language Mismatch Error` to prevent bilingual Frankenstein-CVs.
 * 🧮 **Brutal Honesty ATS Scoring:** The post-compilation parser reads your generated PDF, checks for keyword frequency against the Job Description, and calculates a hard, mathematically honest ATS score. Missing "C#"? You get penalized. 
+* 🔒 **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No shady web services, no tracking, no data harvesting.
 
 ---
 
@@ -155,4 +164,11 @@ Looking to customize the LaTeX templates, add your own personal dossier for cult
 
 Most commercial AI resume builders optimize for feeling good, not for technical accuracy. By maintaining your resume as a database and treating the LLM solely as an orchestration layer, you maintain **100% control over your narrative** while automating the tedious process of LaTeX formatting and ATS tailoring.
 
-**Your career is a database. Query it.**
+**Your career is a database. Version control it.**
+Stop maintaining 15 different Word documents. Store your career facts in Git. When you achieve something new, just `git commit -m "Promoted to Senior Engineer"`. Query your database, compile your LaTeX, and land the job.
+
+---
+
+## 🙏 Acknowledgements
+
+EigenCV's default LaTeX templates are heavily inspired by and utilize components from the excellent [Awesome-CV](https://github.com/posquit0/Awesome-CV) project created by Byungjin Park (posquit0). We are grateful for their beautiful typographic foundation!
