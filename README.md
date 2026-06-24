@@ -65,6 +65,21 @@ Successfully compiled CV-Applicant-Google.pdf
 
 ---
 
+## 🔬 Under the Hood: How it actually works
+
+To appeal to the technical crowd, here is exactly how EigenCV pulls this off without over-engineering:
+
+### 1. "Pseudo-RAG" (Context Window Routing)
+We do **not** use Vector Databases (Chroma, Pinecone) or traditional RAG embeddings. Why? Because an individual's entire career history (even a 20-year veteran's) is only a few kilobytes of text. It easily fits into a modern LLM's context window. 
+Instead of vector search, we use **In-Context Semantic Routing**. We feed your entire JSON database to the LLM and prompt it to output an array of `bullet_ids` that semantically match the Job Description. The LLM acts as the retriever, but the actual text insertion is handled deterministically by Python.
+
+### 2. How the "Lie Detector" Catches Hallucinations
+When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess.
+The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a case-insensitive substring intersection between your `missing_skills` list and the AI-generated free-text. 
+If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner.
+
+---
+
 ## 🛠️ System Architecture
 
 ```mermaid
