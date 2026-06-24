@@ -20,7 +20,19 @@ import uuid
 from rich.console import Console
 from rich.panel import Panel
 
+# Add tools directory to path and import linter
+tools_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'tools')
+sys.path.append(tools_dir)
+try:
+    from lint_database import lint_database
+except ImportError:
+    lint_database = None
+
 console = Console()
+
+# Run Linter before anything else
+if lint_database:
+    lint_database()
 
 def hex_to_rgb(hex_str: str) -> tuple:
     hex_str = hex_str.lstrip('#')
