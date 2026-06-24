@@ -1,3 +1,10 @@
+"""
+Pydantic Schema Definitions for EigenCV.
+
+This module defines the strict JSON structure expected from the LLM. 
+It uses Pydantic to validate the input and enforces business logic such as 
+RapidFuzz-based ID healing and data integrity checks against the master databases.
+"""
 from pydantic import BaseModel, Field, model_validator, field_validator
 from typing import List, Dict, Optional
 import json
@@ -108,7 +115,7 @@ class BuildConfig(BaseModel):
                 return match[0]
             return candidate
 
-        # Validate Experience Company IDs and Bullet IDs
+
         healed_experience = {}
         for comp_id, exp_data in self.experience.items():
             healed_comp_id = heal_id(comp_id, list(master_exp.keys()), "experience company")
@@ -137,29 +144,25 @@ class BuildConfig(BaseModel):
         
         self.experience = healed_experience
 
-        # Validate Projects
         self.projects = [heal_id(p, list(master_proj.keys()), "projects") for p in self.projects]
         for p_id in self.projects:
             if p_id not in master_proj:
                 errors.append(f"Project ID '{p_id}' not found in projects.json.")
 
-        # Validate Education
         self.education = [heal_id(e, list(master_edu.keys()), "education") for e in self.education]
         for e_id in self.education:
             if e_id not in master_edu:
                 errors.append(f"Education ID '{e_id}' not found in education.json.")
 
-        # Validate Extracurriculars
         self.extracurriculars = [heal_id(ex, list(master_ext.keys()), "extracurriculars") for ex in self.extracurriculars]
         for ex_id in self.extracurriculars:
             if ex_id not in master_ext:
                 errors.append(f"Extracurricular ID '{ex_id}' not found in extracurriculars.json.")
 
-        # Validate Languages
-        self.languages = [heal_id(l, list(master_lang.keys()), "languages") for l in self.languages]
-        for l_id in self.languages:
-            if l_id not in master_lang:
-                errors.append(f"Language ID '{l_id}' not found in languages.json.")
+        self.languages = [heal_id(lang, list(master_lang.keys()), "languages") for lang in self.languages]
+        for lang_id in self.languages:
+            if lang_id not in master_lang:
+                errors.append(f"Language ID '{lang_id}' not found in languages.json.")
 
         if errors:
             raise ValueError("Database Validation Failed:\n- " + "\n- ".join(errors))

@@ -1,3 +1,10 @@
+"""
+EigenCV Compiler Core.
+
+This script parses the Pydantic-validated JSON data and orchestrates the 
+generation of LaTeX documents via Jinja2 templating. It includes the EigenTruth 
+Engine to detect LLM hallucinations and langdetect to prevent language mismatches.
+"""
 import os
 import sys
 import json
@@ -149,7 +156,6 @@ def load_json(filepath):
 def compile_cv(config_path):
     console.print(Panel(f"Compiling CV from {config_path}...", title="EigenCV Compiler", style="bold blue"))
     
-    # Determine base directory
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_dir = os.path.join(base_dir, 'database', 'active')
     template_dir = os.path.join(base_dir, 'template')
@@ -162,10 +168,8 @@ def compile_cv(config_path):
         console.print("Please ask the AI to run the Onboarding process (docs/AI_ONBOARDING_PROMPT.md) to reconstruct your database.\n")
         sys.exit(1)
     
-    # Load configuration
     raw_config = load_json(config_path)
     
-    # Validate using Pydantic
     try:
         config = BuildConfig.model_validate(raw_config)
     except Exception as e:
@@ -227,14 +231,13 @@ def compile_cv(config_path):
         if dyn_locale not in i18n_all:
             i18n_all[dyn_locale] = {}
         i18n_all[dyn_locale].update(config.i18n_updates.translations)
-        # Save back to database for future use
         try:
             with open(i18n_path, 'w', encoding='utf-8') as f:
                 json.dump(i18n_all, f, indent=2, ensure_ascii=False)
             console.print(f"[bold yellow]Dynamically learned new language translations for '{dyn_locale}' and saved to i18n.json[/bold yellow]")
         except Exception as e:
             console.print(f"[bold red]Warning: Could not save new translations: {e}[/bold red]")
-        # Override current locale for this compile
+            
         locale = dyn_locale
         
     i18n_dict = i18n_all.get(locale, i18n_all.get('en', {}))

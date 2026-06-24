@@ -1,3 +1,9 @@
+"""
+ChatGPT / AI Sandbox Runner.
+
+This script acts as the entry point for executing the EigenCV pipeline directly 
+inside a sandboxed AI environment (like ChatGPT Advanced Data Analysis).
+"""
 import os
 import sys
 import subprocess

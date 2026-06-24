@@ -1,3 +1,9 @@
+"""
+ATS Match Score Calculator.
+
+This script analyzes the compiled PDF resume and compares it against the 
+job description using NLTK lemmatization and RapidFuzz to simulate an ATS scanner.
+"""
 import sys
 import os
 import re

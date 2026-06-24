@@ -1,3 +1,9 @@
+"""
+Application Scaffolder.
+
+This CLI tool generates a new application folder structure and tracks 
+the application ID in the application_tracking.md file.
+"""
 import os
 import sys
 import re

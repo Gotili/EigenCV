@@ -1,3 +1,9 @@
+"""
+LaTeX Database Linter.
+
+This script scans the active JSON database files for unescaped characters 
+(e.g., %, &, $, #) that would crash the pdflatex compiler.
+"""
 import os
 import json
 import re
