@@ -149,19 +149,18 @@ sequenceDiagram
 
 ### Step 1: Onboarding (Build your Zero-Trust Database)
 Before you apply to jobs, you must establish your Source of Truth.
-1. Open your Agentic IDE (Cursor, Windsurf) or a web LLM (Claude/ChatGPT).
-2. Feed it the `docs/AI_ONBOARDING_PROMPT.md`.
-3. Paste the raw text dump of your old CV or LinkedIn profile.
-4. The AI will systematically extract your data and generate your immutable JSON/Markdown files in `cv/database/active/`.
+1. Open this repo in an Agentic IDE (Cursor, Windsurf).
+2. Paste the raw text of your old CV into the chat and simply say: *"Migrate my old CV. Follow `AI_START_HERE.md`."*
+3. The Agent will automatically route to the correct internal onboarding prompt, extract your data, and generate your immutable JSON files in `cv/database/active/`.
 
 ### Step 2: Agentic Routing (Apply to a Job)
 Once your database is built, applying to jobs takes seconds.
-1. Paste the target Job Description into your AI chat.
-2. Tell the Agent: *"I want to apply to this job. Read `AI_START_HERE.md` and generate my application package."*
-3. The Agent will semantically match your database to the job and output a strict `build_config.json`.
+1. Paste the target Job Description into your chat.
+2. Say: *"Apply to this job. Follow `AI_START_HERE.md`."*
+3. The Agent will automatically route to the generation prompt, semantically match your database to the job, and output a strict `build_config.json`.
 
 ### Step 3: Compilation & Verification
-*(💡 Note: If you are using an Agentic IDE like Cursor or Windsurf, the Agent will execute these commands for you automatically! If you are using a Web LLM, run them manually:)*
+*(💡 Note: If you are using Cursor or Windsurf, the Agent will usually execute these commands for you automatically! If not, run them manually:)*
 1. Run `python ../../cv/scripts/cv_compiler.py build_config.json` inside your new application folder.
 2. The Python compiler verifies the JSON, runs the Lie Detector, and deterministically injects your data into the LaTeX templates.
 3. Check the terminal for your honest ATS Score and review your beautiful PDF!
