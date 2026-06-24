@@ -30,14 +30,14 @@ def test_pydantic_id_validation_broken_id():
         {"name": "Soft Skills", "skills": "Leadership"}
       ],
       "experience": {
-        "carl_zeiss": {
+        "acme_corp": {
           "title": "Senior Data Engineer",
           "bullets": [
-            "zeiss_tech_lead",
-            "zeiss_etl_pipelines",
-            "zeiss_ml_anomaly",
+            "acme_corp_lead",
+            "acme_corp_ml",
+            "acme_corp_arch",
             "i_made_this_up",
-            "zeiss_evaluation_workflows"
+            "acme_corp_dummy2"
           ]
         }
       },
@@ -80,14 +80,14 @@ def test_eigentruth_violation():
         {"name": "Soft Skills", "skills": "Leadership"}
       ],
       "experience": {
-        "carl_zeiss": {
+        "acme_corp": {
           "title": "Senior Data Engineer",
           "bullets": [
-            "zeiss_tech_lead",
-            "zeiss_etl_pipelines",
-            "zeiss_ml_anomaly",
-            "zeiss_spc_drift",
-            "zeiss_evaluation_workflows"
+            "acme_corp_lead",
+            "acme_corp_ml",
+            "acme_corp_arch",
+            "acme_corp_dummy1",
+            "acme_corp_dummy2"
           ]
         }
       },
@@ -134,7 +134,7 @@ def test_pydantic_color_crash():
         {"name": "D", "skills": "P"}, {"name": "D", "skills": "D"}, 
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
-      "experience": {"carl_zeiss": {"title": "X", "bullets": ["zeiss_tech_lead"]}},
+      "experience": {"acme_corp": {"title": "X", "bullets": ["acme_corp_lead"]}},
       "projects": ["llm_workflow_orchestrator"],
       "education": ["phd_chemistry"],
       "extracurriculars_title": "X",
@@ -166,7 +166,7 @@ def test_pydantic_wall_of_text():
         {"name": "D", "skills": "P"}, {"name": "D", "skills": "D"}, 
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
-      "experience": {"carl_zeiss": {"title": "X", "bullets": ["zeiss_tech_lead"]}},
+      "experience": {"acme_corp": {"title": "X", "bullets": ["acme_corp_lead"]}},
       "projects": ["llm_workflow_orchestrator"],
       "education": ["phd_chemistry"],
       "extracurriculars_title": "X",
@@ -199,14 +199,14 @@ def test_rapidfuzz_healer():
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
       "experience": {
-        "carl_zeiss": {
+        "acme_corp": {
           "title": "Data Engineer",
           "bullets": [
-            "zeiss_etl_pipelines", 
-            "zeiss_ml_anomaly", 
-            "zeiss_spc_drift", 
-            "zeiss_evaluation_workflows",
-            "zeis_tech_lead" # TYPO! Should be zeiss_tech_lead
+            "acme_corp_ml", 
+            "acme_corp_arch", 
+            "acme_corp_dummy1", 
+            "acme_corp_dummy2",
+            "exampl_tech_lead" # TYPO! Should be acme_corp_lead
           ]
         }
       },
@@ -224,8 +224,8 @@ def test_rapidfuzz_healer():
     config = BuildConfig.model_validate(config_dict)
     
     # Check that the ID was actually healed
-    assert "zeiss_tech_lead" in config.experience["carl_zeiss"].bullets
-    assert "zeis_tech_lead" not in config.experience["carl_zeiss"].bullets
+    assert "acme_corp_lead" in config.experience["acme_corp"].bullets
+    assert "exampl_tech_lead" not in config.experience["acme_corp"].bullets
 
 
 def test_locale_mismatch():
@@ -242,14 +242,14 @@ def test_locale_mismatch():
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
       "experience": {
-        "carl_zeiss": {
+        "acme_corp": {
           "title": "Senior Data Engineer",
           "bullets": [
-            "zeiss_tech_lead",
-            "zeiss_etl_pipelines",
-            "zeiss_ml_anomaly",
-            "zeiss_spc_drift",
-            "zeiss_evaluation_workflows"
+            "acme_corp_lead",
+            "acme_corp_ml",
+            "acme_corp_arch",
+            "acme_corp_dummy1",
+            "acme_corp_dummy2"
           ]
         }
       },
