@@ -69,3 +69,65 @@ The most powerful way to customize your CV is through `cv/database/active/metada
 ### Advanced LaTeX Tweaking
 1. **Fonts & Margins**: Edit `cv/template/preamble.tex` (for EigenCV) or `cv/template/awesome-cv.cls` (for Awesome-CV) to change font sizes or document geometry.
 2. **Jinja Logic**: Edit `cv/template/eigencv_resume.tex.j2` or `awesomecv_resume.tex.j2`. These Jinja files determine the overarching layout loops. You can alter how specific sections render here.
+
+---
+
+## 🕵️ Deep Dive: The Cover Letter "Dossier Hack"
+
+Commercial AI builders write terrible, generic cover letters because they don't know who you are as a person. EigenCV solves this with the `personal_dossier.md`.
+
+**How it works:**
+1. The AI reads the Job Description to understand the company's culture (e.g., "fast-paced startup", "enterprise governance").
+2. It then reads your `personal_dossier.md` to find real, factual anecdotes that prove you fit that culture.
+3. It generates the `cover_letter` object in `build_config.json`.
+
+**How to exploit it:**
+Don't just write "I like coding." Write highly specific, verifiable facts in your dossier:
+* *"Open-source philosophy: I maintain a homelab with Proxmox and Kubernetes to test distributed systems."*
+* *"Leadership: I mentored 3 junior developers who subsequently were promoted to mid-level engineers within 12 months."*
+* *"Conflict Resolution: I successfully navigated a cross-departmental dispute between Data Engineering and Sales by presenting data-backed infrastructure costs."*
+
+When you provide hard facts, the AI weaves them into a highly persuasive, non-hallucinated narrative.
+
+---
+
+## 🧮 The ATS & Salary Engine Explained
+
+The `check_ats_score.py` script doesn't just tell you if you passed; it gives you actionable intelligence.
+
+1. **The Keyword Penalty Matrix:** The engine extracts raw text from your compiled PDF and compares it against lemmatized keywords from the Job Description. If a mandatory skill is missing, it applies a mathematically defined penalty to your ATS score.
+2. **Salary Estimation:** Based on the final match percentage, the job title, and the required seniority, the engine attempts to calculate a predicted salary range for you.
+3. **Probability Metrics:** It calculates your statistical chance of receiving an interview invite and your chance of landing an offer based on how well your immutable database aligned with the company's requirements. 
+*Note: To improve these metrics, you must acquire the missing skills or re-write your immutable database bullet points to better reflect your true experience. You cannot cheat the engine.*
+
+---
+
+## 🔌 Local LLM Integration (100% Privacy)
+
+EigenCV was built for the paranoid. You can run the entire semantic routing pipeline offline.
+
+1. Install [Ollama](https://ollama.ai/) or [LM Studio](https://lmstudio.ai/).
+2. Pull a high-context model (e.g., `llama3.1:8b` or `phi-3-mini`).
+3. If using an Agentic IDE like Cursor, point the Custom OpenAI URL setting to your local host (e.g., `http://localhost:11434/v1`).
+4. Execute the same prompts (`AI_START_HERE.md`). The local model will read your JSON database and output the `build_config.json`.
+
+Your career data never touches the internet.
+
+---
+
+## 📜 Advanced LaTeX & Jinja2 Templating
+
+If you are a LaTeX power user, you can build entirely new resume designs.
+
+1. **Create your template:** Create a `custom_resume.tex.j2` file in `cv/template/`.
+2. **Use Jinja tags:** The Python compiler passes the entire `build_config.json` schema to Jinja. 
+   * Example: `\cvprofile{ {{ profile }} }`
+   * Example Loop: 
+     ```latex
+     {% for item in experience %}
+     \cvexperience{ {{ item.title }} }{ {{ item.company }} }{ {{ item.date }} }
+     {% endfor %}
+     ```
+3. **Set the Metadata:** Open `cv/database/active/metadata.tex` and change `\cvtemplate` to `custom_resume`.
+
+Because the data (JSON) and presentation (LaTeX) are strictly decoupled, you can swap between a highly conservative McKinsey-style template and a flashy Tech-Startup template just by changing one line of code, without ever rewriting your bullet points.

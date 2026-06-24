@@ -67,11 +67,14 @@ Successfully compiled CV-Applicant-Google.pdf
 
 ## ✨ Core USPs
 
-* 🛡️ **Zero-Trust & The Lie Detector:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have into your resume to artificially boost your ATS score, the compiler's **Lie Detector** catches it and hard-crashes the build.
-* 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, which is then deterministically compiled into beautiful Jinja2 LaTeX templates.
-* 🌍 **Multi-Language Support (Locale Fallback):** Applying abroad? The system supports native multi-language CVs. If you try to mix a Spanish Job Description with an English database, the compiler throws a `Language Mismatch Error` to prevent bilingual Frankenstein-CVs.
-* 🧮 **Brutal Honesty ATS Scoring:** The post-compilation parser reads your generated PDF, checks for keyword frequency against the Job Description, and calculates a hard, mathematically honest ATS score. Missing "C#"? You get penalized. 
-* 🔒 **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No shady web services, no tracking, no data harvesting.
+* 🛡️ **Zero-Trust & The Lie Detector:** Your career history lives in a static JSON database. If the LLM attempts to hallucinate a skill you don't have to artificially boost your ATS score, the compiler's **Lie Detector** catches it and hard-crashes the build.
+* 🔒 **Immutable Database:** Your bullet points and skills are strictly **FIX**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
+* ✍️ **Zero-Hallucination Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
+* 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
+* 🧮 **Advanced ATS & Salary Estimations:** The post-compilation parser calculates a mathematically honest ATS score, and uses it to estimate potential salary ranges and interview/offer probabilities.
+* 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, deterministically compiled into beautiful Jinja2 LaTeX templates.
+* 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
+* 🕵️ **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
 
@@ -88,6 +91,27 @@ When the LLM analyzes the Job Description, it is forced to populate a `missing_s
 
 The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a case-insensitive substring intersection between your `missing_skills` list and the AI-generated free-text. 
 If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner.
+
+---
+
+## 🚀 How to Use EigenCV: Choose Your Path
+
+### Path 1: The Zero-Setup "Lifehack" (For Non-Coders / ChatGPT Plus)
+You don't need to know Python, LaTeX, or Git to use EigenCV. You can run the entire pipeline in the cloud.
+
+1. **Download** this entire repository as a ZIP file.
+2. **Upload** the ZIP to ChatGPT (using Advanced Data Analysis) or Claude, along with ALL your old resumes, Word documents, and project descriptions. 
+3. **The Bullet-Point Pool:** You don't just migrate one CV. Dump years of history into the AI. The AI acts as a filter, extracting the facts into your immutable JSON database. Then, give it a Job Description. It will selectively pick ONLY the relevant bullet points for that specific job.
+4. **Zero Local Install:** The cloud AI runs the Python compiler in its own sandbox and provides the final, ATS-perfect LaTeX PDF as a download link.
+
+### Path 2: The Hardcore Privacy Route (For Developers)
+If you want absolute control and 100% data privacy:
+
+1. **Clone** this repository and open it in an Agentic IDE like **Cursor** or **Windsurf**.
+2. **Local LLMs:** Point your IDE to a local model (like Ollama, LM Studio, or GPT4All). Your career data will NEVER leave your machine.
+3. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
+4. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
+5. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
 
 ---
 
@@ -139,34 +163,6 @@ sequenceDiagram
 
 ---
 
-## 🚦 The 3-Step Workflow
-
-### Prerequisites
-* Python 3.10+
-* LaTeX distribution (e.g., TeX Live, MiKTeX) installed and added to PATH
-* `pip install -r requirements.txt`
-*(💡 Don't want to install LaTeX? Use the included **DevContainer** in VS Code to run everything instantly in Docker!)*
-
-### Step 1: Onboarding (Build your Zero-Trust Database)
-Before you apply to jobs, you must establish your Source of Truth.
-1. Open this repo in an Agentic IDE (Cursor, Windsurf).
-2. Paste the raw text of your old CV into the chat and simply say: *"Migrate my old CV. Follow `AI_START_HERE.md`."*
-3. The Agent will automatically route to the correct internal onboarding prompt, extract your data, and generate your immutable JSON files in `cv/database/active/`.
-
-### Step 2: Agentic Routing (Apply to a Job)
-Once your database is built, applying to jobs takes seconds.
-1. Paste the target Job Description into your chat.
-2. Say: *"Apply to this job. Follow `AI_START_HERE.md`."*
-3. The Agent will automatically route to the generation prompt, semantically match your database to the job, and output a strict `build_config.json`.
-
-### Step 3: Compilation & Verification
-*(💡 Note: If you are using Cursor or Windsurf, the Agent will usually execute these commands for you automatically! If not, run them manually:)*
-1. Run `python ../../cv/scripts/cv_compiler.py build_config.json` inside your new application folder.
-2. The Python compiler verifies the JSON, runs the Lie Detector, and deterministically injects your data into the LaTeX templates.
-3. Check the terminal for your honest ATS Score and review your beautiful PDF!
-
----
-
 ## 📖 Advanced Documentation
 Looking to customize the LaTeX templates, add your own personal dossier for cultural-fit Cover Letters, or understand the Pydantic schema? 
 
@@ -185,4 +181,4 @@ Stop maintaining 15 different Word documents. By keeping your career facts in JS
 
 ## 🙏 Acknowledgements
 
-EigenCV's default LaTeX templates are heavily inspired by and utilize components from the excellent [Awesome-CV](https://github.com/posquit0/Awesome-CV) project created by Byungjin Park (posquit0). We are grateful for their beautiful typographic foundation!
+EigenCV's default LaTeX templates utilize a color palette inspired by the excellent [Awesome-CV](https://github.com/posquit0/Awesome-CV) project created by Byungjin Park (posquit0). We are grateful for their beautiful typographic colors! *(Note: The structural layout of EigenCV is entirely custom-built for Jinja2 deterministic rendering and was not derived from Awesome-CV's layout engine).*
