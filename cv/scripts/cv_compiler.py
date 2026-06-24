@@ -361,9 +361,12 @@ def compile_cv(config_path):
     if config.missing_skills:
         # Only check the fields that the AI is prone to hallucinating in
         ai_controlled_text = (config.profile + " " + config.keywords + " " + 
-                              " ".join([cat.skills for cat in config.skill_categories])).lower()
+                              " ".join([cat.skills for cat in config.skill_categories]))
+        if config.cover_letter:
+            ai_controlled_text += " " + config.cover_letter.body
         for missing in config.missing_skills:
-            if missing.lower() in ai_controlled_text:
+            # Use negative lookbehinds/lookaheads instead of \b to correctly handle special chars like C++ and C#
+            if re.search(rf"(?<!\w){re.escape(missing)}(?!\w)", ai_controlled_text, re.IGNORECASE):
                 console.print(Panel(
                     f"Zero-Trust Violation: You declared '{missing}' as a missing skill, "
                     f"but it was hallucinated into the CV output!\\n"
@@ -547,8 +550,8 @@ def compile_cv(config_path):
                 f.write(new_row)
             console.print(f"[bold green]Appended tracking row to application_tracking.md[/bold green]")
             
-        # Automatically compile the PDFs using pdflatex
-        console.print("[bold cyan]Auto-compiling PDFs with pdflatex...[/bold cyan]")
+        # Automatically compile the PDFs using the correct engine
+        console.print(f"[bold cyan]Auto-compiling PDFs with {latex_engine}...[/bold cyan]")
         import subprocess
         tex_files = [output_path]
         if config.cover_letter:
@@ -557,10 +560,10 @@ def compile_cv(config_path):
             
         for tex_file in tex_files:
             try:
-                # Run pdflatex twice for cross-references/geometry
+                # Run engine twice for cross-references/geometry
                 for _ in range(2):
                     subprocess.run(
-                        ["pdflatex", "-interaction=nonstopmode", os.path.basename(tex_file)],
+                        [latex_engine, "-interaction=nonstopmode", os.path.basename(tex_file)],
                         cwd=os.path.dirname(abs_config_path),
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
@@ -570,7 +573,7 @@ def compile_cv(config_path):
             except subprocess.CalledProcessError:
                 console.print(f"[bold red]Failed to compile {os.path.basename(tex_file)}. Check the .log file.[/bold red]")
             except FileNotFoundError:
-                console.print("[bold red]pdflatex command not found. Please install TeX Live or MiKTeX.[/bold red]")
+                console.print(f"[bold red]{latex_engine} command not found. Please install TeX Live or MiKTeX.[/bold red]")
                 
     except Exception as e:
         console.print(f"[bold red]Warning: Failed to auto-update tracking files/compile PDFs: {e}[/bold red]")

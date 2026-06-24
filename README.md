@@ -75,7 +75,7 @@ Successfully compiled CV-Applicant-Google.pdf
 * 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, deterministically compiled into beautiful Jinja2 LaTeX templates.
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
 * 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
-* 🐳 **Zero-Install Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot the environment in seconds to get a full TeX Live distribution inside Docker—no need to install 4GB of LaTeX dependencies on your host machine.
+* 🐳 **Zero-Install Reproducibility:** Comes with a pre-configured VS Code DevContainer. Boot a fully sandboxed environment to get a full TeX Live distribution inside Docker. *(Note: The initial Docker build downloads the 4GB distribution, grab a coffee. After that, compile CVs locally without polluting your host machine.)*
 * 🕵️ **100% Local & Privacy-First:** Your career data never leaves your machine unless you explicitly send it to an LLM via your trusted API or Agent. No web services, no data harvesting.
 
 ---
@@ -91,20 +91,20 @@ Instead of vector search, we use **In-Context Semantic Routing**. We feed your e
 ### 2. How the "Lie Detector" Catches Hallucinations
 When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess. *(Why do we track this? So you explicitly know your weak points, can strategically address them in your Cover Letter, or know exactly what to study before the technical interview!)*
 
-The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a case-insensitive substring intersection between your `missing_skills` list and the AI-generated free-text. 
-If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner.
+The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a strict Regex negative lookahead/lookbehind intersection (`(?<!\w)`) between your `missing_skills` list and the AI-generated free-text. 
+If a match is found, the compiler immediately throws a `ZeroTrustViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner. *(And because of the regex bounds, missing skills like "C" won't crash on the word "script", and special characters like "C++" are safely parsed).*
 
 ---
 
 ## 🚀 How to Use EigenCV: Choose Your Path
 
 ### Path 1: The Zero-Setup "Lifehack" (For Non-Coders / ChatGPT Plus)
-You don't need to know Python, LaTeX, or Git to use EigenCV. You can run the entire pipeline in the cloud.
+You don't need to know Python, LaTeX, or Git to use EigenCV. You can orchestrate the AI in the cloud and render the PDF for free in your browser.
 
 1. **Download** this entire repository as a ZIP file.
 2. **Upload** the ZIP to ChatGPT (using Advanced Data Analysis) or Claude, along with ALL your old resumes, Word documents, and project descriptions. 
-3. **The Bullet-Point Pool:** You don't just migrate one CV. Dump years of history into the AI. The AI acts as a filter, extracting the facts into your immutable JSON database. Then, give it a Job Description. It will selectively pick ONLY the relevant bullet points for that specific job.
-4. **Zero Local Install:** The cloud AI runs the Python compiler in its own sandbox and provides the final, ATS-perfect LaTeX PDF as a download link.
+3. **The Bullet-Point Pool:** Dump years of history into the AI. The AI acts as a filter, extracting the facts into your immutable JSON database. Then, give it a Job Description. It will selectively pick ONLY the relevant bullet points and run the Python compiler in its sandbox to generate the raw `.tex` files.
+4. **Zero Local Install (The Overleaf Hack):** Because Cloud AIs struggle with compiling massive LaTeX environments, simply download the generated `.tex` files from the AI and drop them into **Overleaf** (or use GitHub Codespaces). Instant, gorgeous PDFs without local setup.
 
 ### Path 2: The Hardcore Privacy Route (For Developers)
 If you want absolute control and 100% data privacy:
