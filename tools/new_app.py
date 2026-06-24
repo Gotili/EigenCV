@@ -94,6 +94,7 @@ def create_new_app(company, role, dry_run=False):
   "job_title": "",
   "keywords": "",
   "geometry_options": "left=0.625in, right=0.625in, top=0.45in, bottom=0.45in",
+  "company_accent_color": "",
   "profile": "",
   "skill_categories": [],
   "experience": {},

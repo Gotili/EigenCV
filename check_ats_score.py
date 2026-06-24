@@ -39,8 +39,12 @@ except LookupError:
 lemmatizer = WordNetLemmatizer()
 
 def lemmatize_text(text):
-    tokens = word_tokenize(text)
-    return " ".join([lemmatizer.lemmatize(t.lower()) for t in tokens])
+    try:
+        tokens = word_tokenize(text)
+        return " ".join([lemmatizer.lemmatize(t.lower()) for t in tokens])
+    except Exception:
+        # Fallback falls NLTK-Daten (offline) nicht geladen werden konnten
+        return text.lower()
 
 def load_master_skills(base_dir):
     skills_file = os.path.join(base_dir, "cv", "database", "active", "master_skills.md")

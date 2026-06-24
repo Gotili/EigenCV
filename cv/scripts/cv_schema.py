@@ -92,39 +92,71 @@ class BuildConfig(BaseModel):
         if not master_exp:
             return self  # Skip if we can't load DBs
 
+        def heal_id(candidate, valid_choices, category):
+            try:
+                from rapidfuzz import process, fuzz
+            except ImportError:
+                return candidate
+                
+            if candidate in valid_choices:
+                return candidate
+            if not valid_choices:
+                return candidate
+            match = process.extractOne(candidate, valid_choices, scorer=fuzz.ratio)
+            if match and match[1] >= 90:
+                print(f"[Healer] Auto-corrected '{candidate}' to '{match[0]}' in {category}.")
+                return match[0]
+            return candidate
+
         # Validate Experience Company IDs and Bullet IDs
+        healed_experience = {}
         for comp_id, exp_data in self.experience.items():
-            if comp_id not in master_exp:
-                errors.append(f"Company ID '{comp_id}' not found in experience.json.")
+            healed_comp_id = heal_id(comp_id, list(master_exp.keys()), "experience company")
+            
+            if healed_comp_id not in master_exp:
+                errors.append(f"Company ID '{healed_comp_id}' not found in experience.json.")
+                healed_experience[healed_comp_id] = exp_data
             else:
-                valid_bullets = master_exp[comp_id].get('bullets', {})
+                valid_bullets = master_exp[healed_comp_id].get('bullets', {})
+                healed_bullets = []
                 for b_id in exp_data.bullets:
-                    if b_id not in valid_bullets:
-                        errors.append(f"Bullet ID '{b_id}' not found under company '{comp_id}' in experience.json.")
+                    healed_b_id = heal_id(b_id, list(valid_bullets.keys()), f"bullets for {healed_comp_id}")
+                    if healed_b_id not in valid_bullets:
+                        errors.append(f"Bullet ID '{healed_b_id}' not found under company '{healed_comp_id}' in experience.json.")
+                    healed_bullets.append(healed_b_id)
+                
+                exp_data.bullets = healed_bullets
+                healed_experience[healed_comp_id] = exp_data
                 
                 # Enforce bullet counts
                 total_available = len(valid_bullets)
                 if total_available > 0:
                     min_required = math.ceil(total_available * 0.6)
                     if len(exp_data.bullets) < min_required:
-                        errors.append(f"You only provided {len(exp_data.bullets)} bullets for '{comp_id}'. You MUST provide AT LEAST {min_required} bullets (60% of available {total_available}).")
+                        errors.append(f"You only provided {len(exp_data.bullets)} bullets for '{healed_comp_id}'. You MUST provide AT LEAST {min_required} bullets (60% of available {total_available}).")
+        
+        self.experience = healed_experience
 
         # Validate Projects
+        self.projects = [heal_id(p, list(master_proj.keys()), "projects") for p in self.projects]
         for p_id in self.projects:
             if p_id not in master_proj:
                 errors.append(f"Project ID '{p_id}' not found in projects.json.")
 
         # Validate Education
+        self.education = [heal_id(e, list(master_edu.keys()), "education") for e in self.education]
         for e_id in self.education:
             if e_id not in master_edu:
                 errors.append(f"Education ID '{e_id}' not found in education.json.")
 
         # Validate Extracurriculars
+        self.extracurriculars = [heal_id(ex, list(master_ext.keys()), "extracurriculars") for ex in self.extracurriculars]
         for ex_id in self.extracurriculars:
             if ex_id not in master_ext:
                 errors.append(f"Extracurricular ID '{ex_id}' not found in extracurriculars.json.")
 
         # Validate Languages
+        self.languages = [heal_id(l, list(master_lang.keys()), "languages") for l in self.languages]
         for l_id in self.languages:
             if l_id not in master_lang:
                 errors.append(f"Language ID '{l_id}' not found in languages.json.")

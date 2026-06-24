@@ -23,7 +23,7 @@
 % Map the metadata to awesome-cv commands
 % Awesome-CV bolds the last name. We use the split variables from cv_compiler.
 \name{ {{- user_first_name -}} }{ {{- user_last_name -}} }
-\position{ \cvposition }
+\position{ {{- job_title | sanitize_latex_text -}} }
 \address{ \cvlocation }
 \mobile{ \cvphone }
 \email{ \cvemail }

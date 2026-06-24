@@ -2,6 +2,8 @@ import os
 import sys
 import subprocess
 
+def is_venv():
+    return hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
 def main():
     root_dir = os.path.dirname(os.path.abspath(__file__))
     cv_compiler_path = os.path.join(root_dir, "cv", "scripts", "cv_compiler.py")
@@ -13,6 +15,17 @@ def main():
         sys.exit(1)
         
     print("--- Starting ChatGPT Cloud Compile ---")
+    
+    if not is_venv() and not os.environ.get("EIGENCV_IN_CLOUD"):
+        print("[INFO] You are not in a virtual environment. Skipping automatic 'pip install' to protect your global Python environment.")
+        print("[INFO] If you are missing dependencies, please create a venv or run: pip install -r requirements.txt")
+    else:
+        print("Ensuring dependencies are installed (this may take a few seconds)...")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", os.path.join(root_dir, "requirements.txt")], check=True)
+        except Exception as e:
+            print(f"[WARNING] Could not auto-install dependencies: {e}")
+        
     print("Forcing cloud-safe template to avoid LaTeX font errors...")
     
     env = os.environ.copy()

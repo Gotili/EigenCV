@@ -504,8 +504,8 @@ def compile_cv(config_path):
             f.write("compile:\n")
             f.write("\tpython ../../cv/scripts/cv_compiler.py build_config.json\n\n")
             f.write("latex:\n")
-            f.write(f"\tfor f in CV*.tex; do [ -e \"$$f\" ] && {{ {latex_engine} -interaction=nonstopmode \"$$f\" || exit 1; }}; done\n")
-            f.write(f"\tfor f in Cover_Letter*.tex; do [ -e \"$$f\" ] && {{ {latex_engine} -interaction=nonstopmode \"$$f\" || exit 1; }}; done\n\n")
+            f.write(f"\tfor f in CV*.tex; do [ -e \"$$f\" ] && {{ {latex_engine} -interaction=nonstopmode -no-shell-escape \"$$f\" || exit 1; }}; done\n")
+            f.write(f"\tfor f in Cover_Letter*.tex; do [ -e \"$$f\" ] && {{ {latex_engine} -interaction=nonstopmode -no-shell-escape \"$$f\" || exit 1; }}; done\n\n")
             f.write("ats:\n")
             f.write("\tpython ../../check_ats_score.py .\n\n")
             f.write("clean:\n")
@@ -578,7 +578,7 @@ def compile_cv(config_path):
                 # Run engine twice for cross-references/geometry
                 for _ in range(2):
                     subprocess.run(
-                        [latex_engine, "-interaction=nonstopmode", os.path.basename(tex_file)],
+                        [latex_engine, "-interaction=nonstopmode", "-no-shell-escape", os.path.basename(tex_file)],
                         cwd=os.path.dirname(abs_config_path),
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
@@ -597,4 +597,8 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python cv_compiler.py <path_to_build_config.json>")
         sys.exit(1)
-    compile_cv(sys.argv[1])
+    try:
+        compile_cv(sys.argv[1])
+    except EigenTruthViolationError as e:
+        print(str(e))
+        sys.exit(1)
