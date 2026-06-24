@@ -57,7 +57,7 @@ Beyond the database, the repository is modularized into several functional direc
 
 When the LLM reads your Job Description, it generates a `build_config.json`. This file is strictly validated by Pydantic (`cv/scripts/cv_schema.py`). You don't need to know Python to understand it, but you should understand its structure:
 
-* **No Raw Text for History:** The schema forces the AI to output *arrays of string IDs*, not raw text. For example, under `experience`, the AI outputs `["data_pipelines", "aws_migration"]`. The compiler uses these IDs to fetch the real text from your database.
+* **No Raw Text for History (Self-Healing IDs):** The schema forces the AI to output *arrays of string IDs*, not raw text. For example, under `experience`, the AI outputs `["data_pipelines", "aws_migration"]`. The compiler uses these IDs to fetch the real text from your database. If the AI makes a slight typo in an ID, an internal "Healer" uses RapidFuzz to auto-correct it (>90% accuracy match) to ensure your build doesn't crash over a missing underscore.
 * **The `skills` Array:** The AI extracts a curated list of skills from your `master_skills.md` that match the job.
 * **The `missing_skills` Array:** If the job requires a skill you do not have, the AI MUST put it here. The Lie Detector uses this array to ensure the AI didn't hallucinate that skill into your `profile` or `keywords`.
 * **Dynamic Generation:** Only the `profile` (your summary paragraph) and `keywords` (ATS SEO terms) are generated dynamically as free-text by the AI, because these must be heavily tailored to the specific company's mission statement.
@@ -100,14 +100,13 @@ When you provide hard facts, the AI weaves them into a highly persuasive, non-ha
 
 ---
 
-## 🧮 The ATS & Salary Engine Explained
+## 🧮 The ATS & Probability Engine Explained
 
-The `check_ats_score.py` script doesn't just tell you if you passed; it gives you actionable intelligence.
+The pipeline provides actionable intelligence through a split approach (Determinism vs. Heuristics).
 
-1. **The Keyword Penalty Matrix:** The engine extracts raw text from your compiled PDF and compares it against lemmatized keywords from the Job Description. If a mandatory skill is missing, it applies a mathematically defined penalty to your ATS score.
-2. **Salary Estimation:** Based on the final match percentage, the job title, and the required seniority, the engine attempts to calculate a predicted salary range for you.
-3. **Probability Metrics:** It calculates your statistical chance of receiving an interview invite and your chance of landing an offer based on how well your immutable database aligned with the company's requirements. 
-*Note: To improve these metrics, you must acquire the missing skills or re-write your immutable database bullet points to better reflect your true experience. You cannot cheat the engine.*
+1. **The Python Keyword Matcher (Deterministic):** The `check_ats_score.py` script extracts raw text from your compiled PDF and compares it against lemmatized keywords from the Job Description (using NLTK & RapidFuzz). If a mandatory skill is missing, it applies a mathematically defined penalty to your ATS score.
+2. **Probability & Salary Matrix (AI Heuristics):** Prior to compiling the PDF, the AI Agent assesses your factual database against the Job Description. It acts as a ruthless filter to estimate a realistic salary range and calculates your statistical chance of receiving an interview invite or job offer based strictly on your verified skills.
+*Note: To improve these metrics, you must acquire the missing skills or re-write your immutable database bullet points to better reflect your true experience. The AI is strictly instructed to penalize your probabilities if core skills are tracked as missing.*
 
 ---
 

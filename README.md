@@ -71,7 +71,8 @@ Successfully compiled CV-Applicant-Google.pdf
 * 🔒 **Immutable Database:** Your bullet points and skills are strictly **IMMUTABLE**. You can maintain them yourself or use LLMs to prep them, but within the EigenCV pipeline, the AI is only allowed to *select* them, never rewrite them.
 * ✍️ **Zero-Hallucination Cover Letters:** The AI uses your `personal_dossier.md` to write hyper-authentic cover letters based *only* on your real soft skills and hobbies, eliminating corporate fluff.
 * 🎨 **Corporate Auto-Coloring:** The AI automatically deduces the target company's corporate identity and dynamically injects matching accent colors into the LaTeX output (or you can override it manually).
-* 🧮 **Advanced ATS & Salary Estimations:** The post-compilation parser calculates a mathematically honest ATS score, and uses it to estimate potential salary ranges and interview/offer probabilities.
+* 🧮 **Advanced ATS Engine & Reality Checks:** The post-compilation Python parser calculates a mathematically honest ATS keyword match score. Meanwhile, the AI Agent acts as a ruthless filter, estimating interview/offer probabilities and salary ranges based *strictly* on your verified skills, creating a realistic Probability Matrix.
+* 🏥 **Self-Healing IDs:** If the LLM makes a minor typo when selecting an ID from your database (e.g., `aws_mig` instead of `aws_migration`), the compiler's built-in `rapidfuzz` heuristics will auto-heal the ID, preventing brittle build crashes.
 * 📄 **Automated LaTeX Compilation:** No more broken LaTeX parsing or missing brackets. The AI generates a strictly typed Pydantic JSON schema, deterministically compiled into beautiful Jinja2 LaTeX templates.
 * 🌍 **Multi-Language Support & Auto-Translation (Beta):** Applying abroad? The system supports native multi-language CVs with strict language mismatch prevention, and features an experimental auto-translation engine to dynamically localize your database.
 * 🏗️ **Dynamic Section Routing:** Don't have any open-source projects for a specific application? Simply omit the array in the JSON. The Jinja2 engine will dynamically hide the section and recalculate the LaTeX geometry without leaving awkward whitespace.
@@ -150,7 +151,7 @@ sequenceDiagram
     rect rgb(60, 40, 20)
     Note over LLM,Py: Phase 2: Compile
     LLM->>Py: Execute cv_compiler.py
-    Note over Py,DB: 🛡️ The Lie Detector<br>Crash if AI hallucinated!
+    Note over Py,DB: 🏥 Healer auto-corrects IDs<br>🛡️ Lie Detector prevents hallucinations
     Py->>DB: Fetch verified text
     Py-->>LLM: Render PDF via Jinja2
     end
