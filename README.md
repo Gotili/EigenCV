@@ -34,11 +34,11 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 
 ## ⚙️ How the Pipeline Works (The 3-Step Process)
 
-Before we look at the Lie Detector, here is exactly how EigenCV generates your application:
+Most AI tools use a "generate and pray" approach. EigenCV uses **Agentic Determinism**. Here is how we guarantee a flawless, hallucination-free application:
 
-1. **The Master Database:** You maintain your entire career history (every project, every job, every skill) as structured Markdown/JSON files on your hard drive. Every bullet point has a unique ID (e.g., `proj_aws_migration`).
-2. **AI Orchestration & Matching:** When you apply for a job, the AI reads the Job Description and your database. Instead of writing text, it simply outputs a list of IDs (e.g., `["proj_aws_migration", "exp_google_lead"]`) that perfectly match the job requirements. It also drafts a hyper-authentic Cover Letter based *only* on your verified profile.
-3. **Deterministic Compilation:** The EigenCV Python compiler takes this list of IDs, fetches the verified text from your database, and deterministically injects it into a stunning LaTeX template.
+1. **The Immutable Master Database:** You don't paste your resume into a chat window. Your career history lives offline as a structured JSON/Markdown database on your hard drive. Every achievement, project, and skill has a mathematically verifiable ID (e.g., `proj_aws_migration`).
+2. **AI Orchestration (The Brain):** When applying for a job, the AI reads the Job Description and acts as a strategic orchestrator. Instead of writing text, it executes a precise query against your database, returning only the IDs that maximize your ATS match score. It crafts a hyper-authentic Cover Letter based *exclusively* on your verified profile data.
+3. **Deterministic Compilation (The Muscle):** The AI is entirely locked out of the rendering process. The EigenCV Python compiler takes the approved list of IDs, fetches the exact text from your offline database, and deterministically injects it into a stunning, ATS-optimized LaTeX template. **Zero broken layouts, zero hallucinations.**
 
 ---
 
