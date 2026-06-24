@@ -142,10 +142,12 @@ We do **not** use Vector Databases (Chroma, Pinecone) or traditional RAG embeddi
 Instead of vector search, we use **In-Context Semantic Routing**. We feed your entire JSON database to the LLM and prompt it to output an array of `bullet_ids` that semantically match the Job Description. The LLM acts as the retriever, but the actual text insertion is handled deterministically by Python.
 
 ### 2. The EigenTruth Engine (How We Catch Hallucinations)
-When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array in the JSON schema for any required skills you *do not* possess. *(Why do we track this? So you explicitly know your weak points, can strategically address them in your Cover Letter, or know exactly what to study before the technical interview!)*
+**Is it really "Zero-Trust" if the AI generates the Cover Letter and Profile?** 
+Yes, but it's a *Constrained Generation Boundary*. While your hard facts (experience bullets, projects) are 100% immutable and fetched via IDs, your Profile and Cover Letter *must* be dynamically written to address the specific company's mission. 
 
-The Python compiler (`cv_compiler.py`) intercepts the generated text fields (like your Summary Profile and Keyword list) *before* rendering the LaTeX. It performs a strict Regex negative lookahead/lookbehind intersection (`(?<!\w)`) between your `missing_skills` list and the AI-generated free-text. 
-If a match is found, the compiler immediately throws an `EigenTruthViolationError` and aborts. The AI cannot sneak missing skills into your profile to trick the ATS scanner. *(And because of the regex bounds, missing skills like "C" won't crash on the word "script", and special characters like "C++" are safely parsed).*
+To maintain Zero-Trust here, the Python compiler (`cv_compiler.py`) intercepts these generated text fields *before* rendering the LaTeX. When the LLM analyzes the Job Description, it is forced to populate a `missing_skills` array for any required skills you *do not* possess. 
+
+The compiler performs a strict Regex negative lookahead/lookbehind intersection (`(?<!\w)`) between your `missing_skills` list and the AI-generated free-text. If a match is found, the compiler immediately throws an `EigenTruthViolationError` and aborts. The AI cannot sneak missing skills into your prose to trick the ATS scanner.
 
 **Why a Regex engine and not a State-of-the-Art "LLM-as-a-Judge"?** 
 Because *Pragmatism > Over-engineering*. Your CV compiler should run completely offline, deterministically, in <1 second, without requiring an active API key or costing $0.05 per build. Our EigenTruth Engine is O(1), free, and bulletproof for this specific use case.
