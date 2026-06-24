@@ -83,57 +83,30 @@ If `len(intersection) > 0`, the compiler immediately throws a `ZeroTrustViolatio
 ## 🛠️ System Architecture
 
 ```mermaid
-flowchart LR
-    %% Subgraphs for Architectural Separation
-    subgraph Input ["📥 1. Input Layer"]
-        JD(📄 Job Description)
-    end
+flowchart TD
+    %% Nodes
+    JD(📄 Job Description)
+    DB[(🗄️ Zero-Trust Database)]
+    LLM{🧠 Agentic LLM Router}
+    Config(⚙️ build_config.json)
+    Compiler[[🐍 cv_compiler.py]]
+    PDF(📑 Tailored PDF CV)
+    ATS[[🔍 check_ats_score.py]]
+    Score(📈 Honest ATS Score)
 
-    subgraph Data ["🗄️ 2. Zero-Trust Database"]
-        DB[(JSON / Markdown\nCareer Facts)]
-    end
-
-    subgraph AI_Layer ["🧠 3. Agentic Orchestration"]
-        Router{LLM Router}
-        Config[⚙️ build_config.json]
-    end
-
-    subgraph Build ["🔨 4. Compilation Pipeline"]
-        Compiler[[🐍 cv_compiler.py]]
-        TEX(📝 LaTeX Templates)
-        PDF(📑 Tailored PDF CV)
-    end
-
-    subgraph Verif ["🛡️ 5. Verification"]
-        ATS[[🔍 check_ats_score.py]]
-        Log(📈 Honest ATS Score)
-    end
-
-    %% Workflow
-    JD -.->|Semantic Match| Router
-    DB ==>|Ground Truth| Router
-    Router ==>|Pydantic Validated| Config
+    %% Logical Flow
+    JD -->|1. Feed into Prompt| LLM
+    DB -.->|2. Context & Rules| LLM
+    LLM -->|3. Output Validated Schema| Config
     
-    Config ==>|Injects Data| Compiler
-    Compiler -.->|Renders| TEX
-    TEX ==>|pdflatex| PDF
+    Config -->|4. Load Configuration| Compiler
+    DB ===>|5. Inject Verified Text| Compiler
     
-    PDF -.->|Parses Text| ATS
-    JD -.->|Extracts Keywords| ATS
-    ATS ==>|Calculates Match| Log
-
-    %% Styling to make it look premium
-    classDef primary fill:#4285F4,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
-    classDef secondary fill:#34A853,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
-    classDef database fill:#FBBC05,stroke:#000,stroke-width:2px,color:#000,rx:5px,ry:5px;
-    classDef warning fill:#EA4335,stroke:#000,stroke-width:2px,color:#fff,rx:5px,ry:5px;
-    classDef file fill:#E8EAED,stroke:#9AA0A6,stroke-width:1px,color:#202124,rx:5px,ry:5px;
+    Compiler -->|6. Render via Jinja2 & pdflatex| PDF
     
-    class Router primary;
-    class Compiler,ATS secondary;
-    class DB database;
-    class Log warning;
-    class JD,Config,TEX,PDF file;
+    PDF -.->|7. Extract Text| ATS
+    JD -.->|8. Compare Keywords| ATS
+    ATS ===>|9. Calculate Penalty| Score
 ```
 
 ---
