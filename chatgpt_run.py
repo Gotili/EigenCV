@@ -121,7 +121,33 @@ def main() -> None:
 
     print(f"[INFO] Using config: {os.path.relpath(build_config_path, root_dir)}")
 
-    # --- Install dependencies (always, unconditionally) ---
+    # --- Pre-validate JSON before running compiler ---
+    print("[INFO] Validating build_config.json syntax...")
+    import json
+    try:
+        with open(build_config_path, 'r', encoding='utf-8') as f:
+            json.load(f)
+        print("[INFO] JSON syntax OK.")
+    except json.JSONDecodeError as e:
+        print(f"[WARNING] Invalid JSON detected: {e}")
+        print("[INFO] Attempting auto-repair with tolerant parser (json5)...")
+        try:
+            import json5
+            with open(build_config_path, 'r', encoding='utf-8') as f:
+                data = json5.load(f)
+            with open(build_config_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            print("[INFO] JSON auto-repaired and rewritten. Continuing...")
+        except ImportError:
+            print("[INFO] json5 not available. Continuing — compiler will report the exact error.")
+        except Exception as repair_err:
+            print(f"[ERROR] Could not auto-repair JSON: {repair_err}")
+            print()
+            print("  AI INSTRUCTION: Fix the JSON syntax error in build_config.json.")
+            print("  Common causes: trailing commas, unescaped quotes, missing brackets.")
+            print("  Correct the file and run chatgpt_run.py again.")
+            sys.exit(1)
+
     ensure_dependencies(root_dir)
 
     # --- Check LaTeX availability ---

@@ -6,3 +6,4 @@ nltk>=3.8.1
 rapidfuzz>=3.0.0
 pytest>=7.0.0
 langdetect>=1.0.9
+json5>=0.9.14

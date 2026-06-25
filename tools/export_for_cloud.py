@@ -18,6 +18,13 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
+# Import manifest generator to ensure VALID_IDS.md is always up-to-date
+sys.path.insert(0, str(Path(__file__).parent))
+try:
+    from generate_id_manifest import generate_manifest
+except ImportError:
+    generate_manifest = None
+
 # --- Config ---
 EXCLUDE_DIRS = {
     ".git",
@@ -68,6 +75,15 @@ def main():
     print(f"  Source:  {root}")
     print(f"  Output:  {output_path}")
     print(f"  Excluding: {', '.join(sorted(EXCLUDE_DIRS))}")
+    print("=" * 60)
+
+    # Always regenerate VALID_IDS.md before packaging
+    if generate_manifest:
+        print("[INFO] Regenerating VALID_IDS.md from active database...")
+        generate_manifest(root_dir=str(root))
+        print("[OK]  VALID_IDS.md updated.")
+    else:
+        print("[WARNING] generate_id_manifest.py not found — VALID_IDS.md may be stale.")
     print("=" * 60)
 
     file_count = 0

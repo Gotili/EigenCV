@@ -23,13 +23,17 @@ TASK 1 (only if I uploaded old resumes): Extract my career facts from my provide
 old resumes into the JSON database format found in `cv/database/active/`.
 If I did not upload old resumes, assume the database is already filled.
 
-TASK 2: Analyze this Job Description:
+TASK 2: Read the file `VALID_IDS.md` in the repository root. This is your ONLY
+reference for valid IDs. Do not use any ID that is not listed there.
+
+TASK 3: Analyze this Job Description:
 [ PASTE YOUR JOB DESCRIPTION HERE ]
 
-TASK 3: Strictly follow ALL instructions in `docs/AI_GENERATION_PROMPT.md`.
+TASK 4: Strictly follow ALL instructions in `docs/AI_GENERATION_PROMPT.md`.
 Do not invent or hallucinate any skills or bullet points.
+Only use IDs from `VALID_IDS.md`.
 
-TASK 4: Run `python chatgpt_run.py` (no arguments) from the repository root.
+TASK 5: Run `python chatgpt_run.py` (no arguments) from the repository root.
 The script will auto-discover the build_config.json and compile the CV.
 If pdflatex is not available, it will produce a .tex file — provide me with
 a download link and remind me to upload it to https://overleaf.com.
