@@ -45,8 +45,8 @@ The sample above is just one configuration. EigenCV puts you in complete control
 > **AI Compatibility — Be honest with yourself:**
 > | AI | Full Pipeline | Local / Private | Notes |
 > |---|---|---|---|
-> | **ChatGPT Plus** (Advanced Data Analysis) | ✅ | ❌ | Full PDF compiled in sandbox |
-> | **Claude** (claude.ai, any tier) | ⚠️ Partial | ❌ | Generates `.tex` → paste into Overleaf |
+> | **ChatGPT Plus** | ✅ | ❌ | Requires Advanced Data Analysis tier |
+> | **Claude** | ⚠️ Partial | ❌ | Generates `.tex` → paste into Overleaf |
 > | **Gemini** | ❌ | ❌ | No persistent file context across messages |
 
 **Instructions for ChatGPT Plus (Recommended):**
