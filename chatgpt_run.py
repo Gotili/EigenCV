@@ -1,50 +1,197 @@
 """
-ChatGPT / AI Sandbox Runner.
+EigenCV ChatGPT / AI Sandbox Runner
+====================================
+Entry point for executing the EigenCV pipeline inside a sandboxed AI
+environment (ChatGPT Advanced Data Analysis).
 
-This script acts as the entry point for executing the EigenCV pipeline directly 
-inside a sandboxed AI environment (like ChatGPT Advanced Data Analysis).
+Usage:
+    python chatgpt_run.py                          # auto-discovers build_config.json
+    python chatgpt_run.py path/to/build_config.json  # explicit path
 """
 import os
 import sys
+import shutil
 import subprocess
 
-def is_venv():
-    return hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
-def main():
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    cv_compiler_path = os.path.join(root_dir, "cv", "scripts", "cv_compiler.py")
-    build_config_path = os.path.join(root_dir, "build_config.json")
-    
-    if not os.path.exists(build_config_path):
-        print("ERROR: build_config.json not found in the root directory.")
-        print("AI INSTRUCTION: You must generate the 'build_config.json' file first before running this script.")
-        sys.exit(1)
-        
-    print("--- Starting ChatGPT Cloud Compile ---")
-    
-    if not is_venv() and not os.environ.get("EIGENCV_IN_CLOUD"):
-        print("[INFO] You are not in a virtual environment. Skipping automatic 'pip install' to protect your global Python environment.")
-        print("[INFO] If you are missing dependencies, please create a venv or run: pip install -r requirements.txt")
+# --- Constants ---
+REQUIREMENTS_FILE = "requirements.txt"
+CV_COMPILER_REL   = os.path.join("cv", "scripts", "cv_compiler.py")
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def find_build_config(root_dir: str) -> str | None:
+    """
+    Locate build_config.json.
+
+    Search order:
+      1. Root of the repository (simplest case for cloud AIs)
+      2. Any direct subfolder of application-packages/ (standard local layout)
+      3. Recursive search as last resort
+    """
+    # 1 — root
+    candidate = os.path.join(root_dir, "build_config.json")
+    if os.path.exists(candidate):
+        return candidate
+
+    # 2 — application-packages/* (one level deep, newest first)
+    app_pkg = os.path.join(root_dir, "application-packages")
+    if os.path.isdir(app_pkg):
+        subdirs = sorted(
+            [d for d in os.scandir(app_pkg) if d.is_dir()],
+            key=lambda e: e.stat().st_mtime,
+            reverse=True,
+        )
+        for entry in subdirs:
+            candidate = os.path.join(entry.path, "build_config.json")
+            if os.path.exists(candidate):
+                return candidate
+
+    # 3 — full recursive scan (safety net)
+    for dirpath, _, filenames in os.walk(root_dir):
+        # Skip hidden dirs and the blank_slate database
+        if any(part.startswith(".") or part == "blank_slate" for part in dirpath.split(os.sep)):
+            continue
+        if "build_config.json" in filenames:
+            return os.path.join(dirpath, "build_config.json")
+
+    return None
+
+
+def ensure_dependencies(root_dir: str) -> None:
+    """
+    Always install requirements in the sandbox.
+    In a ChatGPT sandbox, pip install is safe and idempotent.
+    """
+    req_file = os.path.join(root_dir, REQUIREMENTS_FILE)
+    if not os.path.exists(req_file):
+        print("[WARNING] requirements.txt not found — skipping dependency install.")
+        return
+
+    print("[INFO] Installing / verifying Python dependencies...")
+    result = subprocess.run(
+        [sys.executable, "-m", "pip", "install", "-q", "-r", req_file],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"[WARNING] pip install encountered issues:\n{result.stderr}")
+        print("[INFO] Continuing anyway — required packages may already be installed.")
     else:
-        print("Ensuring dependencies are installed (this may take a few seconds)...")
-        try:
-            subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", os.path.join(root_dir, "requirements.txt")], check=True)
-        except Exception as e:
-            print(f"[WARNING] Could not auto-install dependencies: {e}")
-        
-    print("Forcing cloud-safe template to avoid LaTeX font errors...")
-    
+        print("[INFO] Dependencies OK.")
+
+
+def latex_available() -> bool:
+    """Return True if pdflatex (or xelatex) is available on PATH."""
+    return shutil.which("pdflatex") is not None or shutil.which("xelatex") is not None
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+
+    print("=" * 60)
+    print("  EigenCV — Cloud Compile Runner")
+    print("=" * 60)
+
+    # --- Resolve build_config.json ---
+    if len(sys.argv) > 1:
+        build_config_path = os.path.abspath(sys.argv[1])
+        if not os.path.exists(build_config_path):
+            print(f"[ERROR] Provided path does not exist: {build_config_path}")
+            sys.exit(1)
+    else:
+        print("[INFO] No path provided — auto-discovering build_config.json...")
+        build_config_path = find_build_config(root_dir)
+        if build_config_path is None:
+            print()
+            print("[ERROR] Could not find build_config.json anywhere in the repository.")
+            print()
+            print("  AI INSTRUCTION: You must write the build_config.json file to the")
+            print("  repository ROOT before calling this script. Example:")
+            print("    with open('build_config.json', 'w') as f:")
+            print("        f.write(json.dumps(config_dict, indent=2))")
+            print()
+            sys.exit(1)
+
+    print(f"[INFO] Using config: {os.path.relpath(build_config_path, root_dir)}")
+
+    # --- Install dependencies (always, unconditionally) ---
+    ensure_dependencies(root_dir)
+
+    # --- Check LaTeX availability ---
+    has_latex = latex_available()
+    if not has_latex:
+        print()
+        print("[WARNING] pdflatex / xelatex not found in this environment.")
+        print("[INFO] Will compile to .tex source only — no PDF will be produced.")
+        print("[INFO] The user can paste the .tex file into https://overleaf.com to render the PDF.")
+        print()
+
+    # --- Set cloud-safe env flags ---
     env = os.environ.copy()
     env["EIGENCV_FORCE_CLOUD_SAFE"] = "1"
-    
-    try:
-        subprocess.run([sys.executable, cv_compiler_path, build_config_path], env=env, check=True)
-    except subprocess.CalledProcessError:
-        print("\n[FATAL ERROR] Compilation failed. See output above for AI instructions.")
+    if not has_latex:
+        env["EIGENCV_TEX_ONLY"] = "1"
+
+    # --- Run the compiler ---
+    cv_compiler_path = os.path.join(root_dir, CV_COMPILER_REL)
+    if not os.path.exists(cv_compiler_path):
+        print(f"[ERROR] Compiler not found at: {cv_compiler_path}")
         sys.exit(1)
-        
-    print("\n--- Compile Successful ---")
-    print("PDF generation complete. Please provide the download link to the user.")
+
+    print()
+    print("[INFO] Starting EigenCV compiler...")
+    print("-" * 60)
+
+    result = subprocess.run(
+        [sys.executable, cv_compiler_path, build_config_path],
+        env=env,
+    )
+
+    print("-" * 60)
+
+    if result.returncode != 0:
+        print()
+        print("[ERROR] Compilation failed. Review the error output above.")
+        print()
+        print("  AI INSTRUCTION: If the error mentions a missing bullet/project ID,")
+        print("  check that all IDs in your build_config.json exist in the database.")
+        print("  Re-read docs/AI_GENERATION_PROMPT.md Phase 2 (Valid IDs Only).")
+        sys.exit(1)
+
+    # --- Success summary ---
+    print()
+    print("[OK] Compilation successful!")
+    print()
+
+    # Find and report the generated output files
+    config_dir = os.path.dirname(build_config_path)
+    output_files = [
+        f for f in os.listdir(config_dir)
+        if f.endswith(".pdf") or f.endswith(".tex")
+    ]
+    if output_files:
+        print("  Generated files:")
+        for fname in sorted(output_files):
+            fpath = os.path.join(config_dir, fname)
+            size_kb = os.path.getsize(fpath) / 1024
+            print(f"    {fname}  ({size_kb:.1f} KB)")
+        print()
+        if any(f.endswith(".pdf") for f in output_files):
+            print("  AI INSTRUCTION: Provide the user a download link to the .pdf file.")
+        else:
+            print("  AI INSTRUCTION: LaTeX was not available — provide the .tex file.")
+            print("  Tell the user: 'Download this .tex file and upload it to")
+            print("  https://overleaf.com — click New Project > Upload Project.'")
+    print()
+    print("=" * 60)
+
 
 if __name__ == "__main__":
     main()

@@ -11,8 +11,13 @@ Before you begin generating ANY application package, you MUST verify that the us
    > "⚠️ **Welcome to the EigenCV!** I see you are still using the default 'Jane Doe' placeholder data. Before we can generate tailored applications, we need to onboard your actual career history. Please provide me with a text dump of your old CV or LinkedIn profile, and say *'Start Onboarding'*. I will then use the rules in `docs/AI_ONBOARDING_PROMPT.md` to set up your database safely."
 
 ## Phase 1: Initialization & Pre-Flight Analysis
-1. **MANDATORY:** Run `python tools/new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually. The script will automatically calculate the next correct ID and create the folder.
-2. Save the ENTIRE, unedited, verbatim Job Description text into the newly created folder as `JD_[YYYY-MM-DD].md` for archiving.
+
+> ⚠️ **PATH-SPECIFIC INSTRUCTION — FOLLOW YOUR EXECUTION ENVIRONMENT:**
+>
+> **PATH A (ChatGPT / Cloud Sandbox):** Do NOT run `new_app.py`. It requires an interactive terminal and will fail in a sandbox. Instead, you MUST write the completed `build_config.json` directly to the **repository root** directory. The cloud runner (`chatgpt_run.py`) auto-discovers it there. Still save the Job Description as `JD_[YYYY-MM-DD].md` in the root as well.
+>
+> **PATH B (Local CLI / Agentic IDE):** Run `python tools/new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually.
+
 3. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
    - What are the core requirements of this role?
    - Which skills are missing from `cv/database/active/master_skills.md` that I need to track as 0 %?
@@ -170,7 +175,11 @@ If the user requests changes to personal contact information (e.g., email, phone
 > You MUST determine your execution environment before running any build commands:
 >
 > **PATH A — You are running inside ChatGPT (Advanced Data Analysis / Code Interpreter):**
-> You have access to a Python sandbox. You MUST run the `chatgpt_run.py` script from the repository root. This is the ONLY sanctioned way to compile the CV in this environment. You are STRICTLY FORBIDDEN from manually writing or generating `.tex` files. Execute: `python chatgpt_run.py <path_to_application_folder>`. The script will compile the CV and generate a downloadable PDF link.
+> You have access to a Python sandbox. Run: `python chatgpt_run.py` (no arguments needed — it auto-discovers `build_config.json`). You are STRICTLY FORBIDDEN from manually writing or generating `.tex` files by hand. The script will:
+>  1. Install all Python dependencies automatically
+>  2. Compile the CV to PDF (or `.tex` if LaTeX is unavailable)
+>  3. Print the output file path and give you the exact instruction to pass to the user
+> If the script outputs a `.tex` file (no LaTeX in sandbox), tell the user: *"Download this .tex file and upload it to https://overleaf.com → New Project → Upload Project to render the PDF."*
 >
 > **PATH B — You are running in a local CLI / Agentic IDE (Cursor, Windsurf, Antigravity):**
 > Inform the user to run `tools/build_all.bat` (Windows) or `tools/build_all.sh` (Linux/Mac) from the root folder.
