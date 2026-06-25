@@ -7,10 +7,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
 
 **Stop letting ChatGPT hallucinate skills you don't have.** <br>
-An Infrastructure-as-Code (IaC) resume pipeline that guarantees:
-* 🔒 **Zero Hallucinations:** Strict data-first architecture.
-* ⚙️ **ATS-Optimized:** Compiles deterministically to clean, machine-readable LaTeX.
-* 🛡️ **Full Integrity:** You only apply with verified skills you actually possess.
+*An Infrastructure-as-Code (IaC) pipeline to generate ATS-optimized LaTeX resumes; Using your REAL data, keeping you in full control, and protecting your integrity.*
 
 </div>
 
