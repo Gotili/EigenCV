@@ -91,11 +91,11 @@ def test_eigentruth_violation():
           ]
         }
       },
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "Open Source",
-      "extracurriculars": ["invited_speaker"],
-      "languages": ["english", "german"],
+      "extracurriculars": ["open_source"],
+      "languages": ["english", "spanish"],
       "missing_skills": ["Kubernetes"],
       "probability_matrix": {
         "invitation_probability": "50%",
@@ -206,14 +206,14 @@ def test_rapidfuzz_healer():
             "acme_corp_arch", 
             "acme_corp_dummy1", 
             "acme_corp_dummy2",
-            "exampl_tech_lead" # TYPO! Should be acme_corp_lead
+            "acme_corp_lea" # TYPO! Should be acme_corp_lead (close enough for RapidFuzz)
           ]
         }
       },
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "Open Source",
-      "extracurriculars": ["invited_speaker"],
+      "extracurriculars": ["open_source"],
       "probability_matrix": {
         "invitation_probability": "50%", "technical_pass_probability": "50%",
         "job_offer_probability": "50%", "salary_estimate": "100k", "biggest_vulnerability": "None"
@@ -225,7 +225,7 @@ def test_rapidfuzz_healer():
     
     # Check that the ID was actually healed
     assert "acme_corp_lead" in config.experience["acme_corp"].bullets
-    assert "exampl_tech_lead" not in config.experience["acme_corp"].bullets
+    assert "acme_corp_lea" not in config.experience["acme_corp"].bullets
 
 
 def test_locale_mismatch():
@@ -253,10 +253,10 @@ def test_locale_mismatch():
           ]
         }
       },
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "X",
-      "extracurriculars": ["invited_speaker"],
+      "extracurriculars": ["open_source"],
       "probability_matrix": {
         "invitation_probability": "50%", "technical_pass_probability": "50%",
         "job_offer_probability": "50%", "salary_estimate": "100k", "biggest_vulnerability": "None"
