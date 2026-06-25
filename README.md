@@ -27,8 +27,8 @@ If the AI attempts to go rogue and hallucinate a missing skill into your profile
 
 ## 🖼️ Example Output & Gallery
 
-> ![Jane Doe Sample CV](https://github.com/Gotili/EigenCV/releases/download/v1.0-docs/sample_cv.png)
-> ![Jane Doe Sample Cover Letter](https://github.com/Gotili/EigenCV/releases/download/v1.0-docs/sample_cover_letter.png)
+> ![Jane Doe Sample CV](https://github.com/Gotili/EigenCV/releases/download/v1.0-docs/cv1.png)
+> ![Jane Doe Sample Cover Letter](https://github.com/Gotili/EigenCV/releases/download/v1.0-docs/cover-letter.png)
 
 ### 🎨 Total Customization & Control
 The sample above is just one configuration. EigenCV puts you in complete control:
