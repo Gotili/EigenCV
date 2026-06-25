@@ -174,6 +174,11 @@ def compile_cv(config_path):
         config = BuildConfig.model_validate(raw_config)
     except Exception as e:
         console.print(Panel(str(e), title="[bold red]Pydantic Validation Error in build_config.json[/bold red]"))
+        print("\n[!!! AI RECOVERY INSTRUCTION !!!]")
+        print("The build_config.json contains one or more IDs that do not exist in the database.")
+        print("ACTION: Re-read the relevant database JSON file (e.g. cv/database/active/experience.json)")
+        print("        and replace all invalid IDs with real IDs from that file.")
+        print("        Then overwrite build_config.json with the corrected version and run chatgpt_run.py again.")
         sys.exit(1)
     
     # Dynamically find the requested template and name from metadata.tex
@@ -581,29 +586,35 @@ def compile_cv(config_path):
             console.print(f"[bold green]Appended tracking row to application_tracking.md[/bold green]")
             
         # Automatically compile the PDFs using the correct engine
-        console.print(f"[bold cyan]Auto-compiling PDFs with {latex_engine}...[/bold cyan]")
-        import subprocess
-        tex_files = [output_path]
-        if config.cover_letter:
-            cl_output_path = os.path.join(os.path.dirname(config_path), cl_filename)
-            tex_files.append(cl_output_path)
-            
-        for tex_file in tex_files:
-            try:
-                # Run engine twice for cross-references/geometry
-                for _ in range(2):
-                    subprocess.run(
-                        [latex_engine, "-interaction=nonstopmode", "-no-shell-escape", os.path.basename(tex_file)],
-                        cwd=os.path.dirname(abs_config_path),
-                        stdout=subprocess.DEVNULL,
-                        stderr=subprocess.DEVNULL,
-                        check=True
-                    )
-                console.print(f"[bold green]Successfully compiled {os.path.basename(tex_file).replace('.tex', '.pdf')}[/bold green]")
-            except subprocess.CalledProcessError:
-                console.print(f"[bold red]Failed to compile {os.path.basename(tex_file)}. Check the .log file.[/bold red]")
-            except FileNotFoundError:
-                console.print(f"[bold red]{latex_engine} command not found. Please install TeX Live or MiKTeX.[/bold red]")
+        # Skip LaTeX compilation if running in a tex-only cloud environment
+        if os.environ.get("EIGENCV_TEX_ONLY") == "1":
+            console.print("[bold yellow]TEX_ONLY mode active: Skipping LaTeX compilation. Output is .tex files only.[/bold yellow]")
+            console.print("[bold yellow]AI INSTRUCTION: Provide the user with a download link to the .tex file(s) listed above.[/bold yellow]")
+            console.print("[bold yellow]Tell the user: 'Upload the .tex file to https://overleaf.com → New Project → Upload Project.'[/bold yellow]")
+        else:
+            console.print(f"[bold cyan]Auto-compiling PDFs with {latex_engine}...[/bold cyan]")
+            import subprocess
+            tex_files = [output_path]
+            if config.cover_letter:
+                cl_output_path = os.path.join(os.path.dirname(config_path), cl_filename)
+                tex_files.append(cl_output_path)
+                
+            for tex_file in tex_files:
+                try:
+                    # Run engine twice for cross-references/geometry
+                    for _ in range(2):
+                        subprocess.run(
+                            [latex_engine, "-interaction=nonstopmode", "-no-shell-escape", os.path.basename(tex_file)],
+                            cwd=os.path.dirname(abs_config_path),
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.DEVNULL,
+                            check=True
+                        )
+                    console.print(f"[bold green]Successfully compiled {os.path.basename(tex_file).replace('.tex', '.pdf')}[/bold green]")
+                except subprocess.CalledProcessError:
+                    console.print(f"[bold red]Failed to compile {os.path.basename(tex_file)}. Check the .log file.[/bold red]")
+                except FileNotFoundError:
+                    console.print(f"[bold red]{latex_engine} command not found. Please install TeX Live or MiKTeX.[/bold red]")
                 
     except Exception as e:
         console.print(f"[bold red]Warning: Failed to auto-update tracking files/compile PDFs: {e}[/bold red]")
