@@ -165,9 +165,18 @@ You are strictly forbidden from generating text that sounds like standard ChatGP
 If the user requests changes to personal contact information (e.g., email, phone number, LinkedIn URL), you MUST modify `cv/database/active/metadata.tex`. This central file contains macros (like `\cvname`, `\cvemail`, `\cvphone`) that are automatically injected into the header and utilized across all variants simultaneously. DO NOT hardcode personal information into the JSON config.
 
 ## Phase 6: Automate the Build & ATS Check
+
+> ⚠️ **CRITICAL EXECUTION PATH — READ BEFORE PROCEEDING:**
+> You MUST determine your execution environment before running any build commands:
+>
+> **PATH A — You are running inside ChatGPT (Advanced Data Analysis / Code Interpreter):**
+> You have access to a Python sandbox. You MUST run the `chatgpt_run.py` script from the repository root. This is the ONLY sanctioned way to compile the CV in this environment. You are STRICTLY FORBIDDEN from manually writing or generating `.tex` files. Execute: `python chatgpt_run.py <path_to_application_folder>`. The script will compile the CV and generate a downloadable PDF link.
+>
+> **PATH B — You are running in a local CLI / Agentic IDE (Cursor, Windsurf, Antigravity):**
+> Inform the user to run `tools/build_all.bat` (Windows) or `tools/build_all.sh` (Linux/Mac) from the root folder.
+
 1. The compiler will automatically update `application_tracking.md` and `application-packages.mk`. You do not need to do this manually.
-2. Inform the user to run `tools/build_all.bat` or `tools/build_all.sh` in the root folder.
-3. Run the ATS Check Script (`python check_ats_score.py "[Path to Package Folder]"`) which will analyze the compiled PDF against the `JD_*.md` and append the keyword match score to the folder's `README.md`.
+2. Run the ATS Check Script (`python check_ats_score.py "[Path to Package Folder]"`) which will analyze the compiled PDF against the `JD_*.md` and append the keyword match score to the folder's `README.md`.
 
 ## Phase 7: Unbiased Probability Matrix & Salary Estimate
 After all files are generated, the system requires a highly critical, zero-bias "Probability Matrix" assessing the candidate's real-world chances. 
