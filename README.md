@@ -46,7 +46,7 @@ The sample above is just one configuration. EigenCV puts you in complete control
 > | AI | Full Pipeline | Local / Private | Notes |
 > |---|---|---|---|
 > | **ChatGPT Plus** | ✅ | ❌ | Requires Advanced Data Analysis tier |
-> | **Claude** | ⚠️ Partial | ❌ | Generates `.tex` → paste into Overleaf |
+> | **Claude** | ⚠️ Partial | ❌ | claude.ai loads all ZIP files at once — hits token limits fast. Use **Claude Code** (Path 2) instead |
 > | **Gemini** | ❌ | ❌ | No persistent file context across messages |
 
 **Instructions for ChatGPT Plus (Recommended):**
