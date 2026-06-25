@@ -43,11 +43,11 @@ The sample above is just one configuration. EigenCV puts you in complete control
 ### Path 1: The "No-Code" Lifehack (Cloud AI)
 
 > **AI Compatibility — Be honest with yourself:**
-> | AI | PDF Output | Works? |
-> |---|---|---|
-> | **ChatGPT Plus** (Advanced Data Analysis) | ✅ Full PDF via Python sandbox | ✅ Fully supported |
-> | **Claude** (claude.ai, any tier) | ⚠️ `.tex` file → paste into Overleaf | ✅ Supported (manual render step) |
-> | **Gemini** | ❌ Cover letter only, no CV | ❌ Not suitable for this pipeline |
+> | AI | Full Pipeline | Local / Private | Notes |
+> |---|---|---|---|
+> | **ChatGPT Plus** (Advanced Data Analysis) | ✅ | ❌ | Full PDF compiled in sandbox |
+> | **Claude** (claude.ai, any tier) | ⚠️ Partial | ❌ | Generates `.tex` → paste into Overleaf |
+> | **Gemini** | ❌ | ❌ | No persistent file context across messages |
 
 **Instructions for ChatGPT Plus (Recommended):**
 
