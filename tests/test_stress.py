@@ -41,10 +41,10 @@ def test_pydantic_id_validation_broken_id():
           ]
         }
       },
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "Open Source",
-      "extracurriculars": ["invited_speaker"],
+      "extracurriculars": ["open_source"],
       "languages": ["english", "german"],
       "probability_matrix": {
         "invitation_probability": "50%",
@@ -135,10 +135,10 @@ def test_pydantic_color_crash():
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
       "experience": {"acme_corp": {"title": "X", "bullets": ["acme_corp_lead"]}},
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "X",
-      "extracurriculars": ["invited_speaker"],
+      "extracurriculars": ["open_source"],
       "probability_matrix": {
         "invitation_probability": "50%", "technical_pass_probability": "50%",
         "job_offer_probability": "50%", "salary_estimate": "100k", "biggest_vulnerability": "None"
@@ -167,10 +167,10 @@ def test_pydantic_wall_of_text():
         {"name": "T", "skills": "G"}, {"name": "S", "skills": "L"}
       ],
       "experience": {"acme_corp": {"title": "X", "bullets": ["acme_corp_lead"]}},
-      "projects": ["llm_workflow_orchestrator"],
-      "education": ["phd_chemistry"],
+      "projects": ["project_alpha"],
+      "education": ["msc_compsci"],
       "extracurriculars_title": "X",
-      "extracurriculars": ["invited_speaker"],
+      "extracurriculars": ["open_source"],
       "probability_matrix": {
         "invitation_probability": "50%", "technical_pass_probability": "50%",
         "job_offer_probability": "50%", "salary_estimate": "100k", "biggest_vulnerability": "None"
