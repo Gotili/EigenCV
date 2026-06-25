@@ -62,6 +62,17 @@ The sample above is just one configuration. EigenCV puts you in complete control
 ### Path 2: The Agentic Developer Route (CLI & IDE)
 If you prefer terminal workflows, need maximum build speed, or require strict data privacy, run the pipeline locally.
 
+> **Agentic Client Compatibility:**
+> | Client | Full Pipeline | Local Model (Privacy) | Notes |
+> |---|---|---|---|
+> | **Antigravity** | ✅ | ✅ via Ollama | What this repo was built with |
+> | **Claude Code** | ✅ | ❌ | Anthropic API only |
+> | **Cursor** | ✅ | ✅ via Ollama | Composer agent mode |
+> | **Windsurf** | ✅ | ✅ via Ollama | Cascade agent mode |
+> | **Cline** (VS Code) | ✅ | ✅ via Ollama | Open-source, very capable |
+> | **Aider** | ✅ | ✅ via Ollama | CLI-first, great for power users |
+> | **GitHub Copilot** | ⚠️ Partial | ❌ | Agent mode limited, no shell access |
+
 1. **Prerequisites:** You need Python 3.11+ and a LaTeX distribution (e.g., TeX Live or MiKTeX). *Alternatively, simply open this repo in VS Code and click "Reopen in Container" to use our pre-built Docker environment!*
 2. **Install Dependencies:** Run `pip install -r requirements.txt`.
 3. **Agent Setup:** 
@@ -70,6 +81,7 @@ If you prefer terminal workflows, need maximum build speed, or require strict da
 4. **Build the DB:** Tell the Agent: *"Migrate my old CV. Follow `AI_START_HERE.md`."* to build your Zero-Trust database.
 5. **Apply:** Paste a Job Description and say: *"Apply to this job. Follow `AI_START_HERE.md`."*
 6. **Automation:** The Agent will automatically route the prompts, generate the strict JSON, and execute the Python scripts locally to render your PDF and calculate your ATS score!
+
 
 ---
 
