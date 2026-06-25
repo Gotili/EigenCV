@@ -40,16 +40,24 @@ The sample above is just one configuration. EigenCV puts you in complete control
 
 ## 🚀 How to Use EigenCV: Choose Your Path
 
-### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
-You don't need to know Python, LaTeX, or Git to use EigenCV. You can run the entire pipeline directly in ChatGPT or Gemini.
+### Path 1: The "No-Code" Lifehack (Cloud AI)
+
+> **AI Compatibility — Be honest with yourself:**
+> | AI | PDF Output | Works? |
+> |---|---|---|
+> | **ChatGPT Plus** (Advanced Data Analysis) | ✅ Full PDF via Python sandbox | ✅ Fully supported |
+> | **Claude** (claude.ai, any tier) | ⚠️ `.tex` file → paste into Overleaf | ✅ Supported (manual render step) |
+> | **Gemini** | ❌ Cover letter only, no CV | ❌ Not suitable for this pipeline |
+
+**Instructions for ChatGPT Plus (Recommended):**
 
 1. **Get the ZIP file** — choose the right option for you:
    - **First time? (Blank Slate):** Click the green **"Code"** button on GitHub → **"Download ZIP"**. This gives you a clean copy with sample data.
    - **Already onboarded your data locally?** Run `python tools/export_for_cloud.py` from the repository root. This generates a clean `EigenCV_for_cloud.zip` with your real data but **without** the `.git` folder, keeping the upload lean and your context window clean.
-2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Gemini, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
+2. **Build your Master Database:** Upload the ZIP to ChatGPT, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
 3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_GENERATION_PROMPT.md`."*
-4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
-*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. You can drag & drop that code into a free **Overleaf** account for instant rendering (or render the pdf locally using the `pdflatex`)).*
+4. **Download your PDF:** ChatGPT will match your database to the job, generate the strict JSON, and run the `chatgpt_run.py` wrapper to render the PDF directly in its sandbox.
+*(Fallback: If ChatGPT times out, it will still generate the `.tex` code. Drag & drop that into a free **[Overleaf](https://overleaf.com)** account for instant rendering.)*
 
 ### Path 2: The Agentic Developer Route (CLI & IDE)
 If you prefer terminal workflows, need maximum build speed, or require strict data privacy, run the pipeline locally.
