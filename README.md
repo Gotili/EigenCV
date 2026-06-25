@@ -43,8 +43,9 @@ The sample above is just one configuration. EigenCV puts you in complete control
 ### Path 1: The "No-Code" Lifehack (For Non-Coders / ChatGPT Plus)
 You don't need to know Python, LaTeX, or Git to use EigenCV. You can run the entire pipeline directly in ChatGPT or Gemini.
 
-1. **Download** the repository as a ZIP file directly from GitHub by clicking the green **"Code"** button → **"Download ZIP"**.
-   > ⚠️ **Important:** Do NOT zip the folder from your local machine. A local zip includes the `.git` history folder, which wastes your AI's context window with binary junk. The GitHub ZIP is clean.
+1. **Get the ZIP file** — choose the right option for you:
+   - **First time? (Blank Slate):** Click the green **"Code"** button on GitHub → **"Download ZIP"**. This gives you a clean copy with sample data.
+   - **Already onboarded your data locally?** Run `python tools/export_for_cloud.py` from the repository root. This generates a clean `EigenCV_for_cloud.zip` with your real data but **without** the `.git` folder, keeping the upload lean and your context window clean.
 2. **Build your Master Database:** Upload the ZIP to ChatGPT (requires Advanced Data Analysis) or Gemini, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
 3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_GENERATION_PROMPT.md`."*
 4. **Download your PDF:** ChatGPT will automatically match your database to the job, generate the JSON, and run the `chatgpt_run.py` wrapper script. Because we include a dedicated "Cloud-Safe" LaTeX template, ChatGPT will render the PDF directly in its sandbox and give you a download link!
