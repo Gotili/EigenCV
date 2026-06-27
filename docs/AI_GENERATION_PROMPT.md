@@ -183,7 +183,7 @@ You are strictly forbidden from generating text that sounds like standard ChatGP
 12. **Strict Sentence Length:** Keep sentences under 20 words where possible. AI models write convoluted run-on sentences with multiple clauses. Humans write directly.
 13. **No Generic Greetings:** Never use "Dear Hiring Manager" or "To whom it may concern". If a name is missing, use a modern, direct greeting like "Dear [Company] Team" or "Hello [Company] Engineering".
 14. **Authentic Voice:** Write fact-first. Use active verbs. Be direct. If you solved a problem, say exactly what you did and what the result was, without dressing it up in dramatic narrative.
-15. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 %" instead of "40%", and "2 TB" instead of "2TB"). 
+15. **Typography Rules (SI Conventions):** You MUST ALWAYS place a non-breaking space (using a tilde `~` in LaTeX) between a number and its unit or percentage sign (e.g., write `40~\%` instead of `40\%`, and `2~TB` instead of `2TB`). 
 16. **NEVER ESCAPE LATEX CHARACTERS:** Do not manually escape characters like `%`, `&`, `$`, or `_` with a backslash in the JSON (do NOT write `\%` or `\\%`). The `cv_compiler.py` uses `sanitize_latex_text` which escapes these automatically. Escaping them in the JSON will result in literal backslashes appearing in the final PDF!
 
 2. You do NOT need to manually create `build.bat` or `Makefile`. The `cv_compiler.py` script will automatically generate them for you in the new application folder.
