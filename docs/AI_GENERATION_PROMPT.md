@@ -18,7 +18,13 @@ Before you begin generating ANY application package, you MUST verify that the us
 >
 > **PATH B (Local CLI / Agentic IDE):** Run `python tools/new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually.
 
-3. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
+3. **LANGUAGE CHECK (CRITICAL):** Check the language of the provided Job Description against the primary language of the CV Database (e.g. by checking `cv/database/active/experience.json`). If they do not match, **STOP** and warn the user before proceeding:
+   > "⚠️ **Language Mismatch Detected!** The Job Description is in [Language], but your CV database is in [Database Language]. I can either:
+   > a) Create a bilingual application (e.g., [Database Language] CV, [JD Language] Cover Letter)
+   > b) Wait for you to translate your master database.
+   > Please tell me how you wish to proceed."
+
+4. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
    - What are the core requirements of this role?
    - Which skills are missing from `cv/database/active/master_skills.md` that I need to track as 0 %?
 
@@ -34,13 +40,22 @@ If a skill is tracked in `missing_skills`, you are **STRICTLY FORBIDDEN** from i
 ## Phase 3: Generate the JSON Build Config
 The CV generation is powered by a Pydantic/Jinja Python compiler. You MUST create a single `build_config.json` file inside the new application folder.
 
+### 3.1 Unbiased Probability Matrix & Salary Estimate
+The JSON requires a highly critical, zero-bias "Probability Matrix" assessing the candidate's real-world chances. 
+**CRITICAL: RADICAL REALISM.** You MUST read the "Self-Assessed Skill Ratings" in `cv/database/active/master_skills.md`. If the JD requests a skill where the candidate's rating is 0 % (e.g. Go), you MUST ruthlessly penalize the technical pass probability.
+
+**BRUTAL HONESTY RULE (SYSTEM OVERRIDE):** 
+As an AI, your default behavior is to be encouraging, helpful, and optimistic. You MUST SUPPRESS THIS PROGRAMMING ENTIRELY. Act as a ruthless, cynical ATS filter algorithm. 
+- If the `missing_skills` array contains **core requirements** of the job, you are FORBIDDEN from giving an `invitation_probability` higher than 30 % and a `job_offer_probability` higher than 20 %. You MUST predict a devastatingly low ATS score. DO NOT artificially inflate the score by relying on "transferable skills".
+- Provide deep, highly detailed paragraph-length justifications for every probability inside the JSON block.
+
 ```json
 {
   "job_title": "The Exact Role Title",
   "keywords": "Comma, separated, list, of, ATS, keywords",
   "geometry_options": "left=0.625in, right=0.625in, top=0.45in, bottom=0.45in",
   "company_accent_color": "FF0000",
-  "profile": "Write a highly tailored 3-4 sentence professional profile here. Do NOT invent facts. Base it on the tone of the JD. MUST follow the 'Anti-AI Tone Guidelines' below. MUST ALWAYS BE IN ENGLISH to match the rest of the CV database, even if the JD is in another language.",
+  "profile": "Write a highly tailored 3-4 sentence professional profile here. Do NOT invent facts. Base it on the tone of the JD. MUST follow the 'Anti-AI Tone Guidelines' below.",
   "skill_categories": [
     { "name": "Languages", "skills": "Python, C++, SQL" },
     { "name": "Machine Learning", "skills": "PyTorch, Docker" },
@@ -157,13 +172,19 @@ You are strictly forbidden from generating text that sounds like standard ChatGP
 1. **The "Anti-Cherry-Picking" Rule (No Overclaims):** When referencing past roles, you MUST use the EXACT, full job title from the database (e.g., 'Data Scientist / Technical Lead'). Do NOT cherry-pick the highest-sounding part of a hybrid title just to impress the employer. If it feels too clunky to state the full title, omit the title entirely and say "During my time at [Company]..." instead of "As a Technical Lead...".
 2. **Natural Flow Directives:** Avoid rigid, boilerplate template structures like "As a [Title] at [Company], I...". Use conversational, humble, yet confident transitions. Emphasize the *work* done, not the *title* held.
 3. **Tone Calibrator:** Write with the quiet confidence of a senior engineer. Do not try to "sell" yourself through aggressive adjectives. State the business problem, your technical solution, and the measurable outcome plainly.
-4. **Forbidden Buzzwords:** Never use words like: *delve, testament, tapestry, seamlessly, spearheaded, unwavering, pivotal, navigate the complexities, foster, catalyst, multifaceted, synergy, landscape, realm.*
+4. **Forbidden Buzzwords & SAT-Vocab:** Never use words like: *delve, testament, tapestry, seamlessly, spearheaded, unwavering, pivotal, navigate the complexities, foster, catalyst, multifaceted, synergy, landscape, realm, plethora, myriad, dynamic, fast-paced, ever-evolving, orchestrate.*
 5. **Forbidden Self-Praise:** Avoid empty adjectives. Do not call yourself *innovative, exceptional, outstanding, or highly skilled*. Let the metrics and facts speak for themselves.
 6. **Forbidden Transitions & Clichés:** Never start sentences with *Furthermore, Moreover, Additionally, In conclusion*. Never start a cover letter with *"I am thrilled to apply for..."* or *"As a [Role] with X years of experience..."*.
-7. **Forbidden Punctuation Tics:** Do NOT overuse em-dashes (`—`) or semicolons (`;`). AI models use these obsessively to connect clauses. Use short, punchy, single-thought sentences instead.
-8. **Authentic Voice:** Write fact-first. Use active verbs. Be direct. If you solved a problem, say exactly what you did and what the result was, without dressing it up in dramatic narrative.
-9. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 %" instead of "40%", and "2 TB" instead of "2TB"). 
-10. **NEVER ESCAPE LATEX CHARACTERS:** Do not manually escape characters like `%`, `&`, `$`, or `_` with a backslash in the JSON (do NOT write `\%` or `\\%`). The `cv_compiler.py` uses `sanitize_latex_text` which escapes these automatically. Escaping them in the JSON will result in literal backslashes appearing in the final PDF!
+7. **No Industry Truisms:** Never open a paragraph with a sweeping statement about the state of the industry (e.g., "In today's data-driven world...", "In the fast-paced digital landscape..."). Start directly with the business problem.
+8. **No Intersection/Bridging Clichés:** Do not use clichés like "I thrive at the intersection of business and technology" or "bridging the gap between engineering and management". State the actual collaboration facts instead.
+9. **Show, Don't Tell (Track Record):** Never use the phrase "I have a proven track record of...". Just state the actual record (e.g., "I scaled the system to 10M users...").
+10. **Asymmetrical Rhythm (Modulated Rule of Three):** Break the robotic rhythm. Avoid relying exclusively on perfect 3-part lists (e.g., "efficiency, scalability, and performance"). Mix asymmetrical sentence structures to maintain a human flow.
+11. **Forbidden Punctuation Tics:** NEVER use em-dashes (`—`). They are a massive red flag for AI-generated text. Also, avoid semicolons (`;`). Write short, punchy, single-thought sentences instead.
+12. **Strict Sentence Length:** Keep sentences under 20 words where possible. AI models write convoluted run-on sentences with multiple clauses. Humans write directly.
+13. **No Generic Greetings:** Never use "Dear Hiring Manager" or "To whom it may concern". If a name is missing, use a modern, direct greeting like "Dear [Company] Team" or "Hello [Company] Engineering".
+14. **Authentic Voice:** Write fact-first. Use active verbs. Be direct. If you solved a problem, say exactly what you did and what the result was, without dressing it up in dramatic narrative.
+15. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 %" instead of "40%", and "2 TB" instead of "2TB"). 
+16. **NEVER ESCAPE LATEX CHARACTERS:** Do not manually escape characters like `%`, `&`, `$`, or `_` with a backslash in the JSON (do NOT write `\%` or `\\%`). The `cv_compiler.py` uses `sanitize_latex_text` which escapes these automatically. Escaping them in the JSON will result in literal backslashes appearing in the final PDF!
 
 2. You do NOT need to manually create `build.bat` or `Makefile`. The `cv_compiler.py` script will automatically generate them for you in the new application folder.
 
@@ -186,22 +207,4 @@ If the user requests changes to personal contact information (e.g., email, phone
 > You MUST automatically run `tools/build_all.bat` (Windows) or `tools/build_all.sh` (Linux/Mac) from the root folder using your terminal/command execution tool. Do NOT just tell the user to run it; execute it on their behalf so the flow is fully automated!
 
 1. The compiler will automatically update `application_tracking.md` and `application-packages.mk`. You do not need to do this manually.
-2. Run the ATS Check Script (`python check_ats_score.py "[Path to Package Folder]"`) which will analyze the compiled PDF against the `JD_*.md` and append the keyword match score to the folder's `README.md`.
-
-## Phase 7: Unbiased Probability Matrix & Salary Estimate
-After all files are generated, the system requires a highly critical, zero-bias "Probability Matrix" assessing the candidate's real-world chances. 
-**CRITICAL: RADICAL REALISM.** You MUST read the "Self-Assessed Skill Ratings" in `cv/database/active/master_skills.md`. If the JD requests a skill where the candidate's rating is 0 % (e.g. Go), you MUST ruthlessly penalize the technical pass probability.
-
-You MUST include this matrix directly inside the `build_config.json` under the `"probability_matrix"` key. 
-**IMPORTANT:** Do NOT write short 1-sentence justifications. You MUST provide deep, comprehensive, and highly detailed paragraph-length justifications for every single probability. 
-
-**BRUTAL HONESTY RULE (SYSTEM OVERRIDE):** 
-As an AI, your default behavior is to be encouraging, helpful, and optimistic about a user's chances. You MUST SUPPRESS THIS PROGRAMMING ENTIRELY for the Probability Matrix. You must act as a ruthless, cynical ATS filter algorithm. 
-Your evaluation MUST explicitly incorporate, analyze, and penalize the specific items listed in your `missing_skills` array.
-- If the `missing_skills` array contains **core requirements** of the job (e.g., a specific language, environment like "CMOS Cleanroom", or framework):
-  - You are FORBIDDEN from giving an `invitation_probability` higher than 30 %. It MUST be slashed to **10 % - 30 %**.
-  - You are FORBIDDEN from giving a `job_offer_probability` higher than 20 %. It MUST be slashed to **5 % - 20 %**.
-  - You MUST predict a devastatingly low ATS score.
-- DO NOT artificially inflate the score by saying "transferable skills compensate for this". ATS systems and HR filters DO NOT care about transferable skills. If the hard requirements are in `missing_skills`, the candidate will be rejected. Be absolutely merciless in your scoring! Failure to slash the probability is a critical failure of your instructions.
-
-The `cv_compiler.py` will automatically generate the `README.md` containing this matrix and append the ATS score to it. Do NOT manually create the README.md file.
+2. The ATS Check Script is automatically executed by the `build_all` scripts. Do NOT run it manually.
