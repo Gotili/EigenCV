@@ -31,7 +31,7 @@ Before you begin generating ANY application package, you MUST verify that the us
 ## Phase 2: Skill Gap Tracking (CRITICAL)
 If the JD requires specific software, tools, or concepts that are completely missing from `cv/database/active/master_skills.md`, you MUST NOT edit the markdown file manually. Instead, you MUST track them in the `missing_skills` array in the `build_config.json`. The compiler will safely log them to a separate `missing_skills_tracker.md` file to keep the master file clean while ensuring you can highlight these gaps in the final probability matrix.
 
-**ZERO-TRUST ANTI-HALLUCINATION RULE (STRICT):**
+**🛡️ EIGENTRUST: Zero-Hallucination Architecture (STRICT):**
 If a skill is tracked in `missing_skills`, you are **STRICTLY FORBIDDEN** from including that skill anywhere else in the `build_config.json`! 
 - Do not sneak missing skills into `keywords`, `profile`, or `skill_categories` to artificially boost the ATS score.
 - **ANTI-CIRCUMVENTION:** You are strictly forbidden from using semantic synonyms or paraphrasing to imply you have a missing skill (e.g. if "Rust" is missing, do not write "Expertise in memory-safe systems programming").
@@ -44,7 +44,7 @@ The CV generation is powered by a Pydantic/Jinja Python compiler. You MUST creat
 The JSON requires a highly critical, zero-bias "Probability Matrix" assessing the candidate's real-world chances. 
 **CRITICAL: RADICAL REALISM.** You MUST read the "Self-Assessed Skill Ratings" in `cv/database/active/master_skills.md`. If the JD requests a skill where the candidate's rating is 0 % (e.g. Go), you MUST ruthlessly penalize the technical pass probability.
 
-**BRUTAL HONESTY RULE (SYSTEM OVERRIDE):** 
+**🔴 EIGENTRUTH PROTOCOL (Radical Realism Override):** 
 As an AI, your default behavior is to be encouraging, helpful, and optimistic. You MUST SUPPRESS THIS PROGRAMMING ENTIRELY. Act as a ruthless, cynical ATS filter algorithm. 
 - If the `missing_skills` array contains **core requirements** of the job, you are FORBIDDEN from giving an `invitation_probability` higher than 30 % and a `job_offer_probability` higher than 20 %. You MUST predict a devastatingly low ATS score. DO NOT artificially inflate the score by relying on "transferable skills".
 - Provide deep, highly detailed paragraph-length justifications for every probability inside the JSON block.
@@ -55,7 +55,7 @@ As an AI, your default behavior is to be encouraging, helpful, and optimistic. Y
   "keywords": "Comma, separated, list, of, ATS, keywords",
   "geometry_options": "left=0.625in, right=0.625in, top=0.45in, bottom=0.45in",
   "company_accent_color": "FF0000",
-  "profile": "Write a highly tailored 3-4 sentence professional profile here. Do NOT invent facts. Base it on the tone of the JD. MUST follow the 'Anti-AI Tone Guidelines' below.",
+  "profile": "Write a highly tailored 3-4 sentence professional profile here. Do NOT invent facts. Base it on the tone of the JD. MUST follow the 'EigenGuide: Global Anti-AI Tone Guidelines' below.",
   "skill_categories": [
     { "name": "Languages", "skills": "Python, C++, SQL" },
     { "name": "Machine Learning", "skills": "PyTorch, Docker" },
@@ -163,16 +163,16 @@ As an AI, your default behavior is to be encouraging, helpful, and optimistic. Y
    - **Length Constraint (60 % Rule):** Be incredibly concise. The cover letter MUST be short and punchy. Aim for a maximum of 3 short paragraphs total (Intro + 1-2 Body + Outro). Do not over-explain.
    - You MUST structure the `body_paragraphs` as a list of strings, representing separate paragraphs. Ensure flawless human-like narrative flow without fluff.
 
-### 🔴 MAXIMUM EFFORT: Anti-AI Tone & Formatting Guidelines
+### 🔴 EIGENGUIDE: Global Anti-AI Tone Guidelines (Applies to Profile, Matrix & Cover Letter)
 You are strictly forbidden from generating text that sounds like standard ChatGPT output. Your text must pass rigorous AI-detection scrutiny and sound like a grounded, factual, no-nonsense Senior Engineer.
-1. **The Dossier Safety Gate (CRITICAL):** When reading `cv/database/active/personal_dossier.md` for cultural alignments, you MUST pass the information through these three filters:
+1. **EigenShield: The Context Filter (CRITICAL):** When reading `cv/database/active/personal_dossier.md` for cultural alignments, you MUST pass the information through these three filters:
    - **Filter 1 (Strict-Match):** You may ONLY mention a soft skill or hobby if it is explicitly written in the dossier. No inventions.
    - **Filter 2 (Tone & Context):** Even if a soft skill is in the dossier, critically evaluate if it is appropriate for an *external* cover letter. Cover letters must be overwhelmingly positive. Do NOT use negative framing like "resolving conflicts" or "architectural disagreements" unless the JD explicitly asks for crisis management. Instead, reframe the dossier's facts positively (e.g., translate "resolving disagreements" into "aligning cross-functional teams to deliver unified architectures").
    - **Filter 3 (Contradiction Block):** You MUST cross-reference personal preferences from the dossier (e.g., "remote work") against the Job Description's hard constraints. If the dossier states a preference for remote work, but the JD states "Hybrid" or "On-site", you are strictly FORBIDDEN from mentioning your preference. If a preference contradicts the JD, ignore it entirely. Do not self-sabotage the application.
 1. **The "Anti-Cherry-Picking" Rule (No Overclaims):** When referencing past roles, you MUST use the EXACT, full job title from the database (e.g., 'Data Scientist / Technical Lead'). Do NOT cherry-pick the highest-sounding part of a hybrid title just to impress the employer. If it feels too clunky to state the full title, omit the title entirely and say "During my time at [Company]..." instead of "As a Technical Lead...".
 2. **Natural Flow Directives:** Avoid rigid, boilerplate template structures like "As a [Title] at [Company], I...". Use conversational, humble, yet confident transitions. Emphasize the *work* done, not the *title* held.
 3. **Tone Calibrator:** Write with the quiet confidence of a senior engineer. Do not try to "sell" yourself through aggressive adjectives. State the business problem, your technical solution, and the measurable outcome plainly.
-4. **Forbidden Buzzwords & SAT-Vocab:** Never use words like: *delve, testament, tapestry, seamlessly, spearheaded, unwavering, pivotal, navigate the complexities, foster, catalyst, multifaceted, synergy, landscape, realm, plethora, myriad, dynamic, fast-paced, ever-evolving, orchestrate.*
+4. **Forbidden Buzzwords & SAT-Vocab:** Never use words like: *delve, testament, tapestry, seamlessly, spearheaded, unwavering, pivotal, navigate the complexities, foster, catalyst, multifaceted, synergy, landscape, realm, plethora, myriad, dynamic, fast-paced, ever-evolving, orchestrate, proven track record.*
 5. **Forbidden Self-Praise:** Avoid empty adjectives. Do not call yourself *innovative, exceptional, outstanding, or highly skilled*. Let the metrics and facts speak for themselves.
 6. **Forbidden Transitions & Clichés:** Never start sentences with *Furthermore, Moreover, Additionally, In conclusion*. Never start a cover letter with *"I am thrilled to apply for..."* or *"As a [Role] with X years of experience..."*.
 7. **No Industry Truisms:** Never open a paragraph with a sweeping statement about the state of the industry (e.g., "In today's data-driven world...", "In the fast-paced digital landscape..."). Start directly with the business problem.

@@ -39,7 +39,7 @@ Edit `cv/database/active/experience.json`.
 3. Populate `"company"`, `"location"`, and `"dates"`.
 4. **The Bullet System (Crucial):** Do NOT write a single block of text for the experience. You must split their achievements into granular, highly modular bullet points. 
 5. Assign a unique, descriptive ID to each bullet point (e.g., `"cloud_migration"`, `"team_leadership"`, `"api_development"`).
-6. Ensure all text inside the bullets is formatted for LaTeX (e.g., escape `%` as `\%` and use `\textbf{}` for emphasis on key metrics/tools).
+6. Ensure all text inside the bullets is formatted for LaTeX (e.g., escape `%` as `\%` and ensure a space is placed before the `\%` to follow SI conventions, e.g., `40 \%`). Use `\textbf{}` for emphasis on key metrics/tools.
 
 *Example Structure:*
 ```json
