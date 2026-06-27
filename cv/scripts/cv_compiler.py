@@ -330,11 +330,11 @@ def compile_cv(config_path):
                     console.print(Panel(
                         f"Requested Locale: '{locale}'\\n"
                         f"Detected Database Locale: '{detected_mapped}'\\n\\n"
-                        "Zero-Trust Policy: Your master databases (experience, etc.) are NOT translated automatically! "
+                        "Zero-Trust Policy Warning: Your master databases (experience, etc.) are NOT translated automatically! "
                         "You must provide database items in the requested locale, otherwise your CV will be bilingual.",
-                        title="Language Mismatch Error", border_style="red"
+                        title="Language Mismatch Warning", border_style="yellow"
                     ))
-                    raise ValueError(f"Language mismatch: Requested '{locale}' but database is '{detected_mapped}'.")
+                    # Removed raise ValueError to allow bilingual compilation without crashing
         except ImportError:
             console.print("[bold yellow]Warning: 'langdetect' package not installed. Skipping database language check.[/bold yellow]")
     

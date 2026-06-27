@@ -162,7 +162,8 @@ You are strictly forbidden from generating text that sounds like standard ChatGP
 6. **Forbidden Transitions & Clichés:** Never start sentences with *Furthermore, Moreover, Additionally, In conclusion*. Never start a cover letter with *"I am thrilled to apply for..."* or *"As a [Role] with X years of experience..."*.
 7. **Forbidden Punctuation Tics:** Do NOT overuse em-dashes (`—`) or semicolons (`;`). AI models use these obsessively to connect clauses. Use short, punchy, single-thought sentences instead.
 8. **Authentic Voice:** Write fact-first. Use active verbs. Be direct. If you solved a problem, say exactly what you did and what the result was, without dressing it up in dramatic narrative.
-9. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 \\%" instead of "40\\%", and "2 TB" instead of "2TB"). In LaTeX, preferably use a non-breaking space (tilde `~`) or small space (`\\,`) for this, e.g., `40~\\%` or `2~TB`.
+9. **Typography Rules (SI Conventions):** You MUST ALWAYS place a space between a number and its unit or percentage sign (e.g., write "40 %" instead of "40%", and "2 TB" instead of "2TB"). 
+10. **NEVER ESCAPE LATEX CHARACTERS:** Do not manually escape characters like `%`, `&`, `$`, or `_` with a backslash in the JSON (do NOT write `\%` or `\\%`). The `cv_compiler.py` uses `sanitize_latex_text` which escapes these automatically. Escaping them in the JSON will result in literal backslashes appearing in the final PDF!
 
 2. You do NOT need to manually create `build.bat` or `Makefile`. The `cv_compiler.py` script will automatically generate them for you in the new application folder.
 
@@ -182,7 +183,7 @@ If the user requests changes to personal contact information (e.g., email, phone
 > If the script outputs a `.tex` file (no LaTeX in sandbox), tell the user: *"Download this .tex file and upload it to https://overleaf.com → New Project → Upload Project to render the PDF."*
 >
 > **PATH B — You are running in a local CLI / Agentic IDE (Cursor, Windsurf, Antigravity):**
-> Inform the user to run `tools/build_all.bat` (Windows) or `tools/build_all.sh` (Linux/Mac) from the root folder.
+> You MUST automatically run `tools/build_all.bat` (Windows) or `tools/build_all.sh` (Linux/Mac) from the root folder using your terminal/command execution tool. Do NOT just tell the user to run it; execute it on their behalf so the flow is fully automated!
 
 1. The compiler will automatically update `application_tracking.md` and `application-packages.mk`. You do not need to do this manually.
 2. Run the ATS Check Script (`python check_ats_score.py "[Path to Package Folder]"`) which will analyze the compiled PDF against the `JD_*.md` and append the keyword match score to the folder's `README.md`.

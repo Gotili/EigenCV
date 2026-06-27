@@ -54,7 +54,7 @@ The sample above is just one configuration. EigenCV puts you in complete control
 1. **Get the ZIP file** — choose the right option for you:
    - **First time? (Blank Slate):** Click the green **"Code"** button on GitHub → **"Download ZIP"**. This gives you a clean copy with sample data.
    - **Already onboarded your data locally?** Run `python tools/export_for_cloud.py` from the repository root. This generates a clean `EigenCV_for_cloud.zip` with your real data but **without** the `.git` folder, keeping the upload lean and your context window clean.
-2. **Build your Master Database:** Upload the ZIP to ChatGPT, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV JSON database."*
+2. **Build your Master Database:** Upload the ZIP to ChatGPT, along with ALL your old resumes. Tell the AI: *"Extract all my career facts from these resumes and populate the EigenCV database. Please read `docs/AI_ONBOARDING_PROMPT.md` before starting."*
 3. **Apply to a Job:** Paste the Job Description and tell the AI: *"Please apply to this job using the instructions found in `docs/AI_GENERATION_PROMPT.md`."*
 4. **Download your PDF:** ChatGPT will match your database to the job, generate the strict JSON, and run the `chatgpt_run.py` wrapper to render the PDF directly in its sandbox.
 *(Fallback: If ChatGPT times out, it will still generate the `.tex` code. Drag & drop that into a free **[Overleaf](https://overleaf.com)** account for instant rendering.)*

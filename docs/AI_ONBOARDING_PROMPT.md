@@ -1,5 +1,7 @@
 # AI GENERATION PROMPT: Onboarding a New User
 
+> [!CAUTION]
+> **READ THIS ENTIRE FILE BEFORE STARTING.** Do not skim. Do not create an "Implementation Plan." You must execute the onboarding directly. Pay STRICT attention to the "CRITICAL EXCEPTION" rules below (especially regarding mutually exclusive variants and forbidden files). Failure to do so will break the user's database.
 You are an AI assistant tasked with onboarding a NEW USER into the EigenCV framework. 
 The user will provide you with their existing raw CV data (e.g., a text dump of their old CV, a LinkedIn export, or a list of achievements). 
 
