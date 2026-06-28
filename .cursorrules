@@ -6,3 +6,4 @@ Whenever the user asks you to generate a CV, write an application, or work on th
 4. DO NOT create implementation plans for onboarding. Execute the data extraction and file updates directly.
 5. Pay strict attention to the "CRITICAL EXCEPTIONS" (like mutually exclusive variants) and forbidden files (like `personal_dossier.md`) mentioned in the instructions.
 6. NO GIT COMMANDS are allowed. Do not attempt to run `git` commands in the terminal.
+7. **ZERO-TRUST DATABASE RULE:** The `cv/database/active` directory is the single source of truth. You are STRICTLY FORBIDDEN from silently modifying these files to "fix" missing IDs during CV generation. You may ONLY modify the active database if the user explicitly asks you to add a new skill/project, or during the official Onboarding process.

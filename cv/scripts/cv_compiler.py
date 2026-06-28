@@ -175,10 +175,11 @@ def compile_cv(config_path):
     except Exception as e:
         console.print(Panel(str(e), title="[bold red]Pydantic Validation Error in build_config.json[/bold red]"))
         print("\n[!!! AI RECOVERY INSTRUCTION !!!]")
-        print("The build_config.json contains one or more IDs that do not exist in the database.")
-        print("ACTION: Re-read the relevant database JSON file (e.g. cv/database/active/experience.json)")
-        print("        and replace all invalid IDs with real IDs from that file.")
-        print("        Then overwrite build_config.json with the corrected version and run chatgpt_run.py again.")
+        print("ZERO-TRUST VIOLATION: The build_config.json contains one or more IDs that do not exist in the active database.")
+        print("ACTION: You are STRICTLY FORBIDDEN from silently writing to the database to 'fix' this error.")
+        print("        You must EITHER modify build_config.json to only use IDs that actually exist on disk,")
+        print("        OR stop and explicitly ask the user for permission to add the missing data to the database.")
+        print("        Once resolved, run chatgpt_run.py or tools/build_all.bat again.")
         sys.exit(1)
     
     # Dynamically find the requested template and name from metadata.tex
