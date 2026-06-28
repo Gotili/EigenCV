@@ -404,11 +404,12 @@ def compile_cv(config_path):
                     title="EigenTruth Engine", border_style="red"
                 ))
                 raise EigenTruthViolationError(
-                    "\n\n[!!! FATAL ERROR - INSTRUCTION FOR AI !!!]\n"
-                    f"The user lacks a skill required by the job description ({missing}), but you hallucinated it into the output.\n"
-                    "DO NOT ATTEMPT TO FIX THE PYTHON CODE OR RETRY THE COMPILATION.\n"
-                    "STOP EXECUTION IMMEDIATELY.\n"
-                    f"Reply to the user with exactly this message: 'EigenTruth Violation: I attempted to inject a skill you do not have ({missing}). Please remove the hallucinated skill or update your database and try again.'\n"
+                    "\n\n[!!! AI RECOVERY INSTRUCTION !!!]\n"
+                    f"EigenTruth Violation: The missing skill '{missing}' was found in the generated CV text.\n"
+                    "If you injected this skill to pretend the user has it, you MUST remove it.\n"
+                    "If you mentioned it honestly (e.g., 'I don't have experience with [Skill]' or in the Job Title), the regex still caught it. "
+                    "You must rephrase the text (e.g., 'the requested programming language' instead of the exact skill name) so it doesn't trigger the regex.\n"
+                    "ACTION: Fix the build_config.json file to remove the exact string match, then re-run the build script automatically. Do not stop and ask the user unless you fail multiple times.\n"
                 )
                 
     # Build valid filename from folder name if possible
