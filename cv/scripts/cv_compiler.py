@@ -408,7 +408,7 @@ def compile_cv(config_path):
                     f"The user lacks a skill required by the job description ({missing}), but you hallucinated it into the output.\n"
                     "DO NOT ATTEMPT TO FIX THE PYTHON CODE OR RETRY THE COMPILATION.\n"
                     "STOP EXECUTION IMMEDIATELY.\n"
-                    "Reply to the user with exactly this message: 'EigenTruth Violation: I attempted to inject a skill you do not have. Please remove the hallucinated skill or update your database and try again.'\n"
+                    f"Reply to the user with exactly this message: 'EigenTruth Violation: I attempted to inject a skill you do not have ({missing}). Please remove the hallucinated skill or update your database and try again.'\n"
                 )
                 
     # Build valid filename from folder name if possible
