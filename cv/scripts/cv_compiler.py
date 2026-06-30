@@ -610,9 +610,12 @@ def compile_cv(config_path):
                             cwd=os.path.dirname(abs_config_path),
                             stdout=subprocess.DEVNULL,
                             stderr=subprocess.DEVNULL,
-                            check=True
+                            check=True,
+                            timeout=30
                         )
                     console.print(f"[bold green]Successfully compiled {os.path.basename(tex_file).replace('.tex', '.pdf')}[/bold green]")
+                except subprocess.TimeoutExpired:
+                    console.print(f"[bold red]Timeout: {latex_engine} took longer than 30 seconds to compile {os.path.basename(tex_file)} and was killed.[/bold red]")
                 except subprocess.CalledProcessError:
                     console.print(f"[bold red]Failed to compile {os.path.basename(tex_file)}. Check the .log file.[/bold red]")
                 except FileNotFoundError:
