@@ -60,7 +60,9 @@ Edit `cv/database/active/experience.json`.
 Edit the following files, replacing the existing content with the new user's data while maintaining the exact JSON schema:
 **CRITICAL:** These files are FLAT dictionaries mapping an ID directly to a SINGLE string containing LaTeX-formatted text. Do NOT use nested objects.
 1. **`cv/database/active/projects.json`**: Extract major projects. Assign a unique ID and write a single bullet string (e.g., `"proj_1": "\\textbf{Project Name:} Built X using Y."`).
-   - **Preserve Hyperlinks:** If the source document contains URLs (e.g., GitHub, live apps), you MUST preserve them using the LaTeX macro `\href{URL}{Link Text}` (e.g., `... \href{https://github.com/user/repo}{[GitHub]}`).
+   - **4. CRITICAL GLOBAL URL INJECTION & CHECK:**
+   - **Global Formatting:** If the source CV contains any URLs (explicitly written or provided by the user), you MUST preserve them across ALL JSON files (projects, experience bullets, education, extracurriculars). Wrap them dynamically using LaTeX: `\href{<URL>}{<Visible Text>}`.
+   - **Proactive Fallback:** PDF text extraction often strips out hidden hyperlinks. If the user mentions projects, theses, publications, or companies but provides no URLs, you MUST proactively ask the user before finishing: *"Do you have any GitHub, portfolio, or publication URLs for these entries? Standard PDF extraction often loses them, but I want to make sure your CV is fully interactive."*
 2. **`cv/database/active/education.json`**: Extract degrees. Assign IDs like `"msc"`. Write a single string (e.g., `"msc": "\\textbf{MSc in X}, University \\hfill \\textit{2020 - 2022}"`).
 3. **`cv/database/active/languages.json`**: Extract languages and proficiencies. Assign IDs like `"english"` and write a single string (e.g., `"english": "English (Fluent)"`).
 4. **`cv/database/active/extracurriculars.json`**: Extract volunteering, hobbies, speaking engagements, publications, or awards. Assign IDs and format as a single string similarly to projects. 

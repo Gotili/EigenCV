@@ -95,7 +95,6 @@ def sanitize_latex_text(s):
         text = re.sub(r'(?<!\\)\$', r'\\$', text)
         text = re.sub(r'(?<!\\)#', r'\\#', text)
         text = re.sub(r'(?<!\\)_', r'\\_', text)
-        text = text.replace('~', r'\textasciitilde{}')
         text = text.replace('^', r'\textasciicircum{}')
         # Typography fixes
         text = text.replace('—', ' - ').replace('–', ' - ')

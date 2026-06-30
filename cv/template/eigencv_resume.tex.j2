@@ -88,11 +88,10 @@
 
 {% if section == 'Languages' and languages %}
 \section*{ {{ i18n.languages | default('Languages') | sanitize_latex_text }} }
-\begin{itemize}[leftmargin=*, labelsep=0.5em, itemsep=0.2em]
-{% for lang in languages %}
-    \item {{ lang }}
-{% endfor %}
-\end{itemize}
+\noindent
+{% for lang in languages -%}
+{{ lang }}{% if not loop.last %} \quad \textbullet \quad {% endif %}
+{%- endfor %}
 {% endif %}
 {% endfor %}
 
