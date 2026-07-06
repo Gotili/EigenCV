@@ -18,6 +18,7 @@ except ImportError:
 
 from datetime import date
 from cv_schema import BuildConfig
+from cv_i18n import resolve_localized_tree
 
 class EigenTruthViolationError(Exception):
     pass
@@ -152,6 +153,27 @@ def load_json(filepath):
         print("Tip: Check for trailing commas or unescaped quotes (common LLM generation errors).")
         sys.exit(1)
 
+def _render_locale_for_config(config, locale):
+    target_locale = getattr(config, "target_locale", None)
+    if target_locale:
+        return target_locale
+    return {
+        "en": "en-US",
+        "de": "de-DE",
+        "en-US": "en-US",
+        "de-DE": "de-DE",
+    }.get(locale, "en-US")
+
+
+def _resolve_config_for_render(config, locale):
+    resolved_payload = resolve_localized_tree(
+        config.model_dump(mode="python"),
+        _render_locale_for_config(config, locale),
+        "build_config",
+    )
+    return BuildConfig.model_validate(resolved_payload)
+
+
 def compile_cv(config_path):
     console.print(Panel(f"Compiling CV from {config_path}...", title="EigenCV Compiler", style="bold blue"))
     
@@ -246,6 +268,7 @@ def compile_cv(config_path):
         locale = dyn_locale
         
     i18n_dict = i18n_all.get(locale, i18n_all.get('en', {}))
+    render_config = _resolve_config_for_render(config, locale)
                 
     console.print(f"Using layout template: [bold green]{template_name}[/bold green], Locale: [bold green]{locale}[/bold green]")
 
@@ -266,13 +289,18 @@ def compile_cv(config_path):
     
     # Process Experience
     experience_data = []
-    for job_id, job_config in config.experience.items():
+    for job_id, job_config in render_config.experience.items():
         master_job = db_experience[job_id]
         bullets = [master_job['bullets'][b_id] for b_id in job_config.bullets]
+        
+        comp_key = 'company_de' if locale.startswith('de') and 'company_de' in master_job else 'company'
+        loc_key = 'location_de' if locale.startswith('de') and 'location_de' in master_job else 'location'
+        date_key = 'dates_de' if locale.startswith('de') and 'dates_de' in master_job else 'dates'
+        
         experience_data.append({
-            'company': master_job['company'],
-            'location': master_job['location'],
-            'dates': master_job['dates'],
+            'company': master_job[comp_key],
+            'location': master_job[loc_key],
+            'dates': master_job[date_key],
             'title': job_config.title,
             'bullets': bullets
         })
@@ -350,7 +378,7 @@ def compile_cv(config_path):
     
     # Render Template
     # Secure PDF metadata by replacing or stripping LaTeX control characters
-    safe_keywords = config.keywords.replace('#', 'Sharp').replace('&', 'and').replace('%', '')
+    safe_keywords = render_config.keywords.replace('#', 'Sharp').replace('&', 'and').replace('%', '')
     for char in ['{', '}', '\\', '_', '~', '^', '$']:
         safe_keywords = safe_keywords.replace(char, '')
         
@@ -372,13 +400,13 @@ def compile_cv(config_path):
         section_order=section_order,
         user_first_name=user_first_name,
         user_last_name=user_last_name,
-        job_title=config.job_title,
-        profile=config.profile,
-        skill_categories=[cat.model_dump() for cat in config.skill_categories],
+        job_title=render_config.job_title,
+        profile=render_config.profile,
+        skill_categories=[cat.model_dump() for cat in render_config.skill_categories],
         experience=experience_data,
         projects=projects_data,
         education=education_data,
-        extracurriculars_title=config.extracurriculars_title,
+        extracurriculars_title=render_config.extracurriculars_title,
         extracurriculars=extracurriculars_data,
         languages=languages_data,
         company_accent_color=company_accent_color,
@@ -441,7 +469,7 @@ def compile_cv(config_path):
     if config.cover_letter:
         cl_template = latex_jinja_env.get_template('eigencv_cover_letter.tex.j2')
         cl_tex = cl_template.render(
-            cl=config.cover_letter,
+            cl=render_config.cover_letter,
             company_accent_color=company_accent_color
         )
         

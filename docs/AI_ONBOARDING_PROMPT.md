@@ -11,9 +11,21 @@ Your objective is to extract their data and translate it into the strictly defin
 Before you write any files, you MUST check the existing `cv/database/active/metadata.tex`.
 - **Mode 1 (Bootstrap):** If the database contains the "Jane Doe" placeholder, you will OVERWRITE the entire database with the new user's data.
 - **Mode 2 (Incremental Merge):** If the database already belongs to the user, you must append and merge the new data. 
-- **Semantic Deduplication Rule:** When merging new experience bullets into `experience.json`, you MUST compare them against existing bullets. If a new bullet describes the exact same task/project as an existing bullet, do NOT create a redundant ID. Instead, compare their strength. Keep the formulation with the strongest quantifiable metrics and action verbs, and discard the weaker one.
-- **CRITICAL EXCEPTION (Mutually Exclusive Variants):** Do NOT deduplicate bullets that cover distinct technical domains or contain unique, specialized keywords (e.g., "EUV physics" vs "ETL pipelines"), even if they occurred in the same role. They must be saved as separate bullet IDs so the pipeline can tailor CVs to highly specific niches. 
-- **Naming Rule:** If two bullets describe the same underlying project/task but with different technical focuses, you MUST name their IDs to reflect this relationship (e.g., `tech_corp_etl_base` and `tech_corp_etl_cloud`). This signals to the generation phase that they are mutually exclusive variants.
+
+### 🚫 ZERO-TRUST & ZERO-HALLUCINATION POLICY (STRICT)
+1. **NO ON-THE-FLY TRANSLATION:** You are strictly forbidden from automatically translating content to fill gaps. If a bullet or project only exists in English in the source PDFs, it must ONLY exist in English in the database. 
+2. **NATIVE MIGRATION ONLY:** You may only extract and migrate authentic, native strings from the provided text. Never hallucinate data.
+
+### 🛡️ VARIANT PRESERVATION RULE (NO DEDUPLICATION)
+When merging new experience bullets into `experience.json`, you MUST NOT aggressively deduplicate stylistic or target-audience specific variations of the same task. 
+- If the user provides multiple variations of a bullet (e.g., a Management-focused version and a Deep-Tech-focused version of the same project), you must SAVE ALL VARIANTS as distinct, related IDs. This gives the CV Compiler maximum flexibility.
+- **Naming Rule:** You MUST name their IDs to reflect this relationship (e.g., `tech_corp_etl_base` and `tech_corp_etl_cloud`). This signals to the generation phase that they are mutually exclusive variants.
+
+### 🌐 SYMMETRIC LOCALE i18n (DATABASE MAPPING)
+If data is provided from CVs in different languages (e.g. a German and an English CV):
+- The database JSON files (`experience.json`, `projects.json`, `education.json`, etc.) MUST remain **FLAT dictionaries** mapping an ID directly to a single string containing LaTeX-formatted text. Do NOT use nested objects like `{"en-US": "..."}` as they will break the Jinja compiler.
+- Instead, for authentic native translations (e.g., you extracted both an English and a German version of a task from the PDFs), save the English string under the base ID (e.g., `bullet_id`), and save the exact native German string under the same ID with a `_de` suffix (e.g., `bullet_id_de`).
+- **Remember:** Do NOT generate `_de` IDs if the German text does not natively exist in the source material!
 
 ### 🛑 CRITICAL SAFETY DIRECTIVE: DO NOT BREAK THE ENGINE
 You are updating the **Content Database**, NOT the engine. 
@@ -29,67 +41,37 @@ You are strictly FORBIDDEN from editing or overwriting any of the following file
 
 ## Phase 1: Update Personal Metadata
 Edit `cv/database/active/metadata.tex`.
-Extract the user's name, current position/title, email, phone number, LinkedIn URL, GitHub URL, and website. Overwrite the existing LaTeX macros in this file. Do NOT change the macro names (e.g., keep `\newcommand{\cvname}{...}`, `\newcommand{\cvposition}{...}`).
-**CRITICAL:** You MUST preserve the `\cvtemplate`, `\cvcolor`, and `\cvorder` macros exactly as you found them, so the user's preferred template layout, colors, and section sorting are not destroyed during onboarding.
+Extract the user's name, current position/title, email, phone number, LinkedIn URL, GitHub URL, and website. Overwrite the existing LaTeX macros in this file.
+**CRITICAL:** You MUST preserve the `\cvtemplate`, `\cvcolor`, and `\cvorder` macros exactly as you found them.
 
 ## Phase 2: Build the Experience Database
 Edit `cv/database/active/experience.json`.
 1. Break down the user's work history into distinct companies/roles.
 2. For each company, create a top-level key (e.g., `"google"`, `"bmw"`).
-3. Populate `"company"`, `"location"`, and `"dates"`.
+3. Populate `"company"`, `"location"`, and `"dates"`. (Use `_de` keys if German equivalents exist).
 4. **The Bullet System (Crucial):** Do NOT write a single block of text for the experience. You must split their achievements into granular, highly modular bullet points. 
-5. Assign a unique, descriptive ID to each bullet point (e.g., `"cloud_migration"`, `"team_leadership"`, `"api_development"`).
-6. Ensure all text inside the bullets is formatted for LaTeX (e.g., escape `%` as `\%` and ensure a non-breaking space `~` is placed before the `\%` to follow SI conventions, e.g., `40~\%`). Use `\textbf{}` for emphasis on key metrics/tools.
-
-*Example Structure:*
-```json
-{
-  "company_id": {
-    "company": "Company Name",
-    "location": "City, Country",
-    "dates": "Month Year -- Month Year",
-    "bullets": {
-      "bullet_id_1": "Developed \\textbf{scalable APIs} using Python, increasing throughput by 20\\%.",
-      "bullet_id_2": "Led a team of 5 engineers..."
-    }
-  }
-}
-```
+5. Assign a unique, descriptive ID to each bullet point. Add `_de` IDs only for authentic German translations found in the source.
+6. Ensure all text inside the bullets is formatted for LaTeX (escape `%` as `\%`). Use `\textbf{}` for emphasis.
 
 ## Phase 3: Build the Projects, Education, and Extracurriculars Databases
-Edit the following files, replacing the existing content with the new user's data while maintaining the exact JSON schema:
-**CRITICAL:** These files are FLAT dictionaries mapping an ID directly to a SINGLE string containing LaTeX-formatted text. Do NOT use nested objects.
-1. **`cv/database/active/projects.json`**: Extract major projects. Assign a unique ID and write a single bullet string (e.g., `"proj_1": "\\textbf{Project Name:} Built X using Y."`).
-   - **4. CRITICAL GLOBAL URL INJECTION & CHECK:**
-   - **Global Formatting:** If the source CV contains any URLs (explicitly written or provided by the user), you MUST preserve them across ALL JSON files (projects, experience bullets, education, extracurriculars). Wrap them dynamically using LaTeX: `\href{<URL>}{<Visible Text>}`.
-   - **Proactive Fallback:** PDF text extraction often strips out hidden hyperlinks. If the user mentions projects, theses, publications, or companies but provides no URLs, you MUST proactively ask the user before finishing: *"Do you have any GitHub, portfolio, or publication URLs for these entries? Standard PDF extraction often loses them, but I want to make sure your CV is fully interactive."*
-2. **`cv/database/active/education.json`**: Extract degrees. Assign IDs like `"msc"`. Write a single string (e.g., `"msc": "\\textbf{MSc in X}, University \\hfill \\textit{2020 - 2022}"`).
-3. **`cv/database/active/languages.json`**: Extract languages and proficiencies. Assign IDs like `"english"` and write a single string (e.g., `"english": "English (Fluent)"`).
-4. **`cv/database/active/extracurriculars.json`**: Extract volunteering, hobbies, speaking engagements, publications, or awards. Assign IDs and format as a single string similarly to projects. 
-   - **Publication Formatting Rule:** If extracting a publication, DO NOT use job-title prefixes like `\textbf{Published Author:}` or `\textbf{Writer:}`. Format it as a clean academic citation (e.g., `\textbf{Springer Publication:} Co-authored \textit{"Paper Title"} in Conference/Journal (Year).`).
-   - **Preserve Hyperlinks:** Use `\href{URL}{Link Text}` for DOI links or publication URLs.
+Edit `projects.json`, `education.json`, `languages.json`, `extracurriculars.json`.
+1. **CRITICAL GLOBAL URL INJECTION & CHECK:** Wrap URLs dynamically using LaTeX: `\href{<URL>}{<Visible Text>}`.
+2. **Proactive Fallback:** If the user mentions projects, theses, or publications but provides no URLs, you MUST proactively ask the user before finishing: *"Do you have any GitHub, portfolio, or publication URLs for these entries? Standard PDF extraction often loses them..."*
+3. **Publication Formatting Rule:** DO NOT use job-title prefixes like `\textbf{Published Author:}`. Format it as a clean academic citation.
 
 ## Phase 4: Construct the Master Skills Pool
 Edit `cv/database/active/master_skills.md`.
 Extract every single tool, language, methodology, and framework the user knows.
-You MUST format this file with TWO distinct sections so both the ATS parser and the AI generator can read it:
-
-1. **Comma-Separated Categories (Top):** Create headers like `## Programming` or `## Machine Learning` and list the relevant skills as simple comma-separated strings below them. This section is required for the ATS parsing script.
-2. **Self-Assessed Skill Ratings Table (Bottom):** Create a section named EXACTLY `## Self-Assessed Skill Ratings` followed by a Markdown table with the following columns:
-   (a). **Skill Name:** The exact ATS-friendly name.
-   (b). **Category:** E.g., Programming, Cloud, Machine Learning.
-   (c). **Rating:** The user's self-assessed proficiency (0 % - 100 %).
-   (d). **Synonyms/Variants:** Note any alternative names or groupings. 
-      - Use `(A | B)` for exact synonyms where the AI must pick ONE (e.g., `(React | React.js)`).
-      - Use `[A, B]` for clusters where the AI can pick multiple (e.g., `[AWS, Azure]`).
+1. **Comma-Separated Categories (Top):** Create headers like `## Programming` and list the relevant skills as simple comma-separated strings below them.
+2. **Self-Assessed Skill Ratings Table (Bottom):** Create a section named EXACTLY `## Self-Assessed Skill Ratings` followed by a Markdown table.
+   - Use `(A | B)` for exact synonyms where the AI must pick ONE.
+   - Use `[A, B]` for clusters where the AI can pick multiple.
 
 ## Phase 5: Initialize the Personal Dossier
-**CRITICAL RULE:** You are strictly FORBIDDEN from editing or overwriting `cv/database/active/personal_dossier.md` during the automated onboarding. 
-The user manually maintains their soft skills, work philosophy, and hobbies in this file. A standard CV is too dry to capture genuine culture, and attempting to auto-generate this results in sterile, hallucinated corporate speak. Do not touch this file!
+**CRITICAL RULE:** You are strictly FORBIDDEN from editing or overwriting `cv/database/active/personal_dossier.md` during automated onboarding. Do not touch this file!
 
 ## Phase 6: Verification & Handoff
-1. **Coverage Audit (CRITICAL):** Before finalizing, perform a reverse-lookup. Read the source CVs/data again and systematically verify that *every single bullet point, project, and extracurricular activity* can be mapped to an ID in your JSON database. If you missed specialized variants, go back and add them!
+1. **Coverage Audit (CRITICAL):** Verify that *every single bullet point, project, and extracurricular activity* can be mapped to an ID in your JSON database. Did you miss specialized variants? Add them! Did you invent translations? Remove them!
 2. Ensure all JSON files contain valid JSON (no trailing commas).
-3. Ensure all LaTeX special characters (`&`, `%`, `$`, `#`, `_`) inside the JSON string values are properly escaped (e.g., `\&`, `\%`).
 3. Confirm with the user that the Onboarding is complete. 
-4. **CRITICAL:** Do NOT tell the user to run terminal commands (like `python tools/new_app.py`). This is an Agentic workflow! Tell the user: "Onboarding is complete. You can now simply paste a Job Description into this chat, and I will automatically initialize the workspace, generate the tailored CV, and compile the PDF for you."
+4. **CRITICAL:** Tell the user: "Onboarding is complete. You can now simply paste a Job Description into this chat..."

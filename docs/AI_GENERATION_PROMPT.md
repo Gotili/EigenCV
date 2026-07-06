@@ -20,10 +20,11 @@ Before you begin generating ANY application package, you MUST verify that the us
 >
 > **PATH B (Local CLI / Agentic IDE):** Run `python tools/new_app.py <Company> <RoleSnippet>` from the root directory to generate the application folder. Do NOT use `mkdir` manually.
 
-3. **LANGUAGE CHECK (CRITICAL):** Check the language of the provided Job Description against the primary language of the CV Database (e.g. by checking `cv/database/active/experience.json`). If they do not match, **STOP** and warn the user before proceeding:
-   > "⚠️ **Language Mismatch Detected!** The Job Description is in [Language], but your CV database is in [Database Language]. I can either:
-   > a) Create a bilingual application (e.g., [Database Language] CV, [JD Language] Cover Letter)
-   > b) Wait for you to translate your master database.
+3. **LANGUAGE CHECK (CRITICAL):** Check the language of the provided Job Description against the primary language of the CV Database (e.g. by checking `cv/database/active/experience.json`). If there are no matching bullets in the requested language (e.g. no `_de` suffix keys for German), you MUST NOT select wrong-language bullets while setting a mismatched `target_locale`. This will trigger a fatal `EigenTruthViolation` and crash the build! If a mismatch is detected, **STOP** and warn the user before proceeding:
+   > "⚠️ **Language Mismatch Detected!** The Job Description is in [Language], but your CV database is missing translated bullets for this language. **Zero-Trust Policy** forbids me from translating them on-the-fly. I can either:
+   > a) Create a bilingual application (e.g., English CV, German Cover Letter). I will set `target_locale` to `null` to bypass the EigenTruth crash.
+   > b) Wait for you to provide manual translations. (If selected, I will list exactly which English bullets I need translated, so you can provide them text by text).
+   > c) Draft the translations for you in a separate review file. Once you manually approve them, I can merge them into the master database.
    > Please tell me how you wish to proceed."
 
 4. **MANDATORY PRE-FLIGHT ANALYSIS (`<job_analysis>`):** Before generating ANY files, you MUST output a `<job_analysis>` block in your response. Map the Top 5 Job Requirements to specific variants from the Master JSON Databases. This ensures you lock onto the perfect variants before writing code.
