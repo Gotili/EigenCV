@@ -292,10 +292,15 @@ def compile_cv(config_path):
     for job_id, job_config in render_config.experience.items():
         master_job = db_experience[job_id]
         bullets = [master_job['bullets'][b_id] for b_id in job_config.bullets]
+        
+        comp_key = 'company_de' if locale.startswith('de') and 'company_de' in master_job else 'company'
+        loc_key = 'location_de' if locale.startswith('de') and 'location_de' in master_job else 'location'
+        date_key = 'dates_de' if locale.startswith('de') and 'dates_de' in master_job else 'dates'
+        
         experience_data.append({
-            'company': master_job['company'],
-            'location': master_job['location'],
-            'dates': master_job['dates'],
+            'company': master_job[comp_key],
+            'location': master_job[loc_key],
+            'dates': master_job[date_key],
             'title': job_config.title,
             'bullets': bullets
         })

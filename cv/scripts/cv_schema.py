@@ -134,9 +134,21 @@ class ProbabilityMatrix(BaseModel):
     def validate_localized_fields(cls, v):
         return validate_localized_text(v)
 
+class EigenTruthViolationError(ValueError):
+    """Raised when the AI attempts to violate Zero-Trust data integrity policies."""
+    pass
+
+class I18nTranslations(BaseModel):
+    experience: str = Field(..., description="Translation for 'Experience'")
+    education: str = Field(..., description="Translation for 'Education'")
+    projects: str = Field(..., description="Translation for 'Projects'")
+    skills: str = Field(..., description="Translation for 'Skills'")
+    languages: str = Field(..., description="Translation for 'Languages'")
+    profile: str = Field(..., description="Translation for 'Profile'")
+
 class I18nUpdate(BaseModel):
     locale_code: str = Field(..., description="ISO language code (e.g., 'fr', 'uk', 'de')")
-    translations: Dict[str, str] = Field(..., description="Dictionary containing exactly these keys: experience, education, projects, skills, languages, profile")
+    translations: I18nTranslations = Field(..., description="Exact translations for the 6 core sections")
 
 class BuildConfig(BaseModel):
     target_locale: Optional[str] = Field(None, description="Optional explicit output locale, e.g. 'de-DE' or 'en-US'")
@@ -217,6 +229,14 @@ class BuildConfig(BaseModel):
             return candidate
 
 
+        def check_locale_mismatch(item_id, item_type):
+            is_de = item_id.endswith('_de')
+            target_is_de = self.target_locale and self.target_locale.startswith('de')
+            if target_is_de and not is_de:
+                errors.append(f"EigenTruthViolation: target_locale='{self.target_locale}' but {item_type} '{item_id}' is English. STOP and ask user if they want a Bilingual CV (target_locale=null) or manual translation.")
+            elif not target_is_de and is_de:
+                errors.append(f"EigenTruthViolation: target_locale='{self.target_locale or 'en'}' but {item_type} '{item_id}' is German. STOP and ask user.")
+
         healed_experience = {}
         for comp_id, exp_data in self.experience.items():
             healed_comp_id = heal_id(comp_id, list(master_exp.keys()), "experience company")
@@ -231,17 +251,12 @@ class BuildConfig(BaseModel):
                     healed_b_id = heal_id(b_id, list(valid_bullets.keys()), f"bullets for {healed_comp_id}")
                     if healed_b_id not in valid_bullets:
                         errors.append(f"Bullet ID '{healed_b_id}' not found under company '{healed_comp_id}' in experience.json.")
+                    else:
+                        check_locale_mismatch(healed_b_id, "bullet")
                     healed_bullets.append(healed_b_id)
                 
                 exp_data.bullets = healed_bullets
                 healed_experience[healed_comp_id] = exp_data
-                
-                # Enforce bullet counts
-                total_available = len(valid_bullets)
-                if total_available > 0:
-                    min_required = math.ceil(total_available * 0.6)
-                    if len(exp_data.bullets) < min_required:
-                        errors.append(f"You only provided {len(exp_data.bullets)} bullets for '{healed_comp_id}'. You MUST provide AT LEAST {min_required} bullets (60 % of available {total_available}).")
         
         self.experience = healed_experience
 
@@ -249,23 +264,33 @@ class BuildConfig(BaseModel):
         for p_id in self.projects:
             if p_id not in master_proj:
                 errors.append(f"Project ID '{p_id}' not found in projects.json.")
+            else:
+                check_locale_mismatch(p_id, "project")
 
         self.education = [heal_id(e, list(master_edu.keys()), "education") for e in self.education]
         for e_id in self.education:
             if e_id not in master_edu:
                 errors.append(f"Education ID '{e_id}' not found in education.json.")
+            else:
+                check_locale_mismatch(e_id, "education")
 
         self.extracurriculars = [heal_id(ex, list(master_ext.keys()), "extracurriculars") for ex in self.extracurriculars]
         for ex_id in self.extracurriculars:
             if ex_id not in master_ext:
                 errors.append(f"Extracurricular ID '{ex_id}' not found in extracurriculars.json.")
+            else:
+                check_locale_mismatch(ex_id, "extracurricular")
 
         self.languages = [heal_id(lang, list(master_lang.keys()), "languages") for lang in self.languages]
         for lang_id in self.languages:
             if lang_id not in master_lang:
                 errors.append(f"Language ID '{lang_id}' not found in languages.json.")
+            else:
+                check_locale_mismatch(lang_id, "language")
 
         if errors:
+            if any("EigenTruthViolation" in e for e in errors):
+                raise EigenTruthViolationError("Zero-Trust Security Triggered:\n- " + "\n- ".join(errors))
             raise ValueError("Database Validation Failed:\n- " + "\n- ".join(errors))
             
         return self
