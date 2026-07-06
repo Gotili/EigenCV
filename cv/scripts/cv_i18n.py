@@ -91,6 +91,22 @@ def resolve_localized(value, locale: str, path: str):
     return value
 
 
+def resolve_localized_tree(value, locale: str, path: str):
+    if is_locale_map(value):
+        return resolve_localized(value, locale, path)
+    if isinstance(value, dict):
+        return {
+            key: resolve_localized_tree(child, locale, f"{path}.{key}")
+            for key, child in value.items()
+        }
+    if isinstance(value, list):
+        return [
+            resolve_localized_tree(child, locale, f"{path}.{index}")
+            for index, child in enumerate(value)
+        ]
+    return value
+
+
 def _load_json(database_dir: Path, filename: str):
     with (database_dir / filename).open("r", encoding="utf-8") as f:
         return json.load(f)

@@ -277,3 +277,95 @@ def test_selected_record_missing_target_locale_fails_loud_before_rendering(missi
 
     assert "de-DE" in str(exc_info.value)
     assert "experience.tech_corp.bullets.platform" in str(exc_info.value)
+
+
+def test_resolve_localized_tree_resolves_nested_maps_and_preserves_plain_values():
+    m = _i18n()
+    value = {
+        "title": _loc("Titel", "Title"),
+        "metadata": {"kind": "normal", "de-DE": "plain key"},
+        "items": [
+            _loc("Eins", "One"),
+            "plain",
+            {"label": _loc("Etikett", "Label")},
+        ],
+    }
+
+    resolved = m.resolve_localized_tree(value, "de-DE", "build_config")
+
+    assert resolved == {
+        "title": "Titel",
+        "metadata": {"kind": "normal", "de-DE": "plain key"},
+        "items": ["Eins", "plain", {"label": "Etikett"}],
+    }
+
+
+def test_resolve_localized_tree_missing_locale_raises_path_and_locale():
+    m = _i18n()
+    value = {
+        "cover_letter": {
+            "body_paragraphs": [
+                {"en-US": "Core argument."},
+            ],
+        },
+    }
+
+    with pytest.raises(m.LocaleResolutionError) as exc_info:
+        m.resolve_localized_tree(value, "de-DE", "build_config")
+
+    message = str(exc_info.value)
+    assert "de-DE" in message
+    assert "build_config.cover_letter.body_paragraphs.0" in message
+
+
+def _write_schema_active_db(tmp_path):
+    fake_repo = tmp_path / "repo"
+    scripts_dir = fake_repo / "cv" / "scripts"
+    active_dir = fake_repo / "cv" / "database" / "active"
+    scripts_dir.mkdir(parents=True)
+    active_dir.mkdir(parents=True)
+
+    _write_json(
+        active_dir / "experience.json",
+        {
+            "tech_corp": {
+                "company": "Example Corp",
+                "location": "Berlin",
+                "dates": "2021 - 2024",
+                "bullets": {"platform": "Architected a platform."},
+            },
+        },
+    )
+    _write_json(active_dir / "projects.json", {"compiler": "Built a deterministic compiler."})
+    _write_json(active_dir / "education.json", {"msc": "MSc Computer Science"})
+    _write_json(active_dir / "extracurriculars.json", {"mentoring": "Mentored junior engineers."})
+    _write_json(active_dir / "languages.json", {"english": "English (Fluent)"})
+    return scripts_dir
+
+
+def test_compiler_render_config_resolves_build_config_prose_maps(tmp_path, monkeypatch):
+    import cv_schema
+
+    scripts_dir = _write_schema_active_db(tmp_path)
+    monkeypatch.setattr(cv_schema, "__file__", str(scripts_dir / "cv_schema.py"))
+    import cv_compiler
+    payload = _config("localized", "de-DE")
+    payload["cover_letter"]["recruiting_team"] = "Engineering Team"
+    payload["cover_letter"]["salutation"] = "Dear Engineering Team,"
+    payload["probability_matrix"]["technical_pass_probability"] = "75 % - Solid."
+    payload["probability_matrix"]["job_offer_probability"] = "60 % - Realistic."
+    payload["probability_matrix"]["salary_estimate"] = "90k - 110k."
+
+    config = cv_schema.BuildConfig.model_validate(payload)
+    render_config = cv_compiler._resolve_config_for_render(config, "en")
+
+    assert render_config.job_title == "Senior Softwareentwickler"
+    assert render_config.keywords == "Compiler, Tests"
+    assert render_config.profile == "Profiltext."
+    assert render_config.skill_categories[0].name == "Sprachen"
+    assert render_config.experience["tech_corp"].title == "Technischer Leiter"
+    assert render_config.extracurriculars_title == "Engagement"
+    assert render_config.cover_letter.subject_role == "Technischer Leiter"
+    assert render_config.cover_letter.body_paragraphs == ["Kernargument."]
+    assert render_config.probability_matrix.invitation_probability == "80 % - Stark."
+    assert render_config.probability_matrix.biggest_vulnerability == "Keine."
