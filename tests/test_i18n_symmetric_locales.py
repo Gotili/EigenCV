@@ -369,3 +369,69 @@ def test_compiler_render_config_resolves_build_config_prose_maps(tmp_path, monke
     assert render_config.cover_letter.body_paragraphs == ["Kernargument."]
     assert render_config.probability_matrix.invitation_probability == "80 % - Stark."
     assert render_config.probability_matrix.biggest_vulnerability == "Keine."
+
+
+def test_compiler_rendered_latex_has_resolved_build_config_prose_maps(tmp_path, monkeypatch):
+    import jinja2
+    import cv_schema
+
+    scripts_dir = _write_schema_active_db(tmp_path)
+    monkeypatch.setattr(cv_schema, "__file__", str(scripts_dir / "cv_schema.py"))
+    import cv_compiler
+
+    payload = _config("localized", "de-DE")
+    payload["cover_letter"]["recruiting_team"] = "Engineering Team"
+    payload["cover_letter"]["salutation"] = "Dear Engineering Team,"
+    payload["probability_matrix"]["technical_pass_probability"] = "75 % - Solid."
+    payload["probability_matrix"]["job_offer_probability"] = "60 % - Realistic."
+    payload["probability_matrix"]["salary_estimate"] = "90k - 110k."
+
+    config = cv_schema.BuildConfig.model_validate(payload)
+    render_config = cv_compiler._resolve_config_for_render(config, "en")
+    env = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(str(base_dir / "cv" / "template")),
+        trim_blocks=True,
+        lstrip_blocks=True,
+    )
+    env.filters["sanitize_latex_text"] = cv_compiler.sanitize_latex_text
+
+    rendered = env.get_template("eigencv_resume.tex.j2").render(
+        geometry_options=config.geometry_options,
+        keywords=render_config.keywords,
+        cvcolor="awesome-emerald",
+        section_order=["Profile", "Skills", "Experience", "Extracurriculars"],
+        user_first_name="Test",
+        user_last_name="User",
+        job_title=render_config.job_title,
+        profile=render_config.profile,
+        skill_categories=[cat.model_dump() for cat in render_config.skill_categories],
+        experience=[
+            {
+                "company": "Example Corp",
+                "location": "Berlin",
+                "dates": "2021 - 2024",
+                "title": render_config.experience["tech_corp"].title,
+                "bullets": ["Architected a platform."],
+            }
+        ],
+        projects=[],
+        education=[],
+        extracurriculars_title=render_config.extracurriculars_title,
+        extracurriculars=["Mentored junior engineers."],
+        languages=[],
+        company_accent_color=None,
+        i18n={
+            "experience": "Berufserfahrung",
+            "skills": "Faehigkeiten",
+            "profile": "Profil",
+        },
+    )
+
+    assert "Senior Softwareentwickler" in rendered
+    assert "Profiltext." in rendered
+    assert "Sprachen" in rendered
+    assert "Technischer Leiter" in rendered
+    assert "Engagement" in rendered
+    assert "{'de-DE'" not in rendered
+    assert "\"de-DE\"" not in rendered
+    assert "en-US" not in rendered
