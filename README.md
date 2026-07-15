@@ -239,3 +239,36 @@ Stop maintaining 15 different Word documents. By keeping your career facts in JS
 ## 🙏 Acknowledgements
 
 EigenCV's default LaTeX templates utilize a color palette inspired by the excellent [Awesome-CV](https://github.com/posquit0/Awesome-CV) project created by Byungjin Park (posquit0). We are grateful for their beautiful typographic colors! *(Note: The structural layout of EigenCV is entirely custom-built for Jinja2 deterministic rendering and was not derived from Awesome-CV's layout engine).*
+
+---
+
+## 📖 Citation
+
+If you use the Chemical Chaos Engine in your research or publications, please cite it as:
+
+```bibtex
+@software{bourier2026chaos,
+  author    = {Bourier, Dr. Felix Sébastien, Bigdon, Timo},
+  title     = {EigenCV: Zero-Trust Agentic Resume Pipeline},
+  year      = {2026},
+  version   = {1.0.0},
+  url       = {https://bourier.biz}
+}
+```
+
+See [`CITATION.cff`](CITATION.cff) for the full machine-readable citation.
+
+---
+
+## 📄 License
+
+Released under the MIT License. Copyright © 2026 Dr. Felix Sébastien Bourier & Timo Bigdon.
+
+The EigenCV source code is made available for reference, research, and educational study. Commercial use, redistribution, or derivative works require explicit written permission from the author.
+
+---
+
+<div align="center">
+
+**I got tired of ChatGPT lying on my resume, so I built a "Zero-Trust" pipeline that hard-crashes if the AI hallucinates a skill.**  
+</div>
