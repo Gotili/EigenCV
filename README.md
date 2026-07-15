@@ -244,7 +244,7 @@ EigenCV's default LaTeX templates utilize a color palette inspired by the excell
 
 ## 📖 Citation
 
-If you use the Chemical Chaos Engine in your research or publications, please cite it as:
+If you use EigenCV in your research or publications, please cite it as:
 
 ```bibtex
 @software{bourier2026chaos,
@@ -264,9 +264,12 @@ See [`CITATION.cff`](CITATION.cff) for the full machine-readable citation.
 
 Released under the MIT License. Copyright © 2026 Dr. Felix Sébastien Bourier & Timo Bigdon.
 
-The EigenCV source code is made available for reference, research, and educational study. Commercial use, redistribution, or derivative works require explicit written permission from the author.
-
 ---
+
+<div align="center">
+
+**I got tired of ChatGPT lying on my resume, so I built a "Zero-Trust" pipeline that hard-crashes if the AI hallucinates a skill.**  
+</div>
 
 <div align="center">
 
