@@ -270,8 +270,3 @@ Released under the MIT License. Copyright © 2026 Dr. Felix Sébastien Bourier &
 
 **I got tired of ChatGPT lying on my resume, so I built a "Zero-Trust" pipeline that hard-crashes if the AI hallucinates a skill.**  
 </div>
-
-<div align="center">
-
-**I got tired of ChatGPT lying on my resume, so I built a "Zero-Trust" pipeline that hard-crashes if the AI hallucinates a skill.**  
-</div>
