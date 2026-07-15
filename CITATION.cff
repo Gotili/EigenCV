@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software in your research or publications, please cite it as below."
+authors:
+  - family-names: "Bourier"
+    given-names: "Dr. Felix Sébastien"
+  - family-names: "Bigdon"
+    given-names: "Timo"
+title: "EigenCV: Zero-Trust Agentic Resume Pipeline"
+version: 1.0.0
+date-released: "2026-06-07"
+url: "https://bourier.biz"
+abstract: >-
+  EigenCV is a Zero-Trust Agentic Resume Pipeline and Infrastructure-as-Code (IaC) tool designed to generate ATS-optimized LaTeX resumes while strictly preventing LLM hallucinations. It treats a user's career history as an immutable offline JSON database, utilizing AI solely as a semantic retrieval and orchestration layer rather than a content generator. By implementing an EigenTruth Engine (a deterministic verification system) and strict Pydantic schemas, it intercepts and prevents AI-injected skills or fabricated data. This ensures 100% factual accuracy and data integrity while dynamically compiling targeted applications via pdflatex.
